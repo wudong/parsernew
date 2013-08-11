@@ -2,6 +2,9 @@ package uk.ac.ebi.uniprot.parser.impl.id;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
+import uk.ac.ebi.uniprot.parser.AbstractUniprotLineParser;
+import uk.ac.ebi.uniprot.parser.GrammarFactory;
 import uk.ac.ebi.uniprot.parser.ParseException;
 import uk.ac.ebi.uniprot.parser.UniprotLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineLexer;
@@ -14,26 +17,19 @@ import uk.ac.ebi.uniprot.parser.antlr.IdLineParser;
  * Time: 12:12
  * To change this template use File | Settings | File Templates.
  */
-public class IDLineParser implements UniprotLineParser<IdLineObject> {
+public class IDObjectParser extends AbstractUniprotLineParser<IdLineObject, IdLineLexer, IdLineParser> {
 
-    public IdLineObject parse(String input) {
-        ANTLRInputStream in = new ANTLRInputStream(input);
-        return getIdLineObject(in);
+    public IDObjectParser() {
+        super(GrammarFactory.GrammarFactoryEnum.Id.getFactory());
     }
 
-    private IdLineObject getIdLineObject(ANTLRInputStream in) {
-        IdLineLexer lexer = new IdLineLexer(in);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        IdLineParser parser = new IdLineParser(tokens);
-
+    @Override
+    protected IdLineObject processWithParser(IdLineParser parser) {
         IdLineModelListener idLineModelListener = new IdLineModelListener();
         parser.addParseListener(idLineModelListener);
-
         IdLineParser.Id_lineContext id_lineContext = parser.id_line();
-        if (id_lineContext.isEmpty()){
-            throw new ParseException();
-        }
-
-        return idLineModelListener.getObject();
+        return checkAndReturn(id_lineContext, idLineModelListener.getObject());
     }
+
+
 }
