@@ -5,7 +5,7 @@ import uk.ac.ebi.uniprot.parser.ParseException
 import java.io.StringReader
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import uk.ac.ebi.uniprot.parser.impl.id.{IDLineParser, IdLineObject}
+import uk.ac.ebi.uniprot.parser.impl.id.{IDObjectParser, IdLineObject}
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +24,7 @@ class IdLineParserTest extends FunSuite  {
 
   test("A valid idLine should be parsed no problem") {
 
-    val parser = new IDLineParser;
+    val parser = new IDObjectParser;
 
     val obj: IdLineObject = parser.parse(idLine_1)
 
@@ -33,7 +33,7 @@ class IdLineParserTest extends FunSuite  {
   }
 
   test("A non-valid idLine should be throw exception") {
-    val parser = new IDLineParser;
+    val parser = new IDObjectParser;
     intercept[ParseException]
       {parser.parse(idLine_invalid)}
   }
