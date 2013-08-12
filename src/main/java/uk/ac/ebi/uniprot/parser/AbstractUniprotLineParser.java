@@ -25,6 +25,13 @@ public abstract class AbstractUniprotLineParser<T, L extends Lexer, P extends Pa
         L lexer = factory.createLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         P parser = factory.createParser(tokens);
+        parser.addErrorListener(new BaseErrorListener(){
+            @Override
+            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
+                                    int line, int charPositionInLine, String msg, RecognitionException e) {
+                throw new ParseException(msg);
+            }
+        });
         return  parser;
     }
 
@@ -33,13 +40,6 @@ public abstract class AbstractUniprotLineParser<T, L extends Lexer, P extends Pa
         ANTLRInputStream in = new ANTLRInputStream(s);
         P parserFromInput = createParserFromInput(in, factory);
         return processWithParser(parserFromInput);
-    }
-
-    protected T checkAndReturn(ParserRuleContext id_lineContext, T object) {
-        if (id_lineContext.isEmpty())
-            throw new ParseException("");
-        else
-           return object;
     }
 
     protected abstract T processWithParser(P parser);

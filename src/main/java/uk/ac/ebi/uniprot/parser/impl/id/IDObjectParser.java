@@ -28,7 +28,7 @@ public class IDObjectParser extends AbstractUniprotLineParser<IdLineObject, IdLi
         IdLineModelListener idLineModelListener = new IdLineModelListener();
         parser.addParseListener(idLineModelListener);
         IdLineParser.Id_lineContext id_lineContext = parser.id_line();
-        return checkAndReturn(id_lineContext, idLineModelListener.getObject());
+        return idLineModelListener.getObject();
     }
 
 

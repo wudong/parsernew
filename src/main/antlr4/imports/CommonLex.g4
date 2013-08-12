@@ -4,15 +4,19 @@
  */
 lexer grammar CommonLex;
 
-
-
 fragment DIGIT : [0-9];
 fragment LETTER : [a-z][A-Z];
-fragment LETTER_DIGIT: [a-zA-Z0-9];
+LETTER_DIGIT: [a-zA-Z0-9];
 
 INT : DIGIT+;
-ENTRY_NAME: LETTER_DIGIT+ '_' LETTER_DIGIT+;
-ACCESSION: LETTER_DIGIT+;
+ENTRY_NAME: WORD '_' WORD;
+ACCESSION: WORD;
+
+MULTI_WORD: WORD (' ' WORD)* ;
+WORD: LETTER_DIGIT+;
+
+DATE : DIGIT DIGIT '-' MONTH_ABR '-' DIGIT DIGIT DIGIT DIGIT;
+MONTH_ABR : 'JAN' |'FEB'|'MAR' |'MAY'|'JUN' | 'JUL' | 'APR'| 'AGU'| 'SEP'| 'NOV'| 'OCT' |'DEC';
 
 DOT : '.';
 SEMICOLON: ';';

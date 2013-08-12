@@ -17,10 +17,10 @@ public class IdLineModelListener extends IdLineBaseListener {
 
     @Override
     public void exitReview_status(@NotNull IdLineParser.Review_statusContext ctx) {
-        if (ctx.REVIEW_STATUS_REVIEWED()!=null) {
+        if (ctx.REVIEW_STATUS_REVIEWED() != null) {
             object.reviewed = true;
         }
-        if (ctx.REVIEW_STATUS_UNREVIEWED()!=null) {
+        if (ctx.REVIEW_STATUS_UNREVIEWED() != null) {
             object.reviewed = false;
         }
     }
@@ -30,7 +30,8 @@ public class IdLineModelListener extends IdLineBaseListener {
         object.entryName = ctx.getText();
     }
 
-    public IdLineObject getObject(){
+
+    public IdLineObject getObject() {
         return object;
     }
 }

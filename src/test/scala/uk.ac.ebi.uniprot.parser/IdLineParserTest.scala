@@ -34,7 +34,9 @@ class IdLineParserTest extends FunSuite  {
 
   test("A non-valid idLine should be throw exception") {
     val parser = new IDObjectParser;
+
     intercept[ParseException]
       {parser.parse(idLine_invalid)}
   }
+
 }

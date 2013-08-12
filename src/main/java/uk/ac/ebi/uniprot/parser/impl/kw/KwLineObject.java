@@ -1,4 +1,4 @@
-package uk.ac.ebi.uniprot.parser.impl.ac;
+package uk.ac.ebi.uniprot.parser.impl.kw;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.List;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class AcLineObject {
-    public String primaryAcc;
-    public List<String> secondaryAcc = new ArrayList<String>();
+public class KwLineObject {
+    public List<String> keywords = new ArrayList<String>();
 }
