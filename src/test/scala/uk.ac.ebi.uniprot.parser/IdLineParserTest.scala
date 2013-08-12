@@ -17,7 +17,9 @@ import uk.ac.ebi.uniprot.parser.impl.id.{IDLineParser, IdLineObject}
 @RunWith(classOf[JUnitRunner])
 class IdLineParserTest extends FunSuite  {
 
-  val idLine_1 = "ID   001R_FRG3G              Reviewed;         256 AA.\n"
+  val idLine_1 =
+    "ID   001R_FRG3G              Reviewed;         256 AA.\n"
+
   val idLine_invalid = "ID   001R_FRG3G              Reviewed;         256 AA."
 
   test("A valid idLine should be parsed no problem") {
@@ -35,6 +37,4 @@ class IdLineParserTest extends FunSuite  {
     intercept[ParseException]
       {parser.parse(idLine_invalid)}
   }
-
-
 }

@@ -4,14 +4,19 @@
  */
 lexer grammar CommonLex;
 
-DIGITS : '1'..'9' '0'..'9'*; 
 
-ENTRY_NAME: .+'_'.+;
-ACCESSION: .+;
+
+fragment DIGIT : [0-9];
+fragment LETTER : [a-z][A-Z];
+fragment LETTER_DIGIT: [a-zA-Z0-9];
+
+INT : DIGIT+;
+ENTRY_NAME: LETTER_DIGIT+ '_' LETTER_DIGIT+;
+ACCESSION: LETTER_DIGIT+;
 
 DOT : '.';
 SEMICOLON: ';';
-NEWLINE :  '\r'? '\n' ;
+NEWLINE : '\n';
 
 SPACE1: ' ';
 SPACE2: '  ';

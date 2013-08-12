@@ -1,11 +1,16 @@
 package uk.ac.ebi.uniprot.parser.impl.id;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.misc.Nullable;
 import uk.ac.ebi.uniprot.parser.ParseException;
 import uk.ac.ebi.uniprot.parser.UniprotLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineParser;
+
+import java.util.BitSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,13 +31,16 @@ public class IDLineParser implements UniprotLineParser<IdLineObject> {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         IdLineParser parser = new IdLineParser(tokens);
 
+        //for test purpose.
+        //parser.setBuildParseTree(true);
+
         IdLineModelListener idLineModelListener = new IdLineModelListener();
         parser.addParseListener(idLineModelListener);
-
         IdLineParser.Id_lineContext id_lineContext = parser.id_line();
-        if (id_lineContext.isEmpty()){
-            throw new ParseException();
-        }
+
+        //id_lineContext.inspect(parser);
+
+        //how to force detect error?
 
         return idLineModelListener.getObject();
     }
