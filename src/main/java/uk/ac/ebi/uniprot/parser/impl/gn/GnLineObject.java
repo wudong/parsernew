@@ -15,10 +15,16 @@ public class GnLineObject {
     public List<GnObject> gnObjects = new ArrayList<GnObject>();
 
     public static class GnObject {
-        public String gene_name;
-        public List<String> syn_name = new ArrayList<String>();
-        public List<String> orf_name = new ArrayList<String>();
-        public List<String> ol_name = new ArrayList<String>();
+        public List<GnName> names = new ArrayList<GnName>();
+    }
+
+    public static class GnName {
+        public GnNameType type;
+        public List<String> names = new ArrayList<String>();
+    }
+
+    public static enum GnNameType {
+        GENAME, SYNNAME, ORFNAME, OLNAME;
     }
 
 }

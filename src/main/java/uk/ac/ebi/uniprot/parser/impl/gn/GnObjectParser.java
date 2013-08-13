@@ -24,7 +24,7 @@ public class GnObjectParser extends AbstractUniprotLineParser<GnLineObject, GnLi
     protected GnLineObject processWithParser(GnLineParser parser) {
         GnLineModelListener gnLineModelListener = new GnLineModelListener();
         parser.addParseListener(gnLineModelListener);
-        parser.gn_line_blocks();
+        GnLineParser.Gn_line_blocksContext gn_line_blocksContext = parser.gn_line_blocks();
         return gnLineModelListener.getObject();
     }
 

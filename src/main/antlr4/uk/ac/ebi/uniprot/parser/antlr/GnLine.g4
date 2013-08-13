@@ -5,7 +5,7 @@ GN   ORFNames=<name1>[, <name2>...];
 
 grammar GnLine;
 
-gn_line_blocks: gn_line_block (GN_NAME_SEPERATOR gn_line_block)*;
+gn_line_blocks: gn_line_block (GN_NAME_SEPARATOR gn_line_block)*;
 
 gn_line_block: gn_header
         one_name ((SPACE|change_line) one_name)*
@@ -25,7 +25,7 @@ names: name (COMMA (SPACE|change_line) name)*;
 
 change_line: NEWLINE gn_header;
 
-GN_NAME_SEPERATOR: GN SPACE3 'and' NEWLINE;
+GN_NAME_SEPARATOR: GN SPACE3 'and' NEWLINE;
 
 NAME : 'Name';
 SYNONYMS : 'Synonyms';
