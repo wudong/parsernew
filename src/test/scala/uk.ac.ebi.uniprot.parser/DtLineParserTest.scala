@@ -3,7 +3,7 @@ package uk.ac.ebi.uniprot.parser
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import uk.ac.ebi.uniprot.parser.impl.id.{IDObjectParser, IdLineObject}
+import uk.ac.ebi.uniprot.parser.impl.id.{IdObjectParser, IdLineObject}
 import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
 /**

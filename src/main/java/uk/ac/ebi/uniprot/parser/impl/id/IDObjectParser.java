@@ -17,9 +17,9 @@ import uk.ac.ebi.uniprot.parser.antlr.IdLineParser;
  * Time: 12:12
  * To change this template use File | Settings | File Templates.
  */
-public class IDObjectParser extends AbstractUniprotLineParser<IdLineObject, IdLineLexer, IdLineParser> {
+public class IdObjectParser extends AbstractUniprotLineParser<IdLineObject, IdLineLexer, IdLineParser> {
 
-    public IDObjectParser() {
+    public IdObjectParser() {
         super(GrammarFactory.GrammarFactoryEnum.Id.getFactory());
     }
 
