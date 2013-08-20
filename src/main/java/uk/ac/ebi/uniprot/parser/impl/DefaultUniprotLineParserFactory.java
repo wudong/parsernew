@@ -24,12 +24,18 @@ import uk.ac.ebi.uniprot.parser.impl.pe.PeLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.ra.RaLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.ra.RaLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rc.RcLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rg.RgLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rg.RgLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rn.RnLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rp.RpLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rt.RtLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rx.RxLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rx.RxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
 
@@ -146,6 +152,30 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
         return new AbstractUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
                 GrammarFactory.GrammarFactoryEnum.Ra.getFactory(),
                 new RaLineModelListener()
+        );
+    }
+
+    @Override
+    public UniprotLineParser<RgLineObject> createRgLineParser() {
+        return new AbstractUniprotLineParser<RgLineObject, RgLineLexer, RgLineParser>(
+                GrammarFactory.GrammarFactoryEnum.Rg.getFactory(),
+                new RgLineModelListener()
+        );
+    }
+
+    @Override
+    public UniprotLineParser<RcLineObject> createRcLineParser() {
+        return new AbstractUniprotLineParser<RcLineObject, RcLineLexer, RcLineParser>(
+                GrammarFactory.GrammarFactoryEnum.Rc.getFactory(),
+                new RcLineModelListener()
+        );
+    }
+   
+    @Override
+    public UniprotLineParser<RxLineObject> createRxLineParser() {
+        return new AbstractUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
+                GrammarFactory.GrammarFactoryEnum.Rx.getFactory(),
+                new RxLineModelListener()
         );
     }
     
