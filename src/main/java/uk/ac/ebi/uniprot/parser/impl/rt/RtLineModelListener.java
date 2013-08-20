@@ -1,10 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.rt;
 
+import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.RnLineBaseListener;
-import uk.ac.ebi.uniprot.parser.antlr.RnLineParser;
-import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
+import uk.ac.ebi.uniprot.parser.antlr.*;
+import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,17 +13,26 @@ import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class RtLineModelListener extends RnLineBaseListener implements ParseTreeObjectExtractor<RnLineObject> {
+public class RtLineModelListener extends RtLineBaseListener implements ParseTreeObjectExtractor<RtLineObject> {
 
-    private RnLineObject object = new RnLineObject();
+    private RtLineObject object = new RtLineObject();
 
     @Override
-    public void exitRn_number(@NotNull RnLineParser.Rn_numberContext ctx) {
-        String text = ctx.getText();
-        object.number = Integer.parseInt(text);
+    public void exitSeparator(@NotNull RtLineParser.SeparatorContext ctx) {
+        if (ctx.CHANGE_OF_LINE() != null) {
+            WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
+            symbol.setText(" ");
+            symbol.setType(RtLineLexer.SPACE);
+        }
     }
 
-    public RnLineObject getObject() {
+    @Override
+    public void exitMulti_word(@NotNull RtLineParser.Multi_wordContext ctx) {
+        String text = ctx.getText();
+        object.title = text;
+    }
+
+    public RtLineObject getObject() {
         return object;
     }
 }

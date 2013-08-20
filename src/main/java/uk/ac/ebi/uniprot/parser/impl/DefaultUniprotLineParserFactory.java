@@ -22,6 +22,14 @@ import uk.ac.ebi.uniprot.parser.impl.os.OsLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ra.RaLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.ra.RaLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rn.RnLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rp.RpLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rt.RtLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
 
@@ -109,5 +117,37 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 				new SqLineModelListener()
 		);
 	}
+
+    @Override
+	public UniprotLineParser<RnLineObject> createRnLineParser() {
+		return new AbstractUniprotLineParser<RnLineObject, RnLineLexer, RnLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rn.getFactory(),
+				new RnLineModelListener()
+		);
+	}
+    @Override
+	public UniprotLineParser<RtLineObject> createRtLineParser() {
+		return new AbstractUniprotLineParser<RtLineObject, RtLineLexer, RtLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rt.getFactory(),
+				new RtLineModelListener()
+		);
+	}
+
+    @Override
+    public UniprotLineParser<RpLineObject> createRpLineParser() {
+        return new AbstractUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
+                GrammarFactory.GrammarFactoryEnum.Rp.getFactory(),
+                new RpLineModelListener()
+        );
+    }
+
+    @Override
+    public UniprotLineParser<RaLineObject> createRaLineParser() {
+        return new AbstractUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
+                GrammarFactory.GrammarFactoryEnum.Ra.getFactory(),
+                new RaLineModelListener()
+        );
+    }
+    
 
 }

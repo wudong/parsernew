@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.ra;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wudong
@@ -8,5 +11,5 @@ package uk.ac.ebi.uniprot.parser.impl.ra;
  * To change this template use File | Settings | File Templates.
  */
 public class RaLineObject {
-    public int number;
+    public List<String> authors = new ArrayList<String>();
 }

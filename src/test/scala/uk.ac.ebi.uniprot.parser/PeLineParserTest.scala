@@ -4,8 +4,6 @@ import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers._
-import uk.ac.ebi.uniprot.parser.impl.sq.SqObjectParser
-import uk.ac.ebi.uniprot.parser.impl.pe.PeObjectParser
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**
@@ -21,13 +19,15 @@ class PeLineParserTest extends FunSuite {
   test("A valid SQ Line blocks") {
 
     val peLine = """PE   1: Evidence at protein level;
-                   |""".stripMargin.replace("\r", "");
+                   | """.stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createPeLineParser();
     val obj = parser.parse(peLine)
 
     obj should not be null;
-    expectResult(1) {obj.level};
+    expectResult(1) {
+      obj.level
+    };
 
   }
 

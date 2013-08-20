@@ -1,10 +1,13 @@
 package uk.ac.ebi.uniprot.parser.impl.rp;
 
+import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.RnLineBaseListener;
-import uk.ac.ebi.uniprot.parser.antlr.RnLineParser;
-import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
+import uk.ac.ebi.uniprot.parser.antlr.OsLineLexer;
+import uk.ac.ebi.uniprot.parser.antlr.RpLineBaseListener;
+import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
+import uk.ac.ebi.uniprot.parser.antlr.RpLineParser;
+import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,17 +16,25 @@ import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class RpLineModelListener extends RnLineBaseListener implements ParseTreeObjectExtractor<RnLineObject> {
+public class RpLineModelListener extends RpLineBaseListener implements ParseTreeObjectExtractor<RpLineObject> {
 
-    private RnLineObject object = new RnLineObject();
+    private RpLineObject object = new RpLineObject();
 
-    @Override
-    public void exitRn_number(@NotNull RnLineParser.Rn_numberContext ctx) {
-        String text = ctx.getText();
-        object.number = Integer.parseInt(text);
+    public RpLineObject getObject() {
+        return object;
     }
 
-    public RnLineObject getObject() {
-        return object;
+    @Override
+    public void exitSeparator(@NotNull RpLineParser.SeparatorContext ctx) {
+        if (ctx.CHANGE_OF_LINE() != null) {
+            WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
+            symbol.setText(" ");
+            symbol.setType(RpLineLexer.SPACE);
+        }
+    }
+
+    @Override
+    public void exitMulti_word(@NotNull RpLineParser.Multi_wordContext ctx) {
+        object.position = ctx.getText();
     }
 }

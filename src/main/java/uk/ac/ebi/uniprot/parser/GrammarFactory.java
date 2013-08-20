@@ -18,7 +18,7 @@ public interface GrammarFactory<L extends Lexer, P extends Parser> {
 	public static final String packageName = "uk.ac.ebi.uniprot.parser.antlr";
 
 	public static enum GrammarFactoryEnum {
-		Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og;
+		Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og, Rn, Rt, Rp, Ra;
 
 		private GrammarFactory factory;
 		private AbstractUniprotLineParser parser;

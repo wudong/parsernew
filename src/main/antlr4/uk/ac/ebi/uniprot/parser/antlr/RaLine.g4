@@ -1,12 +1,27 @@
-grammar RnLine;
+/*
+RA   Galinier A., Bleicher F., Negre D., Perriere G., Duclos B.,
+RA   Cozzone A.J., Cortay J.-C.;
+*/
 
-rn_rn: 'RN   ' LEFT_BRACKET rn_number RIGHT_BRACKET '\n';
+grammar RaLine;
 
-rn_number: INTEGER;
+ra_ra: RA_HEADER names RA_END;
 
-LEFT_BRACKET: '[';
-RIGHT_BRACKET: ']';
-INTEGER: INT_NO_ZERO  (INT_NO_ZERO|ZERO)*;
+names: name (',' separator name)*;
 
-fragment INT_NO_ZERO: [1-9];
-fragment ZERO: '0';
+name: FIRST_NAME SPACE LAST_NAME (SPACE ABBR)?;
+FIRST_NAME: UP_CASE LOW_CASE+;
+LAST_NAME: UP_CASE DOT ('-'? UP_CASE DOT)*;
+ABBR: 'Jr.'|'Sr.'|'II'|'III'|'IV'|'V'|'VI'|'VII'|'VIII';
+
+RA_HEADER: 'RA   ';
+RA_END: ';\n';
+
+separator: CHANGE_OF_LINE|SPACE;
+
+SPACE: ' ';
+CHANGE_OF_LINE: '\nRA   ';
+
+fragment DOT : '.';
+fragment UP_CASE: [A-Z];
+fragment  LOW_CASE: [a-z];

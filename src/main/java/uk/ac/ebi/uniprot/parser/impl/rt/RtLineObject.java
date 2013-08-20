@@ -8,5 +8,5 @@ package uk.ac.ebi.uniprot.parser.impl.rt;
  * To change this template use File | Settings | File Templates.
  */
 public class RtLineObject {
-    public int number;
+    public String title;
 }

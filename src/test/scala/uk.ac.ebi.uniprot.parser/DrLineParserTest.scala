@@ -3,9 +3,8 @@ package uk.ac.ebi.uniprot.parser
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
-import uk.ac.ebi.uniprot.parser.impl.dr.{DrLineObject, DrObjectParser}
+import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**

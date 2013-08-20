@@ -3,10 +3,9 @@ package uk.ac.ebi.uniprot.parser
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import org.scalatest.matchers.ShouldMatchers._
-import uk.ac.ebi.uniprot.parser.impl.sq.SqObjectParser
-import uk.ac.ebi.uniprot.parser.impl.pe.PeObjectParser
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
+import org.scalatest.matchers.ShouldMatchers._
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,16 +17,15 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 @RunWith(classOf[JUnitRunner])
 class RnLineParserTest extends FunSuite {
 
-  test("A valid SQ Line blocks") {
+  test("A valid Rn Line ") {
 
-    val peLine = """PE   1: Evidence at protein level;
-                   |""".stripMargin.replace("\r", "");
+    val rnLine = "RT   [1231]\n";
 
-    val parser = (new DefaultUniprotLineParserFactory).createPeLineParser();
-    val obj = parser.parse(peLine)
+    val parser = (new DefaultUniprotLineParserFactory).createRnLineParser();
+    val obj = parser.parse(rnLine)
 
     obj should not be null;
-    expectResult(1) {obj.level};
+    expectResult(1231) {obj.number};
 
   }
 

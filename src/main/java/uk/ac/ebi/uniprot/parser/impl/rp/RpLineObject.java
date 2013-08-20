@@ -8,5 +8,5 @@ package uk.ac.ebi.uniprot.parser.impl.rp;
  * To change this template use File | Settings | File Templates.
  */
 public class RpLineObject {
-    public int number;
+    public String position;
 }

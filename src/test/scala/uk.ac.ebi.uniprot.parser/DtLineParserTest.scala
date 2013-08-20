@@ -3,8 +3,6 @@ package uk.ac.ebi.uniprot.parser
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import uk.ac.ebi.uniprot.parser.impl.id.{IdObjectParser, IdLineObject}
-import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
@@ -16,12 +14,12 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(classOf[JUnitRunner])
-class DtLineParserTest extends FunSuite  {
+class DtLineParserTest extends FunSuite {
 
   val dtLine = """DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
                  |DT   19-JUL-2004, sequence version 1.
                  |DT   18-APR-2012, entry version 24.
-                 |""".stripMargin.replace("\r","")
+                 | """.stripMargin.replace("\r", "")
 
 
   test("A valid Swissprot DT") {
@@ -29,20 +27,44 @@ class DtLineParserTest extends FunSuite  {
     val obj = parser.parse(dtLine)
 
     obj should not be null;
-    expectResult(2011) {obj.integration_date.getYear}
-    expectResult(6) {obj.integration_date.getMonthOfYear}
-    expectResult(28) {obj.integration_date.getDayOfMonth}
-    expectResult(true) {obj.isSiwssprot}
+    expectResult(2011) {
+      obj.integration_date.getYear
+    }
+    expectResult(6) {
+      obj.integration_date.getMonthOfYear
+    }
+    expectResult(28) {
+      obj.integration_date.getDayOfMonth
+    }
+    expectResult(true) {
+      obj.isSiwssprot
+    }
 
-    expectResult(2004) {obj.seq_date.getYear}
-    expectResult(7) {obj.seq_date.getMonthOfYear}
-    expectResult(19) {obj.seq_date.getDayOfMonth}
-    expectResult(1) {obj.seq_version}
+    expectResult(2004) {
+      obj.seq_date.getYear
+    }
+    expectResult(7) {
+      obj.seq_date.getMonthOfYear
+    }
+    expectResult(19) {
+      obj.seq_date.getDayOfMonth
+    }
+    expectResult(1) {
+      obj.seq_version
+    }
 
-    expectResult(2012) {obj.entry_date.getYear}
-    expectResult(4) {obj.entry_date.getMonthOfYear}
-    expectResult(18) {obj.entry_date.getDayOfMonth}
-    expectResult(24) {obj.entry_version}
+    expectResult(2012) {
+      obj.entry_date.getYear
+    }
+    expectResult(4) {
+      obj.entry_date.getMonthOfYear
+    }
+    expectResult(18) {
+      obj.entry_date.getDayOfMonth
+    }
+    expectResult(24) {
+      obj.entry_version
+    }
   }
 
 }

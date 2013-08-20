@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers._
-import uk.ac.ebi.uniprot.parser.impl.sq.SqObjectParser
+
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**

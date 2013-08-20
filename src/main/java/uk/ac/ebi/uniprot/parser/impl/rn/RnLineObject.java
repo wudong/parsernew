@@ -8,8 +8,5 @@ package uk.ac.ebi.uniprot.parser.impl.rn;
  * To change this template use File | Settings | File Templates.
  */
 public class RnLineObject {
-    public String sequence;
-    public String crc64;
-    public int length;
-	public int weight;
+    public int number;
 }

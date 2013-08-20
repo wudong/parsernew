@@ -18,34 +18,28 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 @RunWith(classOf[JUnitRunner])
 class RtLineParserTest extends FunSuite {
 
-  test("A valid RP Line") {
-
-    val rpLine = "RP   NUCLEOTIDE SEQUENCE [MRNA].\n";
-
-    val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
+  test("A valid RT Line") {
+    val rpLine = "RT   \"A novel adapter protein employs a phosphotyrosine binding domain.\";\n";
+    val parser = (new DefaultUniprotLineParserFactory).createRtLineParser();
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("NUCLEOTIDE SEQUENCE [MRNA]") {obj.position};
-
+    expectResult("A novel adapter protein employs a phosphotyrosine binding domain") {obj.title};
   }
 
-  test("A valid RP 2 Lines") {
+  test("A valid RT multi Line") {
+    val rpLine = """RT   "New insulin-like proteins with atypical disulfide bond pattern
+                   |RT   characterized in Caenorhabditis elegans by comparative sequence
+                   |RT   analysis and homology modeling.";
+                   | """.stripMargin.replace("\r", "");
 
-    val rpLine = """RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C), FUNCTION, INTERACTION
-                   |RP   WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL
-                   |RP   STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221.
-                   |""".stripMargin.replace("\r","");
-
-    val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
+    val parser = (new DefaultUniprotLineParserFactory).createRtLineParser();
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C), FUNCTION, INTERACTION " +
-      "WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL " +
-      "STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221") {obj.position};
-
+    expectResult("New insulin-like proteins with atypical disulfide bond pattern " +
+      "characterized in Caenorhabditis elegans by comparative sequence " +
+      "analysis and homology modeling") {obj.title};
   }
-
 
 }
