@@ -13,7 +13,7 @@ DR   Pfam; PF04947; Pox_VLTF3; 1.
 
 grammar DrLine;
 
-dr_blocks:   dr_line+;
+dr_dr:   dr_line+;
 
 dr_line: dr_head dr_dbname '; ' (dr_one_attribute_line|dr_two_attribute_line|dr_four_attribute_line|dr_three_attribute_line) NEWLINE;
 
@@ -22,7 +22,7 @@ dr_dbname : Cap_Word | All_Cap_Word ;
 
 dr_one_attribute_line:  dr_attribute '; ' empty_attribute '.';
 dr_two_attribute_line:  dr_attribute '; ' dr_attribute '.';
-dr_three_attribute_line: dr_attribute  '; ' dr_attribute '; ' dr_attribute '.';
+dr_three_attribute_line: dr_attribute  '; ' dr_attribute  '; ' dr_attribute '.';
 dr_four_attribute_line: dr_attribute  '; ' dr_attribute '; ' (dr_attribute|empty_attribute) '; ' dr_attribute '.';
 
 empty_attribute: '-';

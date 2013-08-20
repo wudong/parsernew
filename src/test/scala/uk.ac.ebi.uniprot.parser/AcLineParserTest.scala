@@ -7,6 +7,7 @@ import uk.ac.ebi.uniprot.parser.impl.id.{IdObjectParser, IdLineObject}
 import uk.ac.ebi.uniprot.parser.impl.ac.AcObjectParser
 
 import org.scalatest.matchers.ShouldMatchers._
+import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +23,7 @@ class AcLineParserTest extends FunSuite  {
 
   test("a valid one line one primary acc ") {
 
-    val parser = new AcObjectParser;
+    val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_one_line)
 
     expectResult("Q6GZX4"){
@@ -36,7 +37,7 @@ class AcLineParserTest extends FunSuite  {
 
   test("a valid one line with more than one secondary acc ") {
 
-    val parser = new AcObjectParser;
+    val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_one_line_moreacc)
 
     expectResult("Q6GZX4"){
@@ -56,7 +57,7 @@ class AcLineParserTest extends FunSuite  {
 
   test("a valid three lineer with more than one secondary acc ") {
 
-    val parser = new AcObjectParser;
+    val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_three_lineer_moreacc)
 
     expectResult("Q6GZX4"){

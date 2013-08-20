@@ -1,8 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.gn;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineParser;
+import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class GnLineModelListener extends GnLineBaseListener {
+public class GnLineModelListener extends GnLineBaseListener implements ParseTreeObjectExtractor<GnLineObject> {
 
     private GnLineObject object = new GnLineObject();
 

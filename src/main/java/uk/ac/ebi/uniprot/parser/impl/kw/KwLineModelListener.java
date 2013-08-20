@@ -1,10 +1,12 @@
 package uk.ac.ebi.uniprot.parser.impl.kw;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.KwLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.KwLineParser;
+import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
 
 /**
@@ -14,7 +16,7 @@ import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class KwLineModelListener extends KwLineBaseListener {
+public class KwLineModelListener extends KwLineBaseListener implements ParseTreeObjectExtractor<KwLineObject> {
 
     private KwLineObject object = new KwLineObject();
 

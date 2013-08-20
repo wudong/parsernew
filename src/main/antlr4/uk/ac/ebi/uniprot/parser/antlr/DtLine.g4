@@ -7,7 +7,7 @@ DT   18-APR-2012, entry version 24.
 grammar DtLine;
 import CommonLex;
 
-dt_blocks: dt_integration_line dt_seqver_line dt_entryver_line;
+dt_dt: dt_integration_line dt_seqver_line dt_entryver_line;
 
 dt_integration_line :  dt_head dt_date 'integrated into UniProtKB/' dt_database DOT NEWLINE;
 

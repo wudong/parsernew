@@ -6,6 +6,8 @@ import org.junit.runner.RunWith
 import uk.ac.ebi.uniprot.parser.impl.id.{IdObjectParser, IdLineObject}
 import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
+import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
+
 /**
  * Created with IntelliJ IDEA.
  * User: wudong
@@ -23,7 +25,7 @@ class DtLineParserTest extends FunSuite  {
 
 
   test("A valid Swissprot DT") {
-    val parser = new DtObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createDtLineParser();
     val obj = parser.parse(dtLine)
 
     obj should not be null;

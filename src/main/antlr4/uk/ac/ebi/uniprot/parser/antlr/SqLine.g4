@@ -9,11 +9,13 @@ SQ   SEQUENCE   256 AA;  29735 MW;  B4840739BF7D4121 CRC64;
 
 grammar SqLine;
 
-sq_blocks: sq_head sq_block;
+sq_sq: sq_head sq_block;
 
-sq_head: 'SQ' SPACE3 'SEQUENCE' SPACE3 sq_length SPACE1 'AA;' SPACE2 INT SPACE1 'MW;' SPACE2 crc SPACE1 'CRC64' ';' NEWLINE;
+sq_head: 'SQ' SPACE3 'SEQUENCE' SPACE3 sq_length SPACE1 'AA;' SPACE2
+        molecular_weight SPACE1 'MW;' SPACE2 crc SPACE1 'CRC64' ';' NEWLINE;
 
 sq_length: INT;
+molecular_weight: INT;
 
 sq_block: sq_line* sq_line_last;
 
@@ -51,7 +53,8 @@ SPACE1 : ' ';
 SPACE2 : '  ';
 SPACE3 : '   ';
 SPACE5 : '     ';
-SQLETTER : [A-Z];
-UP_LETTER : [A-Z];
-DIGIT: [0-9];
+
+fragment SQLETTER : [ARNDCQEGHILKMFPSTWYVOUBZX];
+fragment UP_LETTER : [A-Z];
+fragment DIGIT: [0-9];
 

@@ -1,8 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.sq;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.SqLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.SqLineParser;
+import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
 
 /**
@@ -12,7 +14,7 @@ import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class SqLineModelListener extends SqLineBaseListener {
+public class SqLineModelListener extends SqLineBaseListener implements ParseTreeObjectExtractor<SqLineObject> {
 
     private SqLineObject object = new SqLineObject();
     private StringBuilder sb = new StringBuilder();
@@ -27,7 +29,12 @@ public class SqLineModelListener extends SqLineBaseListener {
         object.crc64 = ctx.getText();
     }
 
-    @Override
+	@Override
+	public void exitMolecular_weight(@NotNull SqLineParser.Molecular_weightContext ctx) {
+		object.weight = Integer.parseInt(ctx.getText());
+	}
+
+	@Override
     public void exitSq_letters(@NotNull SqLineParser.Sq_lettersContext ctx) {
         sb.append(ctx.getText());
     }

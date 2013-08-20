@@ -2,6 +2,7 @@ package uk.ac.ebi.uniprot.parser.impl.ac;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.AcLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.AcLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.IdLineBaseListener;
@@ -15,7 +16,7 @@ import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class AcLineModelListener extends AcLineBaseListener {
+public class AcLineModelListener extends AcLineBaseListener implements ParseTreeObjectExtractor<AcLineObject> {
 
     private AcLineObject object = new AcLineObject();
 

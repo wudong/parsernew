@@ -7,6 +7,7 @@ import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.dr.{DrLineObject, DrObjectParser}
 import uk.ac.ebi.uniprot.parser.impl.gn.GnObjectParser
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineObject.GnNameType
+import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +24,7 @@ class GnLineParserTest extends FunSuite  {
       |""".stripMargin.replace("\r", "");
 
   test("A valid GN Line block one liner.") {
-    val parser = new GnObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
     val obj = parser.parse(gnLine1)
 
     obj should not be null
@@ -53,7 +54,7 @@ class GnLineParserTest extends FunSuite  {
       |""".stripMargin.replace("\r", "");
 
   test("A valid GN Line block two liner.") {
-    val parser = new GnObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
     val obj = parser.parse(gnLine2)
 
     obj should not be null
@@ -83,7 +84,7 @@ class GnLineParserTest extends FunSuite  {
       |""".stripMargin.replace("\r", "");
 
   test("A valid GN Line block two liner with line-seperating in between name.") {
-    val parser = new GnObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
     val obj = parser.parse(gnLine3)
 
     obj should not be null
@@ -115,7 +116,7 @@ class GnLineParserTest extends FunSuite  {
       |""".stripMargin.replace("\r", "");
 
   test("A valid GN Line blocks.") {
-    val parser = new GnObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
     val obj = parser.parse(gnLine3)
 
     obj should not be null

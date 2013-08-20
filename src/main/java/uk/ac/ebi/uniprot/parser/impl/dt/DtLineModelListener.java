@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.DtLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.DtLineParser;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
@@ -15,7 +16,7 @@ import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class DtLineModelListener extends DtLineBaseListener {
+public class DtLineModelListener extends DtLineBaseListener implements ParseTreeObjectExtractor<DtLineObject> {
 
     private DtLineObject object = new DtLineObject();
     private DateTimeFormatter formatter

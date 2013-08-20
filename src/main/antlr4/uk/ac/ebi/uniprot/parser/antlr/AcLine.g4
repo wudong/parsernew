@@ -1,7 +1,7 @@
 grammar AcLine;
 import CommonLex;
 
-ac_blocks: ac_line+;
+ac_ac: ac_line+;
 
 ac_line: ac_head (accession SPACE1)* (accession NEWLINE);
 

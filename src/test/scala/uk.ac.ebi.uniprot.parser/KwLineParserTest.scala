@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.kw.KwObjectParser
+import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,15 +18,13 @@ import uk.ac.ebi.uniprot.parser.impl.kw.KwObjectParser
 @RunWith(classOf[JUnitRunner])
 class KwLineParserTest extends FunSuite  {
 
-  val kwOneLiner = "KW   Activator; Complete proteome; Reference proteome; Transcription.\n";
 
-  val threeLiner = """KW   Activator; Complete proteome;
-                     |KW   Reference proteome; Transcription;
-                     |KW   Transcription regulation.
-                     |""".stripMargin.replace("\r", "")
+
 
   test("A valid one line keyword") {
-    val parser = new KwObjectParser
+
+    val kwOneLiner = "KW   Activator; Complete proteome; Reference proteome; Transcription.\n";
+    val parser = (new DefaultUniprotLineParserFactory).createKwLineParser();
     val obj = parser.parse(kwOneLiner)
 
     obj should not be null;
@@ -37,7 +36,12 @@ class KwLineParserTest extends FunSuite  {
   }
 
   test("A valid tree line keyword") {
-    val parser = new KwObjectParser
+    val threeLiner = """KW   Activator; Complete proteome;
+                       |KW   Reference proteome; Transcription;
+                       |KW   Transcription regulation.
+                       |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createKwLineParser();
     val obj = parser.parse(threeLiner)
 
     obj should not be null;

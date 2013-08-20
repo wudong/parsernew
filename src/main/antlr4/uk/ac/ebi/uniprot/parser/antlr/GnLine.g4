@@ -1,11 +1,13 @@
 /*
 GN   Name=<name>; Synonyms=<name1>[, <name2>...]; OrderedLocusNames=<name1>[, <name2>...];
 GN   ORFNames=<name1>[, <name2>...];
+--Constrains not checked.
+---
 */
 
 grammar GnLine;
 
-gn_line_blocks: gn_line_block (GN_NAME_SEPARATOR gn_line_block)*;
+gn_gn: gn_line_block (GN_NAME_SEPARATOR gn_line_block)*;
 
 gn_line_block: gn_header
         one_name ((SPACE|change_line) one_name)*

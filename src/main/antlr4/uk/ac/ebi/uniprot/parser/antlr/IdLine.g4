@@ -6,7 +6,7 @@
 grammar IdLine;
 import CommonLex;
 
-id_line: id_head entry_name SPACE14 review_status SPACE9 INT SPACE1 'AA' DOT NEWLINE;
+id_id: id_head entry_name SPACE14 review_status SPACE9 INT SPACE1 'AA' DOT NEWLINE;
 
 review_status: REVIEW_STATUS_REVIEWED | REVIEW_STATUS_UNREVIEWED;
                

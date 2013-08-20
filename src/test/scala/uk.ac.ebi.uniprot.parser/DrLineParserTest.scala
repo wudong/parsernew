@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 import uk.ac.ebi.uniprot.parser.impl.dt.DtObjectParser
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.dr.{DrLineObject, DrObjectParser}
+import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +32,7 @@ class DrLineParserTest extends FunSuite  {
 
 
   test("A valid DR Line blocks") {
-    val parser = new DrObjectParser
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
     val obj = parser.parse(drLine)
 
     obj should not be null;

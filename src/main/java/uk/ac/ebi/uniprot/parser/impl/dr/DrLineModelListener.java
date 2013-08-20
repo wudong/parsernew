@@ -1,6 +1,7 @@
 package uk.ac.ebi.uniprot.parser.impl.dr;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.DrLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.DrLineParser;
 
@@ -11,7 +12,7 @@ import uk.ac.ebi.uniprot.parser.antlr.DrLineParser;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class DrLineModelListener extends DrLineBaseListener {
+public class DrLineModelListener extends DrLineBaseListener implements ParseTreeObjectExtractor<DrLineObject> {
 
     private DrLineObject object = new DrLineObject();
 

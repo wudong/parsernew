@@ -1,4 +1,4 @@
-package uk.ac.ebi.uniprot.parser.impl.sq;
+package uk.ac.ebi.uniprot.parser.impl.og;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,7 @@ import java.util.List;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class SqLineObject {
-    public String sequence;
-    public String crc64;
-    public int length;
-	public int weight;
+public class OgLineObject {
+    public List<String> plasmidName = new ArrayList<String>();
+
 }
