@@ -50,7 +50,7 @@ class RxLineParserTest extends FunSuite {
       (v.`type`.name(), v.value)
     }
 
-    expectResult(("DOI", "j.toxicon.2004.10.011")) {
+    expectResult(("DOI", "10.1016/j.toxicon.2004.10.011")) {
       val v = obj.rxs.get(1);
       (v.`type`.name(), v.value)
     }
@@ -76,7 +76,7 @@ class RxLineParserTest extends FunSuite {
     }
 
     expectResult(("DOI", "10.1073/pnas.1130426100")) {
-      val v = obj.rxs.get(1);
+      val v = obj.rxs.get(2);
       (v.`type`.name(), v.value)
     }
   }
