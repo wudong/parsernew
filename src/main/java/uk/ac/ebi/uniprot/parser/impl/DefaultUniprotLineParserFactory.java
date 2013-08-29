@@ -30,6 +30,8 @@ import uk.ac.ebi.uniprot.parser.impl.rc.RcLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rg.RgLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rg.RgLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rl.RlLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.rl.RlLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rn.RnLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rp.RpLineModelListener;
@@ -150,6 +152,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		);
 	}
 
+
 	@Override
 	public UniprotLineParser<RpLineObject> createRpLineParser() {
 		return new AbstractUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
@@ -187,6 +190,14 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		return new AbstractUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rx.getFactory(),
 				new RxLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<RlLineObject> createRlLineParser() {
+		return new AbstractUniprotLineParser<RlLineObject, RlLineLexer, RlLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rl.getFactory(),
+				new RlLineModelListener()
 		);
 	}
 
