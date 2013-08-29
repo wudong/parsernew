@@ -16,6 +16,18 @@
     <version>2013.07-SNAPSHOT</version>
     <name>Uniprot FlatFile Entry Parser Module with Antlr 4</name>
 
+    <repositories>
+        <repository>
+            <id>http-deployed-releases</id>
+            <name>http-deployed-releases</name>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <url>http://wwwdev.ebi.ac.uk/uniprot/maven/release</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.google.guava</groupId>
