@@ -1,7 +1,5 @@
 package uk.ac.ebi.uniprot.parser.impl.de;
 
-import uk.ac.ebi.kraken.interfaces.uniprot.description.FlagType;
-
 import java.util.ArrayList;
 import java.util.List;
 

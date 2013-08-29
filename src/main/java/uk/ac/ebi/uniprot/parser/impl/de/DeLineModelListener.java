@@ -101,6 +101,6 @@ public class DeLineModelListener extends DeLineBaseListener implements ParseTree
 	}
 
 	public String treateNameValue(String name) {
-		return name.substring(0, name.length() - 2);
+		return name.substring(1, name.length() - 2);
 	}
 }
