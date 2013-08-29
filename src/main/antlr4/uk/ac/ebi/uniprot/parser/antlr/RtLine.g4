@@ -9,7 +9,7 @@ RT_ENDING : TITLE_END '";\n';
 TITLE_END: [.?!];
 
 multi_word:  WORD (separator WORD)*;
-separator: SPACE | CHANGE_OF_LINE;
+separator: SPACE | CHANGE_OF_LINE ;
 
 WORD: (LD)+ ;
 SPACE: ' ';

@@ -6,6 +6,8 @@ import uk.ac.ebi.uniprot.parser.UniprotLineParserFactory;
 import uk.ac.ebi.uniprot.parser.antlr.*;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineObject;
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineModelListener;
@@ -51,7 +53,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 				new AcLineModelListener()
 		);
 	}
-	
+
 	@Override
 	public UniprotLineParser<DrLineObject> createDrLineParser() {
 		return new AbstractUniprotLineParser<DrLineObject, DrLineLexer, DrLineParser>(
@@ -59,7 +61,15 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 				new DrLineModelListener()
 		);
 	}
-	
+
+	@Override
+	public UniprotLineParser<DeLineObject> createDeLineParser() {
+		return new AbstractUniprotLineParser<DeLineObject, DeLineLexer, DeLineParser>(
+				GrammarFactory.GrammarFactoryEnum.De.getFactory(),
+				new DeLineModelListener()
+		);
+	}
+
 	@Override
 	public UniprotLineParser<DtLineObject> createDtLineParser() {
 		return new AbstractUniprotLineParser<DtLineObject, DtLineLexer, DtLineParser>(
@@ -67,7 +77,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 				new DtLineModelListener()
 		);
 	}
-	
+
 	@Override
 	public UniprotLineParser<GnLineObject> createGnLineParser() {
 		return new AbstractUniprotLineParser<GnLineObject, GnLineLexer, GnLineParser>(
@@ -124,14 +134,15 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		);
 	}
 
-    @Override
+	@Override
 	public UniprotLineParser<RnLineObject> createRnLineParser() {
 		return new AbstractUniprotLineParser<RnLineObject, RnLineLexer, RnLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rn.getFactory(),
 				new RnLineModelListener()
 		);
 	}
-    @Override
+
+	@Override
 	public UniprotLineParser<RtLineObject> createRtLineParser() {
 		return new AbstractUniprotLineParser<RtLineObject, RtLineLexer, RtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rt.getFactory(),
@@ -139,45 +150,45 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		);
 	}
 
-    @Override
-    public UniprotLineParser<RpLineObject> createRpLineParser() {
-        return new AbstractUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
-                GrammarFactory.GrammarFactoryEnum.Rp.getFactory(),
-                new RpLineModelListener()
-        );
-    }
+	@Override
+	public UniprotLineParser<RpLineObject> createRpLineParser() {
+		return new AbstractUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rp.getFactory(),
+				new RpLineModelListener()
+		);
+	}
 
-    @Override
-    public UniprotLineParser<RaLineObject> createRaLineParser() {
-        return new AbstractUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
-                GrammarFactory.GrammarFactoryEnum.Ra.getFactory(),
-                new RaLineModelListener()
-        );
-    }
+	@Override
+	public UniprotLineParser<RaLineObject> createRaLineParser() {
+		return new AbstractUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Ra.getFactory(),
+				new RaLineModelListener()
+		);
+	}
 
-    @Override
-    public UniprotLineParser<RgLineObject> createRgLineParser() {
-        return new AbstractUniprotLineParser<RgLineObject, RgLineLexer, RgLineParser>(
-                GrammarFactory.GrammarFactoryEnum.Rg.getFactory(),
-                new RgLineModelListener()
-        );
-    }
+	@Override
+	public UniprotLineParser<RgLineObject> createRgLineParser() {
+		return new AbstractUniprotLineParser<RgLineObject, RgLineLexer, RgLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rg.getFactory(),
+				new RgLineModelListener()
+		);
+	}
 
-    @Override
-    public UniprotLineParser<RcLineObject> createRcLineParser() {
-        return new AbstractUniprotLineParser<RcLineObject, RcLineLexer, RcLineParser>(
-                GrammarFactory.GrammarFactoryEnum.Rc.getFactory(),
-                new RcLineModelListener()
-        );
-    }
-   
-    @Override
-    public UniprotLineParser<RxLineObject> createRxLineParser() {
-        return new AbstractUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
-                GrammarFactory.GrammarFactoryEnum.Rx.getFactory(),
-                new RxLineModelListener()
-        );
-    }
-    
+	@Override
+	public UniprotLineParser<RcLineObject> createRcLineParser() {
+		return new AbstractUniprotLineParser<RcLineObject, RcLineLexer, RcLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rc.getFactory(),
+				new RcLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<RxLineObject> createRxLineParser() {
+		return new AbstractUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Rx.getFactory(),
+				new RxLineModelListener()
+		);
+	}
+
 
 }

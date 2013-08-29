@@ -4,6 +4,7 @@ import uk.ac.ebi.uniprot.parser.antlr.AcLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.AcLineParser;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineObject;
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineObject;
@@ -29,6 +30,8 @@ public interface UniprotLineParserFactory {
 	public  UniprotLineParser<AcLineObject> createAcLineParser();
 
 	UniprotLineParser<DrLineObject> createDrLineParser();
+
+	UniprotLineParser<DeLineObject> createDeLineParser();
 
 	UniprotLineParser<DtLineObject> createDtLineParser();
 
