@@ -1,43 +1,53 @@
+/*
+FT   VAR_SEQ      33     83       TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL
+FT                                DGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in
+FT                                isoform 2).
+FT                                /FTId=VSP_004370.
+*/
+
 grammar FtLine;
+
+@members {
+  private int loc = 0;
+  private boolean word=false;
+}
 
 ft_ft: ft_line+;
 
-ft_line: FT_HEADER ft_name space ft_location space ft_location ((SPACE7 ft_content)|NEWLINE) ft_id? ;
+ft_line: FT_HEADER ft_key (SPACE+) loc_start (SPACE+) loc_end (SPACE7 ft_text DOT)? ft_id? NEW_LINE;
 
-ft_location : (LT?'1') | (INT GT?);
+ft_id: CHANGE_OF_LINE '/FTId=' ID_WORD DOT ;
 
-ft_name: FT_NAME ;
+ft_text: WORD (separator WORD)*;
+loc_start: FT_LOCATION;
+loc_end: FT_LOCATION;
 
-ft_content: .+? DOT_NEWLINE;
+ft_key: FT_KEY;
+FT_HEADER: 'FT   ' {loc=0;};
 
-ft_id: FT_NEW_LINE_HEADER '/FTId=' ft_id_content DOT_NEWLINE;
+separator: (SPACE|CHANGE_OF_LINE);
 
-space : SPACE1 | SPACE7 | SPACE;
+FT_LOCATION: DIGIT+ {loc++;};
 
-ft_id_content : FT_ID_CONTENT ;
+CHANGE_OF_LINE: '\nFT                                ';
 
-FT_NEW_LINE_HEADER:'FT                                ';
-FT_HEADER : 'FT   ';
-CHANGE_LINE: NEWLINE FT_NEW_LINE_HEADER;
+FT_KEY:
+      'INIT_MET'|'SIGNAL'|'PROPEP'|'TRANSIT'|'CHAIN'|'PEPTIDE'|'TOPO_DOM'|'TRANSMEM'|
+      'INTRAMEM'|'DOMAIN'|'REPEAT'|'CA_BIND'|'ZN_FING'|'DNA_BIND'|'NP_BIND'|
+      'REGION'|'COILED'|'MOTIF'|'COMPBIAS'|'ACT_SITE'|'METAL'|'BINDING'|'SITE'|
+      'NON_STD'|'MOD_RES'|'LIPID'|'CARBOHYD'|'DISULFID'|'CROSSLNK'|
+      'VAR_SEQ'|'VARIANT'|'MUTAGEN'|'UNSURE'|'CONFLICT'|'NON_CONS'|
+      'NON_TER'|'HELIX'|'STRAND'|'TURN';
 
-CAR : 'CAR_';
-PRO: 'PRO_';
-VAR: 'VAR_';
-VSP: 'VSP_';
+ID_WORD: ('VSP_'| 'CAR_'|'PRO_'|'VSP_') DIGIT+;
 
-SPACE1 : ' ';
-SPACE7: '       ';
-SPACE: SPACE1+;
-DOT_NEWLINE: DOT NEWLINE;
-NEWLINE : '\n';
-DOT : '.';
+DOT: '.' {word=false;};
+SPACE: ' ';
+SPACE7: '       ' {loc==2}? {word=true;};
+WORD: LETTER+ {word}?;
+NEW_LINE : '\n';
 
-INT : DIGIT+;
-FT_NAME : UP_LETTER+ '_'? UP_LETTER+;
-FT_ID_CONTENT: (CAR|PRO|VAR|VSP) INT;
-Word_With_Digit_Score: (UP_LETTER|LOW_LETTER|DIGIT|'_'|'-')+;
-GT : '>'     ;
-LT : '<'      ;
-DIGIT : [0-9]  ;
-UP_LETTER: [A-Z];
-LOW_LETTER: [a-z];
+fragment DIGIT: [0-9];
+fragment LETTER: ~[ \n\r\t.];
+
+
