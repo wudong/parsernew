@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.gn;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +15,27 @@ import java.util.List;
  */
 public class GnLineObject {
 
-    public List<GnObject> gnObjects = new ArrayList<GnObject>();
+	public List<GnObject> gnObjects = new ArrayList<GnObject>();
 
-    public static class GnObject {
-        public List<GnName> names = new ArrayList<GnName>();
-    }
+	public static class GnObject {
+		public List<GnName> names = new ArrayList<GnName>();
+	}
 
-    public static class GnName {
-        public GnNameType type;
-        public List<String> names = new ArrayList<String>();
-    }
+	public static class GnName implements HasEvidence {
 
-    public static enum GnNameType {
-        GENAME, SYNNAME, ORFNAME, OLNAME;
-    }
+		public GnNameType type;
+		public List<String> names = new ArrayList<String>();
+
+		private EvidenceInfo evidence = new EvidenceInfo();
+
+		@Override
+		public EvidenceInfo getEvidenceInfo() {
+			return evidence;
+		}
+	}
+
+	public static enum GnNameType {
+		GENAME, SYNNAME, ORFNAME, OLNAME;
+	}
 
 }

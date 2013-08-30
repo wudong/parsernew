@@ -1,11 +1,15 @@
 package uk.ac.ebi.uniprot.parser.impl.gn;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineParser;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,8 +33,15 @@ public class GnLineModelListener extends GnLineBaseListener implements ParseTree
                 GnLineParser.Gene_nameContext gene_nameContext = context.gene_name();
                 GnLineObject.GnName gnName = new GnLineObject.GnName();
                 gnName.type = GnLineObject.GnNameType.GENAME;
-                gnName.names.add(gene_nameContext.name().getText());
-                gnObject.names.add(gnName);
+
+	            GnLineParser.NameContext name = gene_nameContext.name();
+	            GnLineParser.EvidenceContext evidence = name.evidence();
+	            String text = name.GENE_NAME().getText();
+
+	            gnName.names.add(text);
+	            addEvidenceForName(text, evidence, gnName);
+	            gnObject.names.add(gnName);
+
             } else if (context.syn_name() != null) {
                 GnLineParser.Syn_nameContext syn_nameContext = context.syn_name();
                 GnLineObject.GnName gnName = new GnLineObject.GnName();
@@ -38,7 +49,10 @@ public class GnLineModelListener extends GnLineBaseListener implements ParseTree
 
                 List<GnLineParser.NameContext> names = syn_nameContext.names().name();
                 for (GnLineParser.NameContext name : names) {
-                    gnName.names.add(name.getText());
+	                GnLineParser.EvidenceContext evidence = name.evidence();
+	                String text = name.GENE_NAME().getText();
+	                gnName.names.add(text);
+	                addEvidenceForName(text, evidence, gnName);
                 }
                 gnObject.names.add(gnName);
             } else if (context.orf_name() != null) {
@@ -48,7 +62,10 @@ public class GnLineModelListener extends GnLineBaseListener implements ParseTree
 
                 List<GnLineParser.NameContext> names = orf_nameContext.names().name();
                 for (GnLineParser.NameContext name : names) {
-                    gnName.names.add(name.getText());
+	                GnLineParser.EvidenceContext evidence = name.evidence();
+	                String text = name.GENE_NAME().getText();
+	                gnName.names.add(text);
+	                addEvidenceForName(text, evidence, gnName);
                 }
                 gnObject.names.add(gnName);
             } else if (context.ol_name() != null) {
@@ -58,7 +75,10 @@ public class GnLineModelListener extends GnLineBaseListener implements ParseTree
 
                 List<GnLineParser.NameContext> names = ol_nameContext.names().name();
                 for (GnLineParser.NameContext name : names) {
-                    gnName.names.add(name.getText());
+	                GnLineParser.EvidenceContext evidence = name.evidence();
+	                String text = name.GENE_NAME().getText();
+	                gnName.names.add(text);
+	                addEvidenceForName(text, evidence, gnName);
                 }
                 gnObject.names.add(gnName);
             }
@@ -67,7 +87,20 @@ public class GnLineModelListener extends GnLineBaseListener implements ParseTree
         object.gnObjects.add(gnObject);
     }
 
-    public GnLineObject getObject() {
+	private void addEvidenceForName(String text, GnLineParser.EvidenceContext evidence, HasEvidence container) {
+		if (evidence==null)return;
+
+		EvidenceInfo evidenceInfo = container.getEvidenceInfo();
+		List<TerminalNode> terminalNodes = evidence.EV_TAG();
+		List<String> strings = new ArrayList<String>();
+		for (TerminalNode terminalNode : terminalNodes) {
+			String text1 = terminalNode.getText();
+			strings.add(text1);
+		}
+		evidenceInfo.evidences.put(text, strings);
+	}
+
+	public GnLineObject getObject() {
         return object;
     }
 }
