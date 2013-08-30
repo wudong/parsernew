@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject.{FlagType, Name}
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject.{NameBlock, FlagType, Name}
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,24 +47,24 @@ class DeLineParserTest extends FunSuite {
 
     obj.flag should equal(FlagType.Precursor)
 
-    obj.altname should have size (7)
+    obj.altName should have size (7)
 
     expectResult(("Annexin V", 0, 0)) {
-      val name: Name = obj.altname.get(0)
+      val name: Name = obj.altName.get(0)
       (name.fullName,
         name.shortNames.size(),
         name.ecs.size())
     }
 
     expectResult(("Lipocortin V", 0, 0)) {
-      val name: Name = obj.altname.get(1)
+      val name: Name = obj.altName.get(1)
       (name.fullName,
         name.shortNames.size(),
         name.ecs.size())
     }
 
     expectResult(("Placental anticoagulant protein I", "PAP-I", 1, 0)) {
-      val name: Name = obj.altname.get(2)
+      val name: Name = obj.altName.get(2)
       (name.fullName,
         name.shortNames.get(0),
         name.shortNames.size(),
@@ -72,7 +72,7 @@ class DeLineParserTest extends FunSuite {
     }
 
     expectResult(("Anchorin CII", 0, 0)) {
-      val name: Name = obj.altname.get(6)
+      val name: Name = obj.altName.get(6)
       (name.fullName,
         name.shortNames.size(),
         name.ecs.size())
@@ -96,10 +96,10 @@ class DeLineParserTest extends FunSuite {
     obj should not be null
     obj.recName should be(null)
 
-    obj.altname should have size (3)
+    obj.altName should have size (3)
 
     expectResult((null, 1, 2, "PAP-I", "1.1.1.1", "1.1.1.2")) {
-      val altNname1 = obj.altname.get(0)
+      val altNname1 = obj.altName.get(0)
       (altNname1.fullName,
         altNname1.shortNames.size(),
         altNname1.ecs.size(),
@@ -110,7 +110,7 @@ class DeLineParserTest extends FunSuite {
     }
 
     expectResult((null, 0, 1, "1.1.1.1")) {
-      val altNname1 = obj.altname.get(1)
+      val altNname1 = obj.altName.get(1)
       (altNname1.fullName,
         altNname1.shortNames.size(),
         altNname1.ecs.size(),
@@ -119,7 +119,7 @@ class DeLineParserTest extends FunSuite {
     }
 
     expectResult((null, 3, 0, "PAP-I", "PAP.1", "PAP.2")) {
-      val altNname1 = obj.altname.get(2)
+      val altNname1 = obj.altName.get(2)
       (altNname1.fullName,
         altNname1.shortNames.size(),
         altNname1.ecs.size(),
@@ -129,6 +129,82 @@ class DeLineParserTest extends FunSuite {
         )
     }
 
+  }
+
+  test("DE with include and contains") {
+    val deLines = """DE   RecName: Full=Arginine biosynthesis bifunctional protein argJ;
+                    |DE   Includes:
+                    |DE     RecName: Full=Glutamate N-acetyltransferase;
+                    |DE              EC=2.3.1.35;
+                    |DE     AltName: Full=Ornithine acetyltransferase;
+                    |DE              Short=OATase;
+                    |DE     AltName: Full=Ornithine transacetylase;
+                    |DE   Includes:
+                    |DE     RecName: Full=Amino-acid acetyltransferase;
+                    |DE              EC=2.3.1.1;
+                    |DE     AltName: Full=N-acetylglutamate synthase;
+                    |DE              Short=AGS;
+                    |DE   Contains:
+                    |DE     RecName: Full=Arginine biosynthesis bifunctional protein argJ alpha chain;
+                    |DE   Contains:
+                    |DE     RecName: Full=Arginine biosynthesis bifunctional protein argJ beta chain;
+                    |""".stripMargin.replace("\r", "");
+
+    val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
+    obj.recName should not be (null)
+    obj.recName.fullName should equal("Arginine biosynthesis bifunctional protein argJ")
+    obj.recName.ecs should be ('empty)
+    obj.recName.shortNames should be ('empty)
+    obj.subName should be('empty)
+    obj.altName should be('empty)
+    obj.alt_Allergen should be (null)
+    obj.alt_Biotech should be (null)
+    obj.alt_CD_antigen should be ('empty)
+    obj.alt_INN should be ('empty)
+
+    obj.includedNames should have size (2)
+    val block1: NameBlock = obj.includedNames.get(0)
+    block1.recName.fullName should equal("Glutamate N-acetyltransferase")
+    block1.recName.ecs should have size (1)
+    block1.recName.ecs.get(0) should equal("2.3.1.35")
+    block1.recName.shortNames should be('empty)
+
+    block1.altName should have size (2)
+    block1.altName.get(0).fullName should equal("Ornithine acetyltransferase")
+    block1.altName.get(0).shortNames should have size (1)
+    block1.altName.get(0).shortNames.get(0) should equal("OATase")
+    block1.altName.get(0).ecs should be('empty)
+
+    block1.altName.get(1).fullName should equal("Ornithine transacetylase")
+    block1.altName.get(1).ecs should be('empty)
+    block1.altName.get(1).shortNames should be('empty)
+
+    val block2: NameBlock = obj.includedNames.get(1)
+    block2.recName.fullName should equal("Amino-acid acetyltransferase")
+    block2.recName.ecs should have size (1)
+    block2.recName.ecs.get(0) should equal("2.3.1.1")
+    block2.recName.shortNames should be('empty)
+
+    block2.altName should have size (1)
+    block2.altName.get(0).fullName should equal("N-acetylglutamate synthase")
+    block2.altName.get(0).shortNames should have size (1)
+    block2.altName.get(0).shortNames.get(0) should equal("AGS")
+    block2.altName.get(0).ecs should be('empty)
+
+    obj.containedNames should have size (2)
+    val block3: NameBlock = obj.containedNames.get(0)
+    block3.recName.fullName should equal("Arginine biosynthesis bifunctional protein argJ alpha chain")
+    block3.recName.ecs should be('empty)
+    block3.recName.shortNames should be('empty)
+    block3.altName should be('empty)
+    block3.subName should be('empty)
+
+    val block4: NameBlock = obj.containedNames.get(1)
+    block4.recName.fullName should equal("Arginine biosynthesis bifunctional protein argJ beta chain")
+    block4.recName.ecs should be('empty)
+    block4.recName.shortNames should be('empty)
+    block4.altName should be('empty)
+    block4.subName should be('empty)
   }
 
 }

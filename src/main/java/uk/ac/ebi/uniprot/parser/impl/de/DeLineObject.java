@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class DeLineObject {
 	public Name recName;
-	public List<Name> altname = new ArrayList<Name>();
+	public List<Name> altName = new ArrayList<Name>();
 	public List<Name> subName = new ArrayList<Name>();
 	public String alt_Allergen;
 	public String alt_Biotech;
@@ -23,8 +23,8 @@ public class DeLineObject {
 
 	public static class NameBlock {
 		public Name recName;
-		public List<Name> altname = new ArrayList<Name>();
-		public List<Name> subName;
+		public List<Name> altName = new ArrayList<Name>();
+		public List<Name> subName = new ArrayList<Name>();
 		public String alt_Allergen;
 		public String alt_Biotech;
 		public List<String> alt_CD_antigen = new ArrayList<String>();
