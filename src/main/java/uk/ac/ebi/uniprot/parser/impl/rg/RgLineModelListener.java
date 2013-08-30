@@ -1,7 +1,7 @@
 package uk.ac.ebi.uniprot.parser.impl.rg;
 
 import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTree;
+
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.RgLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RgLineParser;

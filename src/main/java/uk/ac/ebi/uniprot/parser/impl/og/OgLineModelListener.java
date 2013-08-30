@@ -1,10 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.og;
 
-import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
+
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.*;
-import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
+import uk.ac.ebi.uniprot.parser.antlr.OgLineBaseListener;
+import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
 
 /**
  * Created with IntelliJ IDEA.
