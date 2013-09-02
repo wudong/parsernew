@@ -19,7 +19,7 @@ class PeLineParserTest extends FunSuite {
   test("A valid SQ Line blocks") {
 
     val peLine = """PE   1: Evidence at protein level;
-                   | """.stripMargin.replace("\r", "");
+                 |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createPeLineParser();
     val obj = parser.parse(peLine)

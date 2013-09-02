@@ -6,7 +6,4 @@ rn_number: INTEGER;
 
 LEFT_BRACKET: '[';
 RIGHT_BRACKET: ']';
-INTEGER: INT_NO_ZERO  (INT_NO_ZERO|ZERO)*;
-
-fragment INT_NO_ZERO: [1-9];
-fragment ZERO: '0';
+INTEGER: [1-9][0-9]*;

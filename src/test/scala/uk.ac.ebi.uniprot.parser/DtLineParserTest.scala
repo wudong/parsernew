@@ -21,7 +21,6 @@ class DtLineParserTest extends FunSuite {
                  |DT   18-APR-2012, entry version 24.
                  |""".stripMargin.replace("\r", "")
 
-
   test("A valid Swissprot DT") {
     val parser = (new DefaultUniprotLineParserFactory).createDtLineParser();
     val obj = parser.parse(dtLine)

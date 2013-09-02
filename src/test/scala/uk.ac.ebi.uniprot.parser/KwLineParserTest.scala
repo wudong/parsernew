@@ -16,9 +16,6 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 @RunWith(classOf[JUnitRunner])
 class KwLineParserTest extends FunSuite  {
 
-
-
-
   test("A valid one line keyword") {
 
     val kwOneLiner = "KW   Activator; Complete proteome; Reference proteome; Transcription.\n";
