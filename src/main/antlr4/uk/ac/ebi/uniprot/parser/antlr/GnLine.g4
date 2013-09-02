@@ -41,7 +41,7 @@ SPACE3: '   ';
 SPACE: ' ';
 NEWLINE : '\n';
 
-EV_TAG : ('EI'|'EA')DIGIT+;
+EV_TAG : ('EI'|'EA') DIGIT+;
 
 GENE_NAME:GENE_LETTER_STARTER GENE_LETTER+ {name}?;
 fragment DIGIT: [0-9];
