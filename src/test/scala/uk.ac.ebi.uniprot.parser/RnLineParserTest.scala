@@ -19,7 +19,7 @@ class RnLineParserTest extends FunSuite {
 
   test("A valid Rn Line ") {
 
-    val rnLine = "RT   [1231]\n";
+    val rnLine = "RN   [1231]\n";
 
     val parser = (new DefaultUniprotLineParserFactory).createRnLineParser();
     val obj = parser.parse(rnLine)
