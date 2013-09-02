@@ -19,7 +19,7 @@ class DtLineParserTest extends FunSuite {
   val dtLine = """DT   28-JUN-2011, integrated into UniProtKB/Swiss-Prot.
                  |DT   19-JUL-2004, sequence version 1.
                  |DT   18-APR-2012, entry version 24.
-                 | """.stripMargin.replace("\r", "")
+                 |""".stripMargin.replace("\r", "")
 
 
   test("A valid Swissprot DT") {

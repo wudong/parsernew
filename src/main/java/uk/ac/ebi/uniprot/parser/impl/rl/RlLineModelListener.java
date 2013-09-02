@@ -57,8 +57,7 @@ public class RlLineModelListener extends RlLineBaseListener implements ParseTree
     public void exitRl_book(@NotNull RlLineParser.Rl_bookContext ctx) {
         RlLineObject.Book book = new RlLineObject.Book();
 
-        String text1 = ctx.rl_book_title().getText();
-        book.title = text1.substring(0, text1.length()-1 );
+        book.title = ctx.rl_book_title().getText();
         List<TerminalNode> name = ctx.editor_names().NAME();
 
         for (TerminalNode terminalNode : name) {

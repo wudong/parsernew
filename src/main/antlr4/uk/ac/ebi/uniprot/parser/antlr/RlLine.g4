@@ -5,6 +5,7 @@ grammar RlLine;
 @members {
   private boolean inEpub=false;
   private boolean inBook=false;
+  private boolean inBook_2=false;
 }
 
 rl_rl: RL_HEADER rl '\n';
@@ -27,31 +28,35 @@ EPUB_TEXT:
 //and it is disabled after EPUB is parsed.
 
 rl_book: '(In) ' editor_names rl_book_separator EDS
-        rl_book_title rl_book_separator rl_book_page COMMA rl_book_separator
-        rl_book_press COMMA rl_book_separator rl_book_place SPACE LEFT_BRACKET date_year RIGHT_BRACKET '.';
+        rl_book_title rl_book_separator rl_book_page ',' rl_book_separator
+        rl_book_press ',' rl_book_separator rl_book_place SPACE LEFT_BRACKET date_year RIGHT_BRACKET '.';
 
 rl_book_page: 'pp.'(INTEGER':')?INTEGER'-'INTEGER;
 rl_book_title: BOOK_TITLE;
-rl_book_press: WORD (SPACE WORD)*;
-rl_book_place: WORD (SPACE WORD)*;
+rl_book_press: BOOK_WORD (SPACE BOOK_WORD)*;
+rl_book_place: BOOK_WORD (SPACE BOOK_WORD)*;
 
-editor_names: NAME (COMMA rl_book_separator NAME)* ;
+editor_names: NAME (',' rl_book_separator NAME)* ;
 NAME: UP_CASE LOW_CASE+ SPACE UP_CASE DOT ('-'? UP_CASE DOT)* (SPACE ABBR)?;
 EDS: '(eds.);' CHANGE_OF_LINE
      {inBook=true;};
 BOOK_TITLE:
-    .+? COMMA
-    {inBook}? {inBook=false;};
+    .+? ','
+    {inBook}? {inBook=false;inBook_2=true;};
+BOOK_WORD:
+    BW+?
+    {inBook_2}?    ;
+fragment BW:  ~[ \r\n\t()];
 
 rl_book_separator: SPACE|CHANGE_OF_LINE;
 
 rl_unpublished: 'Unpublished observations' SPACE LEFT_BRACKET date_month_year RIGHT_BRACKET '.';
 
-rl_thesis: 'Thesis ' LEFT_BRACKET date_year RIGHT_BRACKET COMMA SPACE institute_name COMMA SPACE country'.';
+rl_thesis: 'Thesis ' LEFT_BRACKET date_year RIGHT_BRACKET ',' SPACE institute_name','SPACE country'.';
 country: WORD (SPACE WORD)*;
 institute_name: WORD (SPACE WORD)*;
 
-rl_patent: 'Patent number ' patent_number COMMA SPACE date_day_month_year '.';
+rl_patent: 'Patent number ' patent_number ',' SPACE date_day_month_year '.';
 patent_number: (WORD | INTEGER)+;
 
 rl_submission: 'Submitted ' LEFT_BRACKET date_month_year RIGHT_BRACKET ' to ' submission_db '.';

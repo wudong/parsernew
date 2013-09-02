@@ -10,4 +10,5 @@ package uk.ac.ebi.uniprot.parser.impl.id;
 public class IdLineObject {
     public Boolean reviewed;
     public String entryName;
+    public int sequenceLength;
 }

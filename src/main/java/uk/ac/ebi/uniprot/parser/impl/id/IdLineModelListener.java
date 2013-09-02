@@ -31,6 +31,10 @@ public class IdLineModelListener extends IdLineBaseListener implements ParseTree
         object.entryName = ctx.getText();
     }
 
+    @Override
+    public void exitLength(@NotNull IdLineParser.LengthContext ctx) {
+        object.sequenceLength = Integer.parseInt(ctx.getText());
+    }
 
     public IdLineObject getObject() {
         return object;
