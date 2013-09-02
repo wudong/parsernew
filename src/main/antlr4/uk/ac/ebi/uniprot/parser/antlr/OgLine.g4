@@ -44,9 +44,9 @@ EV_TAG : ('EI'|'EA') [1-9][0-9]*;
 SPACE : ' ';
 
 LEFT_B : '{' {plasmid=false;};
-RIGHT_B : '{';
+RIGHT_B : '}';
 COMMA: ',' {plasmid=false;};
 DOT: '.' {plasmid=false;};
 
-fragment LD : ~[,.];
+fragment LD : ~[,.{}];
 

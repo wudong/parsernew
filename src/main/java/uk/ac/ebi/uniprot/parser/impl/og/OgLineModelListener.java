@@ -33,7 +33,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 	}
 
 	@Override
-	public void enterHydrogenosome_line(@NotNull OgLineParser.Hydrogenosome_lineContext ctx) {
+	public void exitHydrogenosome_line(@NotNull OgLineParser.Hydrogenosome_lineContext ctx) {
 		object.ogs.add(OgLineObject.OgEnum.HYDROGENOSOME);
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
