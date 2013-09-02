@@ -10,7 +10,9 @@ import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineObject;
 import uk.ac.ebi.uniprot.parser.impl.oc.OcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.og.OgLineObject;
+import uk.ac.ebi.uniprot.parser.impl.oh.OhLineObject;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ox.OxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.ra.RaLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject;
@@ -68,4 +70,8 @@ public interface UniprotLineParserFactory {
 	UniprotLineParser<FtLineObject> createFtLineParser();
 
 	UniprotLineParser<OcLineObject> createOcLineParser();
+
+	UniprotLineParser<OxLineObject> createOxLineParser();
+
+	UniprotLineParser<OhLineObject> createOhLineParser();
 }
