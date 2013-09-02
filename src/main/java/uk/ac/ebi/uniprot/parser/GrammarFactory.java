@@ -2,7 +2,6 @@ package uk.ac.ebi.uniprot.parser;
 
 import com.google.common.base.Throwables;
 import org.antlr.v4.runtime.*;
-import uk.ac.ebi.uniprot.parser.impl.AbstractUniprotLineParser;
 
 import java.lang.reflect.Constructor;
 
@@ -18,7 +17,7 @@ public interface GrammarFactory<L extends Lexer, P extends Parser> {
 	public static final String packageName = "uk.ac.ebi.uniprot.parser.antlr";
 
 	public static enum GrammarFactoryEnum {
-		Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og, Rn, Rt, Rp, Ra, Rg, Rc, Rx, De, Rl, Ft;
+		Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og, Rn, Rt, Rp, Ra, Rg, Rc, Rx, De, Rl, Ft, Oc;
 
 		private GrammarFactory factory;
 

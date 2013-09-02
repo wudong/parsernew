@@ -20,6 +20,8 @@ import uk.ac.ebi.uniprot.parser.impl.id.IdLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineObject;
+import uk.ac.ebi.uniprot.parser.impl.oc.OcLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.oc.OcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.og.OgLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.og.OgLineObject;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineModelListener;
@@ -208,6 +210,14 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		return new AbstractUniprotLineParser<FtLineObject, FtLineLexer, FtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ft.getFactory(),
 				new FtLineModelListener()
+		);
+	}
+	
+	@Override
+	public UniprotLineParser<OcLineObject> createOcLineParser() {
+		return new AbstractUniprotLineParser<OcLineObject, OcLineLexer, OcLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Oc.getFactory(),
+				new OcLineModelListener()
 		);
 	}
 
