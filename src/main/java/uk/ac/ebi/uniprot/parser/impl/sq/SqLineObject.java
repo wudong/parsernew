@@ -1,7 +1,5 @@
 package uk.ac.ebi.uniprot.parser.impl.sq;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
