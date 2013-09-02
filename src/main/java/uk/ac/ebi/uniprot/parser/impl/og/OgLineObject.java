@@ -11,6 +11,19 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class OgLineObject {
-    public List<String> plasmidName = new ArrayList<String>();
+
+	public boolean hydrogenosome;
+	public boolean mitochondrion;
+	public boolean nucleomorph;
+
+
+	public boolean plastid;
+	public boolean plastid_Apicoplast;
+	public boolean plastid_Chloroplast;
+	public boolean plastid_Organellar_chromatophore;
+	public boolean plastid_Cyanelle;
+	public boolean plastid_Non_photosynthetic;
+
+    public List<String> plasmidNames = new ArrayList<String>();
 
 }

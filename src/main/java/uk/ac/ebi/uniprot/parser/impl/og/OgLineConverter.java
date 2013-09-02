@@ -11,7 +11,7 @@ public class OgLineConverter implements Converter<OgLineObject, List<Organelle> 
 	@Override
 	public List<Organelle> convert(OgLineObject f) {
 		List<Organelle> organelles = new ArrayList<Organelle>();
-		for(String val: f.plasmidName){
+		for(String val: f.plasmidNames){
 			
 		}
 		return organelles;

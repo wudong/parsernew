@@ -67,6 +67,7 @@
             <version>2.0.M5b</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>

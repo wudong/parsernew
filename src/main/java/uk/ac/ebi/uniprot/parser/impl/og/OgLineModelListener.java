@@ -15,13 +15,47 @@ import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
  */
 public class OgLineModelListener extends OgLineBaseListener implements ParseTreeObjectExtractor<OgLineObject> {
 
-
-
 	private OgLineObject object = new OgLineObject();
 
 	@Override
 	public void exitPlasmid_name(@NotNull OgLineParser.Plasmid_nameContext ctx) {
-		object.plasmidName.add(ctx.getText());
+		String text = ctx.PLASMID_VALUE().getText();
+		object.plasmidNames.add(text);
+	}
+
+	@Override
+	public void enterHydrogenosome_line(@NotNull OgLineParser.Hydrogenosome_lineContext ctx) {
+		object.hydrogenosome = true;
+	}
+
+	@Override
+	public void exitNucleomorph_line(@NotNull OgLineParser.Nucleomorph_lineContext ctx) {
+		object.nucleomorph = true;
+	}
+
+	@Override
+	public void exitMitochondrion_line(@NotNull OgLineParser.Mitochondrion_lineContext ctx) {
+		object.mitochondrion = true;
+	}
+
+	@Override
+	public void exitPlastid_line(@NotNull OgLineParser.Plastid_lineContext ctx) {
+		OgLineParser.Plastid_nameContext plastid_nameContext = ctx.plastid_name();
+		if (plastid_nameContext == null) {
+			object.plastid = true;
+		} else {
+			if (plastid_nameContext.APICOPLAST() != null) {
+				object.plastid_Apicoplast = true;
+			} else if (plastid_nameContext.CYANELLE() != null) {
+				object.plastid_Cyanelle = true;
+			} else if (plastid_nameContext.ORGANELLAR_CHROMATOPHORE() != null) {
+				object.plastid_Organellar_chromatophore = true;
+			} else if (plastid_nameContext.NON_PHOTOSYNTHETIC_PLASTID() != null) {
+				object.plastid_Non_photosynthetic = true;
+			} else if (plastid_nameContext.CHLOROPLAST() != null) {
+				object.plastid_Chloroplast = true;
+			}
+		}
 	}
 
 	public OgLineObject getObject() {
