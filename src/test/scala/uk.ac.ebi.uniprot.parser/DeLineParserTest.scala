@@ -80,6 +80,84 @@ class DeLineParserTest extends FunSuite {
 
   }
 
+  test("A Good DE With Evidence") {
+    val deLines = """DE   RecName: Full=Annexin A5{EI1};
+                    |DE            Short=Annexin-5{EI1, EI2};
+                    |DE   AltName: Full=Annexin V{EI1};
+                    |DE   AltName: Full=Lipocortin V{EI1};
+                    |DE   AltName: Full=Placental anticoagulant protein I{EI1};
+                    |DE            Short=PAP-I{EI1};
+                    |DE   AltName: Full=PP4{EI1};
+                    |DE   AltName: Full=Thromboplastin inhibitor{EI1};
+                    |DE   AltName: Full=Vascular anticoagulant-alpha{EI1};
+                    |DE            Short=VAC-alpha{EI1};
+                    |DE   AltName: Full=Anchorin CII{EI1};
+                    |DE   Flags: Precursor{EI1, EI2, EI3};
+                    |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createDeLineParser();
+    val obj = parser.parse(deLines)
+
+    obj should not be null;
+
+    obj.recName should not be null;
+    obj.recName.fullName should equal("Annexin A5")
+
+    obj.getEvidenceInfo.evidences.get("Annexin A5") should not be null
+    obj.getEvidenceInfo.evidences.get("Annexin A5") should have size 1
+    obj.getEvidenceInfo.evidences.get("Annexin A5") should contain ("EI1")
+
+    obj.recName.shortNames should have size (1)
+    obj.recName.shortNames should contain("Annexin-5")
+
+
+    obj.getEvidenceInfo.evidences.get("Annexin-5") should not be null
+    obj.getEvidenceInfo.evidences.get("Annexin-5") should have size 2
+    obj.getEvidenceInfo.evidences.get("Annexin-5") should contain ("EI1")
+    obj.getEvidenceInfo.evidences.get("Annexin-5") should contain ("EI2")
+
+    obj.recName.ecs should be('empty)
+
+    obj.flag should equal(FlagType.Precursor)
+    obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should not be null
+    obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should have size 3
+    obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should contain ("EI1")
+    obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should contain ("EI2")
+    obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should contain ("EI3")
+
+    obj.altName should have size (7)
+
+    expectResult(("Annexin V", 0, 0)) {
+      val name: Name = obj.altName.get(0)
+      (name.fullName,
+        name.shortNames.size(),
+        name.ecs.size())
+    }
+
+    expectResult(("Lipocortin V", 0, 0)) {
+      val name: Name = obj.altName.get(1)
+      (name.fullName,
+        name.shortNames.size(),
+        name.ecs.size())
+    }
+
+    expectResult(("Placental anticoagulant protein I", "PAP-I", 1, 0)) {
+      val name: Name = obj.altName.get(2)
+      (name.fullName,
+        name.shortNames.get(0),
+        name.shortNames.size(),
+        name.ecs.size())
+    }
+
+    expectResult(("Anchorin CII", 0, 0)) {
+      val name: Name = obj.altName.get(6)
+      (name.fullName,
+        name.shortNames.size(),
+        name.ecs.size())
+    }
+
+  }
+
   test("Another Good DE") {
     val deLines = """DE   AltName: Short=PAP-I;
                     |DE            EC=1.1.1.1;

@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			processEvidence(text, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),text, terminalNodes);
 		}
 	}
 
@@ -38,7 +39,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			processEvidence(OgLineObject.OgEnum.HYDROGENOSOME, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.HYDROGENOSOME, terminalNodes);
 		}
 	}
 
@@ -48,7 +49,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			processEvidence(OgLineObject.OgEnum.NUCLEOMORPH, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.NUCLEOMORPH, terminalNodes);
 		}
 	}
 
@@ -58,7 +59,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			processEvidence(OgLineObject.OgEnum.MITOCHONDRION, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.MITOCHONDRION, terminalNodes);
 		}
 	}
 
@@ -86,17 +87,10 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			processEvidence(og, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), og, terminalNodes);
 		}
 	}
 
-	public void processEvidence(Object key, List<TerminalNode> terminalNodes) {
-		List<String> strings = new ArrayList<String>();
-		for (TerminalNode terminalNode : terminalNodes) {
-			strings.add(terminalNode.getText());
-		}
-		object.getEvidenceInfo().evidences.put(key, strings);
-	}
 
 	public OgLineObject getObject() {
 		return object;

@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.de;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +10,7 @@ import java.util.List;
  * <p/>
  * User: wudong, Date: 29/08/13, Time: 11:48
  */
-public class DeLineObject {
+public class DeLineObject implements HasEvidence{
 	public Name recName;
 	public List<Name> altName = new ArrayList<Name>();
 	public List<Name> subName = new ArrayList<Name>();
@@ -20,6 +23,13 @@ public class DeLineObject {
 	public List<NameBlock> includedNames = new ArrayList<NameBlock>();
 
 	public FlagType flag;
+
+	public EvidenceInfo evidenceInfo = new EvidenceInfo();
+
+	@Override
+	public EvidenceInfo getEvidenceInfo() {
+		return evidenceInfo;
+	}
 
 	public static class NameBlock {
 		public Name recName;
