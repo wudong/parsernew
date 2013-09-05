@@ -1,10 +1,14 @@
 package uk.ac.ebi.uniprot.parser.impl.og;
 
 import org.antlr.v4.runtime.misc.NotNull;
-
+import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,42 +25,72 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 	public void exitPlasmid_name(@NotNull OgLineParser.Plasmid_nameContext ctx) {
 		String text = ctx.PLASMID_VALUE().getText();
 		object.plasmidNames.add(text);
+
+		OgLineParser.EvidenceContext evidence = ctx.evidence();
+		if (evidence != null) {
+			List<TerminalNode> terminalNodes = evidence.EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),text, terminalNodes);
+		}
 	}
 
 	@Override
-	public void enterHydrogenosome_line(@NotNull OgLineParser.Hydrogenosome_lineContext ctx) {
-		object.hydrogenosome = true;
+	public void exitHydrogenosome_line(@NotNull OgLineParser.Hydrogenosome_lineContext ctx) {
+		object.ogs.add(OgLineObject.OgEnum.HYDROGENOSOME);
+		OgLineParser.EvidenceContext evidence = ctx.evidence();
+		if (evidence != null) {
+			List<TerminalNode> terminalNodes = evidence.EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.HYDROGENOSOME, terminalNodes);
+		}
 	}
 
 	@Override
 	public void exitNucleomorph_line(@NotNull OgLineParser.Nucleomorph_lineContext ctx) {
-		object.nucleomorph = true;
+		object.ogs.add(OgLineObject.OgEnum.NUCLEOMORPH);
+		OgLineParser.EvidenceContext evidence = ctx.evidence();
+		if (evidence != null) {
+			List<TerminalNode> terminalNodes = evidence.EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.NUCLEOMORPH, terminalNodes);
+		}
 	}
 
 	@Override
 	public void exitMitochondrion_line(@NotNull OgLineParser.Mitochondrion_lineContext ctx) {
-		object.mitochondrion = true;
+		object.ogs.add(OgLineObject.OgEnum.MITOCHONDRION);
+		OgLineParser.EvidenceContext evidence = ctx.evidence();
+		if (evidence != null) {
+			List<TerminalNode> terminalNodes = evidence.EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.MITOCHONDRION, terminalNodes);
+		}
 	}
 
 	@Override
 	public void exitPlastid_line(@NotNull OgLineParser.Plastid_lineContext ctx) {
 		OgLineParser.Plastid_nameContext plastid_nameContext = ctx.plastid_name();
+		OgLineObject.OgEnum og = null;
 		if (plastid_nameContext == null) {
-			object.plastid = true;
+			og = OgLineObject.OgEnum.PLASTID;
 		} else {
 			if (plastid_nameContext.APICOPLAST() != null) {
-				object.plastid_Apicoplast = true;
+				og = OgLineObject.OgEnum.PLASTID_APICOPLAST;
 			} else if (plastid_nameContext.CYANELLE() != null) {
-				object.plastid_Cyanelle = true;
+				og = OgLineObject.OgEnum.PLASTID_CYANELLE;
 			} else if (plastid_nameContext.ORGANELLAR_CHROMATOPHORE() != null) {
-				object.plastid_Organellar_chromatophore = true;
+				og = OgLineObject.OgEnum.PLASTID_ORGANELLAR_CHROMATOPHORE;
 			} else if (plastid_nameContext.NON_PHOTOSYNTHETIC_PLASTID() != null) {
-				object.plastid_Non_photosynthetic = true;
+				og = OgLineObject.OgEnum.PLASTID_NON_PHOTOSYNTHETIC;
 			} else if (plastid_nameContext.CHLOROPLAST() != null) {
-				object.plastid_Chloroplast = true;
+				og = OgLineObject.OgEnum.PLASTID_CHLOROPLAST;
 			}
 		}
+		object.ogs.add(og);
+
+		OgLineParser.EvidenceContext evidence = ctx.evidence();
+		if (evidence != null) {
+			List<TerminalNode> terminalNodes = evidence.EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), og, terminalNodes);
+		}
 	}
+
 
 	public OgLineObject getObject() {
 		return object;

@@ -14,21 +14,15 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(classOf[JUnitRunner])
-class PeLineParserTest extends FunSuite {
+class OhLineParserTest extends FunSuite  {
 
-  test("A valid SQ Line blocks") {
+  test("A valid one line oc") {
+    val osOneLiner = "OH   NCBI_TaxID=9598; Pan troglodytes (Chimpanzee).\n";
+    val parser = (new DefaultUniprotLineParserFactory).createOhLineParser();
+    val obj = parser.parse(osOneLiner)
 
-    val peLine = """PE   1: Evidence at protein level;
-                 |""".stripMargin.replace("\r", "");
-
-    val parser = (new DefaultUniprotLineParserFactory).createPeLineParser();
-    val obj = parser.parse(peLine)
-
-    obj should not be null;
-    expectResult(1) {
-      obj.level
-    };
-
+    obj.tax_id should equal (9598)
+    obj.hostname should equal ("Pan troglodytes (Chimpanzee)")
   }
 
 }

@@ -17,9 +17,10 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 @RunWith(classOf[JUnitRunner])
 class AcLineParserTest extends FunSuite {
 
-  val ac_one_line = "AC   Q6GZX4;\n"
 
   test("a valid one line one primary acc ") {
+
+    val ac_one_line = "AC   Q6GZX4;\n"
 
     val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_one_line)
@@ -31,9 +32,9 @@ class AcLineParserTest extends FunSuite {
     obj.secondaryAcc should be('empty)
   }
 
-  val ac_one_line_moreacc = "AC   Q6GZX4; Q6GZX5; Q6GZX6;\n"
-
   test("a valid one line with more than one secondary acc ") {
+
+    val ac_one_line_moreacc = "AC   Q6GZX4; Q6GZX5; Q6GZX6;\n"
 
     val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_one_line_moreacc)
@@ -47,13 +48,15 @@ class AcLineParserTest extends FunSuite {
     obj.secondaryAcc should contain("Q6GZX6");
   }
 
-  val ac_three_lineer_moreacc =
-    """AC   Q6GZX4; Q6GZX5; Q6GZX6;
-      |AC   Q6GZX7; Q6GZX8; Q6GZX9;
-      |AC   Q6GZX0;
-      | """.stripMargin.replace("\r", "");
+
 
   test("a valid three lineer with more than one secondary acc ") {
+
+    val ac_three_lineer_moreacc =
+      """AC   Q6GZX4; Q6GZX5; Q6GZX6;
+        |AC   Q6GZX7; Q6GZX8; Q6GZX9;
+        |AC   Q6GZX0;
+        |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_three_lineer_moreacc)

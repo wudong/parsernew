@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.og;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,20 +13,21 @@ import java.util.List;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class OgLineObject {
+public class OgLineObject implements HasEvidence{
 
-	public boolean hydrogenosome;
-	public boolean mitochondrion;
-	public boolean nucleomorph;
-
-
-	public boolean plastid;
-	public boolean plastid_Apicoplast;
-	public boolean plastid_Chloroplast;
-	public boolean plastid_Organellar_chromatophore;
-	public boolean plastid_Cyanelle;
-	public boolean plastid_Non_photosynthetic;
-
+	public EvidenceInfo evidence = new EvidenceInfo();
     public List<String> plasmidNames = new ArrayList<String>();
+	public List<OgEnum> ogs = new ArrayList<OgEnum>();
+
+	@Override
+	public EvidenceInfo getEvidenceInfo() {
+		return evidence;
+	}
+
+	public static enum OgEnum {
+		HYDROGENOSOME, MITOCHONDRION, NUCLEOMORPH, PLASTID ,
+		PLASTID_APICOPLAST,PLASTID_CHLOROPLAST,PLASTID_ORGANELLAR_CHROMATOPHORE,
+		PLASTID_CYANELLE,PLASTID_NON_PHOTOSYNTHETIC
+	}
 
 }

@@ -20,10 +20,16 @@ import uk.ac.ebi.uniprot.parser.impl.id.IdLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineObject;
+import uk.ac.ebi.uniprot.parser.impl.oc.OcLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.oc.OcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.og.OgLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.og.OgLineObject;
+import uk.ac.ebi.uniprot.parser.impl.oh.OhLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.oh.OhLineObject;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ox.OxLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.ox.OxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.ra.RaLineModelListener;
@@ -202,12 +208,36 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 				new RlLineModelListener()
 		);
 	}
-	
+
 	@Override
 	public UniprotLineParser<FtLineObject> createFtLineParser() {
 		return new AbstractUniprotLineParser<FtLineObject, FtLineLexer, FtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ft.getFactory(),
 				new FtLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<OcLineObject> createOcLineParser() {
+		return new AbstractUniprotLineParser<OcLineObject, OcLineLexer, OcLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Oc.getFactory(),
+				new OcLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<OxLineObject> createOxLineParser() {
+		return new AbstractUniprotLineParser<OxLineObject, OxLineLexer, OxLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Ox.getFactory(),
+				new OxLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<OhLineObject> createOhLineParser() {
+		return new AbstractUniprotLineParser<OhLineObject, OhLineLexer, OhLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Oh.getFactory(),
+				new OhLineModelListener()
 		);
 	}
 

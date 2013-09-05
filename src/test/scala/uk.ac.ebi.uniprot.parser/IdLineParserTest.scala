@@ -24,7 +24,6 @@ class IdLineParserTest extends FunSuite  {
     val idLine_1 =
       "ID   001R_FRG3G              Reviewed;         256 AA.\n"
 
-
     val parser = (new DefaultUniprotLineParserFactory).createIdLineParser();
 
     val obj: IdLineObject = parser.parse(idLine_1)
