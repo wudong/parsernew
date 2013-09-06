@@ -6,6 +6,8 @@ import uk.ac.ebi.uniprot.parser.UniprotLineParserFactory;
 import uk.ac.ebi.uniprot.parser.antlr.*;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineObject;
+import uk.ac.ebi.uniprot.parser.impl.cc.CcLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineModelListener;
@@ -238,6 +240,14 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		return new AbstractUniprotLineParser<OhLineObject, OhLineLexer, OhLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Oh.getFactory(),
 				new OhLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<CcLineObject> createCcLineParser() {
+		return new AbstractUniprotLineParser<CcLineObject, CcLineLexer, CcLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Cc.getFactory(),
+				new CcLineModelListener()
 		);
 	}
 
