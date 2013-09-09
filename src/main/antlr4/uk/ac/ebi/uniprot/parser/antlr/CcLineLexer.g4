@@ -1,9 +1,9 @@
 lexer grammar CcLineLexer;
 
 //define the tokens that is common in all the modes.
-tokens { CC_TOPIC_START, SPACE, SEMICOLON,
+tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
  COLON, DOT, NEW_LINE, CHANGE_OF_LINE,
- CC_HEADER_1, CC_HEADER_2}
+ CC_HEADER_1, CC_HEADER_2, INTEGER, DASH}
 
 CC_TOPIC_START  : 'CC   -!- ';
 CC_TOPIC_COMMON : ('ALLERGEN'|'BIOTECHNOLOGY'|'CATALYTIC ACTIVITY'|'CAUTION'|'COFACTOR'
@@ -17,7 +17,10 @@ CC_TOPIC_WEB_RESOURCE  : 'WEB RESOURCE'              -> pushMode ( CC_WEB_RESOUR
 CC_TOPIC_BIOPHYSICOCHEMICAL_PROPERTIES :
                   'BIOPHYSICOCHEMICAL PROPERTIES'
                                                      -> pushMode ( CC_BIOPHYSICOCHEMICAL_PROPERTIES );
-
+CC_TOPIC_INTERACTION:
+                 'INTERACTION'                       -> pushMode ( CC_INTERACTION );
+CC_TOPIC_SUBCELLUR_LOCATION:
+                 'SUBCELLULAR LOCATION'              -> pushMode ( CC_SUBCELLULAR_LOCATION );
 
 
 //the common mode for most of the CC lines;
@@ -88,3 +91,49 @@ CC_WR_URL: '"' .+? '"';
 CC_WR_TEXT: CC_WR_TEXT_LETTER+;
 CC_WR_WORD_END_1 : ';'                                -> type (SEMICOLON), popMode ;
 CC_WR_WORD_END_2 : '.'                                -> type (DOT), popMode ;
+
+/*
+CC   -!- INTERACTION:
+CC       {{SP_Ac:identifier[ (xeno)]}|Self}; NbExp=n; IntAct=IntAct_Protein_Ac, IntAct_Protein_Ac;
+*/
+mode CC_INTERACTION;
+CC_IR_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_IR_HEADER_1 : 'CC       '                  ->  type (CC_HEADER_1) ;
+CC_IR_SELF: 'Self';
+CC_IR_NBEXP: 'NbExp=';
+CC_IR_INTACT: 'IntAct=';
+CC_IR_SPACE : ' '                            -> type (SPACE);
+CC_IR_NEW_LINE: '\n'                             -> type (NEW_LINE);
+CC_IR_INTEGER: [1-9][0-9]*                             -> type (INTEGER);
+CC_IR_SEMICOLON : ';'                               -> type (SEMICOLON);
+CC_IR_COLON : ':'                               -> type (COLON);
+CC_IR_COMA : ','                               -> type (COMA);
+CC_IR_XENO: '(xeno)';
+CC_IR_AC: [A-Za-z0-9][-A-Za-z0-9]*;
+CC_IR_DASH: '-'                                -> type (DASH);
+
+
+mode CC_SUBCELLULAR_LOCATION;
+CC_SL_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_SL_COLON : ':'                               -> type (COLON);
+CC_SL_COMA : ','                               -> type (COMA);
+CC_SL_SPACE : ' '                            -> type (SPACE);
+CC_SL_DOT : '.'                            -> type (DOT);
+CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
+CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
+CC_SL_CHANGE_OF_LINE: '\nCC       '                 -> type (CHANGE_OF_LINE);
+CC_SL_NOTE: 'Note=';
+CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
+CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
+CC_SL_BY_SIMILARITY:'(By similarity)';
+CC_SL_BY_PROBABLE:'(Probable)';
+CC_SL_BY_POTENTIAL:'(Potential)';
+fragment CC_SL_WORD_LETTER: ~[ :,.;\n\r\t];
+
+
+
+
+
+
+
+

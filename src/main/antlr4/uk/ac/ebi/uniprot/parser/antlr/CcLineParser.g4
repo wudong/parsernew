@@ -4,7 +4,7 @@ options { tokenVocab=CcLineLexer;}
 
 cc_cc: cc_lines+;
 
-cc_lines: cc_common | cc_web_resource|cc_biophyiochemical;
+cc_lines: cc_common | cc_web_resource|cc_biophyiochemical |cc_interaction |cc_subcellular_location;
 
 cc_common: CC_TOPIC_START CC_TOPIC_COMMON COLON SPACE
            cc_common_text
@@ -46,6 +46,43 @@ cc_biophyiochemical_kinetic: CC_HEADER_1 CC_BP_KINETIC_PARAMETERS COLON NEW_LINE
                   (CC_HEADER_2 CC_BP_KM CC_BP_TEXT SEMICOLON NEW_LINE)*
                   (CC_HEADER_2 CC_BP_VMAX CC_BP_TEXT SEMICOLON NEW_LINE)*
                   (CC_HEADER_2 CC_BP_NOTE CC_BP_TEXT SEMICOLON NEW_LINE)?;
+
+cc_interaction: CC_TOPIC_START  CC_TOPIC_INTERACTION  COLON NEW_LINE
+                   cc_interaction_line+;
+cc_interaction_line: CC_HEADER_1 cc_interaction_sp cc_interaction_nbexp cc_interaction_intact;
+cc_interaction_sp: ( CC_IR_SELF | ( CC_IR_AC COLON (CC_IR_AC|DASH) (SPACE CC_IR_XENO)?)) SEMICOLON SPACE;
+cc_interaction_nbexp: CC_IR_NBEXP INTEGER SEMICOLON SPACE;
+cc_interaction_intact: CC_IR_INTACT CC_IR_AC COMA SPACE CC_IR_AC SEMICOLON NEW_LINE;
+
+
+cc_subcellular_location: CC_TOPIC_START CC_TOPIC_SUBCELLUR_LOCATION COLON SPACE
+                         (
+                             (((cc_subcellular_location_molecule COLON SPACE)?
+                              cc_subcellular_location_location (cc_subcellular_text_separator cc_subcellular_location_location)*?)
+                              (cc_subcellular_text_separator cc_subcellular_note)? )
+                             | cc_subcellular_note
+                         )
+                         NEW_LINE;
+
+cc_subcellular_location_molecule: cc_subcellular_words ;
+cc_subcellular_location_location :
+                              (
+                               (cc_subcellular_location_value)|
+                               (cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)|
+                               (cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value
+                                                             SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)
+                              ) DOT ;
+
+cc_subcellular_location_value:
+                cc_subcellular_words (cc_subcellular_location_flag)?;
+
+cc_subcellular_note:
+                CC_SL_NOTE cc_subcellular_words DOT;
+
+cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
+cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;
+cc_subcellular_text_separator: SPACE | CHANGE_OF_LINE;
+
 
 
 
