@@ -24,6 +24,8 @@ public class RpLineModelListener extends RpLineBaseListener implements ParseTree
         return object;
     }
 
+
+
     @Override
     public void exitSeparator(@NotNull RpLineParser.SeparatorContext ctx) {
         if (ctx.CHANGE_OF_LINE() != null) {
