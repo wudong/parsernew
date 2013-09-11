@@ -77,27 +77,6 @@ CC_BP_SPACE : ' '                            -> type (SPACE);
 CC_BP_SEMICOLON : ';'                            -> type (SEMICOLON);
 CC_BP_NEW_LINE: '\n'                             -> type (NEW_LINE);
 
-//the cc web resource model;
-//CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
-mode CC_WEB_RESOURCE;
-CC_WR_CC_TOPIC_START  : 'CC   -!- '                 -> popMode, type(CC_TOPIC_START) ;
-CC_WR_NAME_START: 'Name='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_NOTE_START: 'Note='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_URL_START: 'URL='                             -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_CHANGE_OF_LINE: '\nCC       '                 -> type (CHANGE_OF_LINE);
-CC_WR_SPACE : ' '                                   -> type (SPACE);
-CC_WR_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_WR_COLON: ':'                                    -> type (COLON);
-CC_WR_DOT : '.'                                     -> type (DOT);
-CC_WR_NEW_LINE: '\n'                                -> type (NEW_LINE);
-
-mode CC_WEB_RESOURCE_TEXT;
-fragment CC_WR_TEXT_LETTER: ~[;.];
-CC_WR_URL: '"' .+? '"';
-CC_WR_TEXT: CC_WR_TEXT_LETTER+;
-CC_WR_WORD_END_1 : ';'                                -> type (SEMICOLON), popMode ;
-CC_WR_WORD_END_2 : '.'                                -> type (DOT), popMode ;
-
 /*
 CC   -!- INTERACTION:
 CC       {{SP_Ac:identifier[ (xeno)]}|Self}; NbExp=n; IntAct=IntAct_Protein_Ac, IntAct_Protein_Ac;
@@ -163,11 +142,79 @@ CC_AP_FEATURE_IDENTIFIER: 'VSP_'[0-9]*;
 CC_AP_WORD:  CC_AP_WORD_LETTER+;
 fragment CC_AP_WORD_LETTER: ~[ ;\n\r\t];
 
-mode CC_MASS_SPECTROMETRY;
-CC_MS_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
-
 mode CC_SEQUENCE_CAUTION;
 CC_SC_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_SC_SEMICOLON : ';'                               -> type (SEMICOLON);
+CC_SC_COLON : ':'                               -> type (COLON);
+CC_SC_SPACE : ' '                               -> type (SPACE);
+CC_SC_HEADER_1: 'CC       '                 -> type (CC_HEADER_1);
+CC_SC_NEW_LINE: '\n'                                -> type (NEW_LINE);
+CC_SC_SEQUENCE : 'Sequence=';
+CC_SC_TYPE : 'Type=';
+CC_SC_POSITIONS : 'Positions=';
+CC_SC_NOTE : 'Note=';
+CC_SC_TYPE_VALUE: 'Frameshift' | 'Erroneous initiation' | 'Erroneous termination'
+                   |'Erroneous gene model prediction'|'Erroneous translation'
+                   |'Miscellaneous discrepancy';
+CC_SC_WORD: CC_SC_WORD_LETTER+;
+fragment CC_SC_WORD_LETTER: ~[ =;\n\r\t];
+
+//the cc web resource model;
+//CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
+mode CC_WEB_RESOURCE;
+CC_WR_CC_TOPIC_START  : 'CC   -!- '                 -> popMode, type(CC_TOPIC_START) ;
+CC_WR_NAME_START: 'Name='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
+CC_WR_NOTE_START: 'Note='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
+CC_WR_URL_START: 'URL='                             -> pushMode(CC_WEB_RESOURCE_TEXT);
+CC_WR_CHANGE_OF_LINE: '\nCC       '                 -> type (CHANGE_OF_LINE);
+CC_WR_SPACE : ' '                                   -> type (SPACE);
+CC_WR_SEMICOLON : ';'                               -> type (SEMICOLON);
+CC_WR_COLON: ':'                                    -> type (COLON);
+CC_WR_DOT : '.'                                     -> type (DOT);
+CC_WR_NEW_LINE: '\n'                                -> type (NEW_LINE);
+
+mode CC_WEB_RESOURCE_TEXT;
+fragment CC_WR_TEXT_LETTER: ~[;.];
+CC_WR_URL: '"' .+? '"';
+CC_WR_TEXT: CC_WR_TEXT_LETTER+;
+CC_WR_WORD_END_1 : ';'                                -> type (SEMICOLON), popMode ;
+CC_WR_WORD_END_2 : '.'                                -> type (DOT), popMode ;
+
+//CC   -!- MASS SPECTROMETRY: Mass=mass(; Mass_error=error)?; Method=method; Range=ranges( (IsoformID))?(; Note=free_text)?; Source=references;
+mode CC_MASS_SPECTROMETRY;
+CC_MS_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_MS_COLON : ':'                               -> type (COLON);
+CC_MS_SPACE : ' '                               -> type (SPACE);
+CC_MS_NEW_LINE: '\n'                                -> type (NEW_LINE);
+CC_MS_MASS: 'Mass='                               -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_MASS_ERROR: 'Mass_error='                    -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_METHOD: 'Method='                            -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_RANGE: 'Range='                              -> pushMode ( CC_MASS_SPECTROMETRY_RANGE_VALUE );
+CC_MS_NOTE: 'Note='                               -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_SOURCE: 'Source='                           -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+
+mode CC_MASS_SPECTROMETRY_VALUE;
+CC_MS_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_MS_V_SPACE : ' '                                   -> type (SPACE);
+CC_MS_V_CHANGE_OF_LINE : '\nCC       '                    -> type (CHANGE_OF_LINE);
+CC_MS_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
+CC_MS_V_WORD:  CS_MS_V_LETTER+;
+fragment CS_MS_V_LETTER: ~[ ;\n\r\t];
+
+mode CC_MASS_SPECTROMETRY_RANGE_VALUE;
+CC_MS_R_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_MS_R_V_LEFT_BRACKET : '('  ;
+CC_MS_R_V_RIGHT_BRACKET : ')' ;
+CC_MS_R_V_DASH : '-'                                   -> type (DASH);
+CC_MS_R_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
+CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '                    -> type (CHANGE_OF_LINE);
+CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
+fragment CS_MS_R_V_LETTER: ~[ -;\n\r\t];
+
+
+
+
+
 
 
 
