@@ -21,6 +21,12 @@ CC_TOPIC_INTERACTION:
                  'INTERACTION'                       -> pushMode ( CC_INTERACTION );
 CC_TOPIC_SUBCELLUR_LOCATION:
                  'SUBCELLULAR LOCATION'              -> pushMode ( CC_SUBCELLULAR_LOCATION );
+CC_TOPIC_ALTERNATIVE_PRODUCTS:
+                 'ALTERNATIVE PRODUCTS'              -> pushMode ( CC_ALTERNATIVE_PRODUCTS );
+CC_TOPIC_MASS_SPECTROMETRY:
+                 'MASS SPECTROMETRY'                 -> pushMode ( CC_MASS_SPECTROMETRY );
+CC_TOPIC_SEQUENCE_CAUTION:
+                 'SEQUENCE CAUTION'                 -> pushMode ( CC_SEQUENCE_CAUTION );
 
 
 //the common mode for most of the CC lines;
@@ -34,6 +40,13 @@ CC_COMMON_DOT : '.'                                  -> type (DOT);
 CC_COMMON_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_COMMON_TEXT_WORD: TL+;
 fragment TL: ~[\n\r\t ];
+
+mode CC_PROPERTIES_TEXT_MODE;
+CC_PROPERTIES_TEXT_END : ';'                                -> popMode, type (SEMICOLON) ;
+fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
+CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         ';
+CC_PROPERTIES_TEXT : CC_PROPERTIES_TEXT_CHANGE_LINE ?
+            CC_PROPERTIES_TEXT_LETTER+ (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT_LETTER+)*;
 
 /*CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
   CC       Absorption:
@@ -50,26 +63,19 @@ CC_BP_HEADER_1 : 'CC       '                  ->  type (CC_HEADER_1) ;
 CC_BP_HEADER_2 : 'CC         '                ->  type (CC_HEADER_2) ;
 CC_BP_ABSORPTION: 'Absorption';
 CC_BP_ABS: 'Abs(max)=';
-CC_BP_NOTE: 'Note='                           -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
+CC_BP_NOTE: 'Note='                           -> pushMode( CC_PROPERTIES_TEXT_MODE );
 CC_BP_KINETIC_PARAMETERS: 'Kinetic parameters';
-CC_BP_KM: 'KM='                               -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
-CC_BP_VMAX: 'Vmax='                           -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
-CC_BP_PH_DEPENDENCE: 'pH dependence:'         -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
-CC_BP_REDOX_POTENTIAL: 'Redox potential:'     -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
-CC_BP_TEMPERATURE_DEPENDENCE: 'Temperature dependence:' -> pushMode( CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT );
+CC_BP_KM: 'KM='                               -> pushMode( CC_PROPERTIES_TEXT_MODE );
+CC_BP_VMAX: 'Vmax='                           -> pushMode( CC_PROPERTIES_TEXT_MODE );
+CC_BP_PH_DEPENDENCE: 'pH dependence:'         -> pushMode( CC_PROPERTIES_TEXT_MODE );
+CC_BP_REDOX_POTENTIAL: 'Redox potential:'     -> pushMode( CC_PROPERTIES_TEXT_MODE );
+CC_BP_TEMPERATURE_DEPENDENCE: 'Temperature dependence:' -> pushMode( CC_PROPERTIES_TEXT_MODE );
 CC_BP_NM : 'nm';
 CC_BP_DIGIT: [1-9][0-9]*;
 CC_BP_COLON : ':'                            -> type (COLON);
 CC_BP_SPACE : ' '                            -> type (SPACE);
 CC_BP_SEMICOLON : ';'                            -> type (SEMICOLON);
 CC_BP_NEW_LINE: '\n'                             -> type (NEW_LINE);
-
-mode CC_BIOPHYSICOCHEMICAL_PROPERTIES_TEXT;
-CC_BP_TEXT_END : ';'                                -> popMode, type (SEMICOLON) ;
-fragment CC_BP_TEXT_LETTER: ~[\n\r;];
-CC_BP_TEXT_CHANGE_LINE: '\nCC         ';
-CC_BP_TEXT : CC_BP_TEXT_CHANGE_LINE ?
-            CC_BP_TEXT_LETTER+ (CC_BP_TEXT_CHANGE_LINE CC_BP_TEXT_LETTER+)*;
 
 //the cc web resource model;
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
@@ -112,7 +118,6 @@ CC_IR_XENO: '(xeno)';
 CC_IR_AC: [A-Za-z0-9][-A-Za-z0-9]*;
 CC_IR_DASH: '-'                                -> type (DASH);
 
-
 mode CC_SUBCELLULAR_LOCATION;
 CC_SL_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
 CC_SL_COLON : ':'                               -> type (COLON);
@@ -130,6 +135,39 @@ CC_SL_BY_PROBABLE:'(Probable)';
 CC_SL_BY_POTENTIAL:'(Potential)';
 fragment CC_SL_WORD_LETTER: ~[ :,.;\n\r\t];
 
+mode CC_ALTERNATIVE_PRODUCTS;
+CC_AP_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_AP_COLON : ':'                               -> type (COLON);
+CC_AP_COMA : ','                               -> type (COMA);
+CC_AP_SPACE : ' '                            -> type (SPACE);
+CC_AP_DOT : '.'                            -> type (DOT);
+CC_AP_NEW_LINE: '\n'                             -> type (NEW_LINE);
+CC_AR_HEADER_1 : 'CC       '                  ->  type (CC_HEADER_1) ;
+CC_AR_HEADER_2 : 'CC         '                  ->  type (CC_HEADER_2) ;
+CC_AP_COMMENT: 'Comment='                          ->  pushMode ( CC_PROPERTIES_TEXT_MODE ) ;
+CC_AP_NOTE: 'Note='                                 -> pushMode ( CC_PROPERTIES_TEXT_MODE );
+CC_AP_NAME: 'Name='                                -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+CC_AP_SYNONYMS: 'Synonyms='                        -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+CC_AP_ISOID: 'IsoId='                              -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+CC_AP_SEQUENCE: 'Sequence='                        -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+CC_AP_EVENT: 'Event='                               -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+CC_AP_NAMED_ISOFORMS: 'Named isoforms='             -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
+
+mode CC_ALTERNATIVE_PRODUCTS_VALUE;
+CC_AP_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_AP_VALUE_SPACE : ' '                            -> type (SPACE);
+CC_AP_DISPLAYED: 'Displayed' ;
+CC_AP_EXTERNAL: 'External';
+CC_AP_NOT_DESCRIBED: 'Not described';
+CC_AP_FEATURE_IDENTIFIER: 'VSP_'[0-9]*;
+CC_AP_WORD:  CC_AP_WORD_LETTER+;
+fragment CC_AP_WORD_LETTER: ~[ ;\n\r\t];
+
+mode CC_MASS_SPECTROMETRY;
+CC_MS_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+
+mode CC_SEQUENCE_CAUTION;
+CC_SC_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
 
 
 
