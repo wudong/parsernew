@@ -3,11 +3,9 @@ package uk.ac.ebi.uniprot.parser.impl.rp;
 import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.OsLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.RpLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.RpLineParser;
-import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +21,8 @@ public class RpLineModelListener extends RpLineBaseListener implements ParseTree
     public RpLineObject getObject() {
         return object;
     }
+
+
 
     @Override
     public void exitSeparator(@NotNull RpLineParser.SeparatorContext ctx) {

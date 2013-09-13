@@ -1,6 +1,7 @@
 package uk.ac.ebi.uniprot.parser;
 
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineObject;
+import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
@@ -74,4 +75,6 @@ public interface UniprotLineParserFactory {
 	UniprotLineParser<OxLineObject> createOxLineParser();
 
 	UniprotLineParser<OhLineObject> createOhLineParser();
+
+	UniprotLineParser<CcLineObject> createCcLineParser();
 }
