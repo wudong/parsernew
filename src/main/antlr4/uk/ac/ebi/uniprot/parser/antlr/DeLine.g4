@@ -64,4 +64,12 @@ SUB_CONTINUE_OF_NAME: 'DE              ';
 //the name will consume the line-ending as well.
 NAME_VALUE: '='.+? ';\n' {!ec}?;
 
+evidence: LEFT_B  EV_TAG (COMMA SPACE EV_TAG)* RIGHT_B;
+EV_TAG : ('EI'|'EA') [1-9][0-9]*;
+LEFT_B : '{';
+RIGHT_B : '}';
+SPACE : ' ';
+
 fragment DIGIT: [0-9];
+
+
