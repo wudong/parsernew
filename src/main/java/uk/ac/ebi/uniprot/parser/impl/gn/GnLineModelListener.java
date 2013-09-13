@@ -1,16 +1,16 @@
 package uk.ac.ebi.uniprot.parser.impl.gn;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.GnLineParser;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
-import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
