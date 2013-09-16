@@ -210,11 +210,10 @@ mode CC_MASS_SPECTROMETRY_RANGE_VALUE;
 CC_MS_R_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
 CC_MS_R_V_LEFT_BRACKET : '('  ;
 CC_MS_R_V_RIGHT_BRACKET : ')' ;
-CC_MS_R_V_DASH : '-'                                   -> type (DASH);
-CC_MS_R_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
+CC_MS_R_V_SPACE : ' '                                   -> type (SPACE);
 CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '           ;
 CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
-fragment CS_MS_R_V_LETTER: ~[ -;\n\r\t];
+fragment CS_MS_R_V_LETTER: ~[ ();\n\r\t];
 
 
 

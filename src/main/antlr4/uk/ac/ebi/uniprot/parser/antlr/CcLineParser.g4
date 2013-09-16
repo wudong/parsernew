@@ -132,11 +132,15 @@ cc_sequence_caution:
            CC_TOPIC_START CC_TOPIC_SEQUENCE_CAUTION COLON NEW_LINE
            cc_sequence_caution_line +;
 cc_sequence_caution_line:
-           CC_HEADER_1 CC_SC_SEQUENCE cc_sequence_caution_value SEMICOLON SPACE
-           CC_SC_TYPE CC_SC_TYPE_VALUE SEMICOLON
-           (SPACE CC_SC_POSITIONS cc_sequence_caution_value SEMICOLON)?
-           (SPACE CC_SC_NOTE cc_sequence_caution_value SEMICOLON)?
+           CC_HEADER_1 cc_sequence_caution_sequence SPACE
+            cc_sequence_caution_type
+           (SPACE cc_sequence_caution_position)?
+           (SPACE cc_sequence_caution_note)?
            NEW_LINE;
+cc_sequence_caution_sequence: CC_SC_SEQUENCE cc_sequence_caution_value SEMICOLON;
+cc_sequence_caution_type: CC_SC_TYPE CC_SC_TYPE_VALUE SEMICOLON;
+cc_sequence_caution_position: CC_SC_POSITIONS cc_sequence_caution_value SEMICOLON;
+cc_sequence_caution_note: CC_SC_NOTE cc_sequence_caution_value SEMICOLON;
 cc_sequence_caution_value: CC_SC_WORD (SPACE CC_SC_WORD)*;
 
 //CC   -!- MASS SPECTROMETRY: Mass=mass(; Mass_error=error)?; Method=method; Range=ranges( (IsoformID))?(; Note=free_text)?; Source=references;
@@ -159,7 +163,7 @@ cc_mass_spectrometry_mass_range:
         CC_MS_RANGE cc_mass_spectrometry_mass_range_value SEMICOLON;
 cc_mass_spectrometry_mass_range_value:
         CC_MS_R_V_NUMBER DASH CC_MS_R_V_CHANGE_OF_LINE ? CC_MS_R_V_NUMBER
-        ( CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_WORD CC_MS_R_V_LEFT_BRACKET)?;
+        ( SPACE CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_WORD CC_MS_R_V_RIGHT_BRACKET)?;
 cc_mass_spectrometry_mass_note:
         CC_MS_NOTE cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_source:

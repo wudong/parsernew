@@ -28,6 +28,88 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		object.ccs.add(ccCommon);
 	}
 
+
+	@Override
+	public void exitCc_sequence_caution(@NotNull CcLineParser.Cc_sequence_cautionContext ctx) {
+		CcLineObject.CC cc = new CcLineObject.CC();
+		cc.topic = CcLineObject.CCTopicEnum.SEQUENCE_CAUTION;
+
+		CcLineObject.SequenceCaution sc = new CcLineObject.SequenceCaution();
+		cc.object = sc;
+		object.ccs.add(cc);
+
+		List<CcLineParser.Cc_sequence_caution_lineContext>
+				cc_sequence_caution_lineContexts = ctx.cc_sequence_caution_line();
+
+		for (CcLineParser.Cc_sequence_caution_lineContext lineContext : cc_sequence_caution_lineContexts) {
+			CcLineObject.SequenceCautionObject object1 = new CcLineObject.SequenceCautionObject();
+			sc.sequenceCautionObjects.add(object1);
+			CcLineParser.Cc_sequence_caution_sequenceContext cc_sequence_caution_sequenceContext = lineContext.cc_sequence_caution_sequence();
+			object1.sequence = cc_sequence_caution_sequenceContext.cc_sequence_caution_value().getText();
+
+			CcLineParser.Cc_sequence_caution_typeContext cc_sequence_caution_typeContext = lineContext.cc_sequence_caution_type();
+			object1.type = CcLineObject.SequenceCautionType.fromSting(cc_sequence_caution_typeContext.CC_SC_TYPE_VALUE().getText());
+
+			CcLineParser.Cc_sequence_caution_positionContext cc_sequence_caution_positionContext = lineContext.cc_sequence_caution_position();
+			if (cc_sequence_caution_positionContext != null) {
+				object1.position = cc_sequence_caution_positionContext.cc_sequence_caution_value().getText();
+			}
+
+			CcLineParser.Cc_sequence_caution_noteContext cc_sequence_caution_noteContext = lineContext.cc_sequence_caution_note();
+			if (cc_sequence_caution_noteContext != null) {
+				object1.note = cc_sequence_caution_noteContext.cc_sequence_caution_value().getText();
+			}
+		}
+
+	}
+
+	@Override
+	public void exitCc_mass_spectrometry(@NotNull CcLineParser.Cc_mass_spectrometryContext ctx) {
+		CcLineObject.CC cc = new CcLineObject.CC();
+		cc.topic = CcLineObject.CCTopicEnum.MASS_SPECTROMETRY;
+
+		CcLineObject.MassSpectrometry ms = new CcLineObject.MassSpectrometry();
+		cc.object = ms;
+		object.ccs.add(cc);
+
+		CcLineParser.Cc_mass_spectrometry_massContext cc_mass_spectrometry_massContext = ctx.cc_mass_spectrometry_mass();
+		String text = cc_mass_spectrometry_massContext.CC_MS_V_NUMBER().getText();
+		ms.mass = Integer.parseInt(text);
+
+		CcLineParser.Cc_mass_spectrometry_mass_errorContext cc_mass_spectrometry_mass_errorContext = ctx.cc_mass_spectrometry_mass_error();
+		if (cc_mass_spectrometry_mass_errorContext != null) {
+			String text1 = cc_mass_spectrometry_mass_errorContext.CC_MS_V_NUMBER().getText();
+			ms.mass_error = Integer.parseInt(text1);
+		}
+
+
+		CcLineParser.Cc_mass_spectrometry_mass_methodContext cc_mass_spectrometry_mass_methodContext = ctx.cc_mass_spectrometry_mass_method();
+		String text1 = cc_mass_spectrometry_mass_methodContext.cc_mass_spectrometry_value().getText();
+		ms.method = text1;
+
+		CcLineParser.Cc_mass_spectrometry_mass_rangeContext cc_mass_spectrometry_mass_rangeContext = ctx.cc_mass_spectrometry_mass_range();
+		CcLineParser.Cc_mass_spectrometry_mass_range_valueContext cc_mass_spectrometry_mass_range_valueContext = cc_mass_spectrometry_mass_rangeContext.cc_mass_spectrometry_mass_range_value();
+		TerminalNode terminalNode = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_NUMBER(0);
+		ms.range_start = Integer.parseInt(terminalNode.getText());
+
+		TerminalNode terminalNode2 = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_NUMBER(1);
+		ms.range_end = Integer.parseInt(terminalNode2.getText());
+
+		TerminalNode terminalNode3 = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_WORD();
+		if (terminalNode3 != null) {
+			ms.range_isoform = terminalNode3.getText();
+		}
+
+		CcLineParser.Cc_mass_spectrometry_mass_noteContext noteContext = ctx.cc_mass_spectrometry_mass_note();
+		if (noteContext != null) {
+			ms.range_note = noteContext.cc_mass_spectrometry_value().getText();
+		}
+
+		CcLineParser.Cc_mass_spectrometry_mass_sourceContext sourceContext = ctx.cc_mass_spectrometry_mass_source();
+		ms.source = sourceContext.cc_mass_spectrometry_value().getText();
+
+	}
+
 	@Override
 	public void exitCc_web_resource(@NotNull CcLineParser.Cc_web_resourceContext ctx) {
 		CcLineObject.CC cc = new CcLineObject.CC();
@@ -41,9 +123,9 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		wr.name = cc_web_resource_nameContext.CC_WR_TEXT().getText();
 
 		CcLineParser.Cc_web_resource_urlContext cc_web_resource_urlContext = ctx.cc_web_resource_url();
-		if (cc_web_resource_urlContext!=null){
+		if (cc_web_resource_urlContext != null) {
 			String text = cc_web_resource_urlContext.CC_WR_URL().getText();
-			wr.url = text.substring(1, text.length()-1);
+			wr.url = text.substring(1, text.length() - 1);
 		}
 
 		CcLineParser.Cc_web_resource_noteContext cc_web_resource_noteContext = ctx.cc_web_resource_note();
@@ -63,8 +145,32 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		//CC       {{SP_Ac:identifier[ (xeno)]}|Self}; NbExp=n; IntAct=IntAct_Protein_Ac, IntAct_Protein_Ac;
 		List<CcLineParser.Cc_interaction_lineContext> cc_interaction_lineContexts = ctx.cc_interaction_line();
-		for (CcLineParser.Cc_interaction_lineContext cc_interaction_lineContext : cc_interaction_lineContexts) {
+		for (CcLineParser.Cc_interaction_lineContext io : cc_interaction_lineContexts) {
+			CcLineObject.InteractionObject interactionObject = new CcLineObject.InteractionObject();
+			CcLineParser.Cc_interaction_intactContext cc_interaction_intactContext = io.cc_interaction_intact();
+			interactionObject.firstId = cc_interaction_intactContext.CC_IR_AC(0).getText();
+			interactionObject.secondId = cc_interaction_intactContext.CC_IR_AC(1).getText();
 
+			TerminalNode integer = io.cc_interaction_nbexp().INTEGER();
+			interactionObject.nbexp = Integer.parseInt(integer.getText());
+
+			CcLineParser.Cc_interaction_spContext cc_interaction_spContext = io.cc_interaction_sp();
+			if (cc_interaction_spContext.CC_IR_SELF() != null) {
+				interactionObject.isSelf = true;
+			} else {
+				interactionObject.spAc = cc_interaction_spContext.CC_IR_AC(0).getText();
+				if (cc_interaction_spContext.DASH() != null) {
+					interactionObject.gene = "-";
+				} else {
+					interactionObject.gene = cc_interaction_spContext.CC_IR_AC(1).getText();
+				}
+
+				if (cc_interaction_spContext.CC_IR_XENO() != null) {
+					interactionObject.xeno = true;
+				}
+			}
+
+			ir.interactions.add(interactionObject);
 		}
 	}
 
