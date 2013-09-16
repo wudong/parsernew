@@ -29,6 +29,7 @@ public class RlLineObject {
         public String institute;
         public String country;
         public int year;
+        //missing possible city
     }
 
     public static class JournalArticle implements Ref {
