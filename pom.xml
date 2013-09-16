@@ -33,6 +33,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+<!--  
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>interfaces</artifactId>
@@ -49,6 +50,7 @@
             <version>${project.version}</version>
         </dependency>
 
+-->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4</artifactId>
@@ -107,7 +109,8 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
-                    <execution>
+                 
+                      <execution>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>add-source</goal>
@@ -118,6 +121,7 @@
                             </sources>
                         </configuration>
                     </execution>
+                    
                 </executions>
             </plugin>
 
@@ -126,11 +130,13 @@
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.1</version>
                 <executions>
+              
                     <execution>
                         <goals>
                             <goal>antlr4</goal>
                         </goals>
                     </execution>
+                  
                 </executions>
                 <configuration>
                     <visitor>true</visitor>
@@ -143,12 +149,14 @@
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.1.5</version>
                 <executions>
+          
                     <execution>
-                        <phase>test-compile</phase>
+                       <phase>test-compile</phase>
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
+                
                 </executions>
             </plugin>
 
