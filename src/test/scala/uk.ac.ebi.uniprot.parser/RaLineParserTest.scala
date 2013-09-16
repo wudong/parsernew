@@ -17,6 +17,21 @@ import org.scalatest.matchers.ShouldMatchers._
 @RunWith(classOf[JUnitRunner])
 class RaLineParserTest extends FunSuite {
 
+  test("A valid Ra Line 2 with two first name.") {
+    val rnLine = "RA   Tan W.G., Barkman T.J., Gregory Chinchar V., Essani K.;\n";
+
+    val parser = (new DefaultUniprotLineParserFactory).createRaLineParser();
+    val obj = parser.parse(rnLine)
+
+    obj should not be null;
+    obj.authors should have size (4)
+
+    obj.authors should contain ("Tan W.G.");
+    obj.authors should contain ("Barkman T.J.");
+    obj.authors should contain ("Gregory Chinchar V.");
+    obj.authors should contain ("Essani K.");
+  }
+
   test("A valid Ra Line ") {
 
     val rnLine = "RA   Galinier A., Perriere G., Duclos B.;\n";

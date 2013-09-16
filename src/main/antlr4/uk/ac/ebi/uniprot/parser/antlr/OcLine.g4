@@ -9,10 +9,18 @@ OC   Homo.
 
 grammar OcLine;
 
-oc_oc: 'OC   ' oc (';' OC_SEPARATOR oc)* '.\n';
+@lexer::members{
+    private boolean oc=false;
+}
+
+oc_oc: OC_HEADER oc (';' OC_SEPARATOR oc)* '.\n';
 
 oc: OcWord;
 
-OC_SEPARATOR: ' '| '\nOC   ';
+OC_HEADER : 'OC   ' {oc=true;};
+OC_SEPARATOR: (' '| '\nOC   ') {oc=true;};
+SEMI_COLON: ';' {oc=false;};
+DOT: '.' {oc=false;};
 
-OcWord: [A-Z][A-Za-z]+;
+OcWord: OcWordLetter+ {oc}?;
+fragment OcWordLetter : ~[;.\r\n\t];

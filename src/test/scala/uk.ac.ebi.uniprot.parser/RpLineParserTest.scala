@@ -32,6 +32,21 @@ class RpLineParserTest extends FunSuite {
 
   }
 
+
+  test("A valid RP Line 2") {
+
+    val rpLine = "RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].\n";
+
+    val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
+    val obj = parser.parse(rpLine)
+
+    obj should not be null;
+    expectResult("NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]") {
+      obj.position
+    };
+
+  }
+
   test("A invalid RP Line with lower case letter") {
 
     val rpLine = "RP   NUCLEOTIDE sequence [MRNA].\n";

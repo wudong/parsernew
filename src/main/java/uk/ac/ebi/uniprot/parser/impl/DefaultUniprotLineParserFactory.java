@@ -14,6 +14,8 @@ import uk.ac.ebi.uniprot.parser.impl.dr.DrLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
+import uk.ac.ebi.uniprot.parser.impl.entry.EntryModelListener;
+import uk.ac.ebi.uniprot.parser.impl.entry.EntryObject;
 import uk.ac.ebi.uniprot.parser.impl.ft.FtLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.ft.FtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineModelListener;
@@ -58,9 +60,18 @@ import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
  * User: wudong, Date: 19/08/13, Time: 15:55
  */
 public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory {
+
+	@Override
+	public UniprotLineParser<EntryObject> createEntryParser() {
+		return new DefaultUniprotLineParser<EntryObject, UniprotLexer, UniprotParser>(
+				GrammarFactory.GrammarFactoryEnum.Uniprot.getFactory(),
+				new EntryModelListener()
+		);
+	}
+
 	@Override
 	public UniprotLineParser<AcLineObject> createAcLineParser() {
-		return new AbstractUniprotLineParser<AcLineObject, AcLineLexer, AcLineParser>(
+		return new DefaultUniprotLineParser<AcLineObject, AcLineLexer, AcLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ac.getFactory(),
 				new AcLineModelListener()
 		);
@@ -68,7 +79,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<DrLineObject> createDrLineParser() {
-		return new AbstractUniprotLineParser<DrLineObject, DrLineLexer, DrLineParser>(
+		return new DefaultUniprotLineParser<DrLineObject, DrLineLexer, DrLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Dr.getFactory(),
 				new DrLineModelListener()
 		);
@@ -76,7 +87,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<DeLineObject> createDeLineParser() {
-		return new AbstractUniprotLineParser<DeLineObject, DeLineLexer, DeLineParser>(
+		return new DefaultUniprotLineParser<DeLineObject, DeLineLexer, DeLineParser>(
 				GrammarFactory.GrammarFactoryEnum.De.getFactory(),
 				new DeLineModelListener()
 		);
@@ -84,7 +95,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<DtLineObject> createDtLineParser() {
-		return new AbstractUniprotLineParser<DtLineObject, DtLineLexer, DtLineParser>(
+		return new DefaultUniprotLineParser<DtLineObject, DtLineLexer, DtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Dt.getFactory(),
 				new DtLineModelListener()
 		);
@@ -92,7 +103,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<GnLineObject> createGnLineParser() {
-		return new AbstractUniprotLineParser<GnLineObject, GnLineLexer, GnLineParser>(
+		return new DefaultUniprotLineParser<GnLineObject, GnLineLexer, GnLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Gn.getFactory(),
 				new GnLineModelListener()
 		);
@@ -100,7 +111,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<IdLineObject> createIdLineParser() {
-		return new AbstractUniprotLineParser<IdLineObject, IdLineLexer, IdLineParser>(
+		return new DefaultUniprotLineParser<IdLineObject, IdLineLexer, IdLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Id.getFactory(),
 				new IdLineModelListener()
 		);
@@ -108,7 +119,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<KwLineObject> createKwLineParser() {
-		return new AbstractUniprotLineParser<KwLineObject, KwLineLexer, KwLineParser>(
+		return new DefaultUniprotLineParser<KwLineObject, KwLineLexer, KwLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Kw.getFactory(),
 				new KwLineModelListener()
 		);
@@ -116,7 +127,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<OgLineObject> createOgLineParser() {
-		return new AbstractUniprotLineParser<OgLineObject, OgLineLexer, OgLineParser>(
+		return new DefaultUniprotLineParser<OgLineObject, OgLineLexer, OgLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Og.getFactory(),
 				new OgLineModelListener()
 		);
@@ -124,7 +135,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<OsLineObject> createOsLineParser() {
-		return new AbstractUniprotLineParser<OsLineObject, OsLineLexer, OsLineParser>(
+		return new DefaultUniprotLineParser<OsLineObject, OsLineLexer, OsLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Os.getFactory(),
 				new OsLineModelListener()
 		);
@@ -132,7 +143,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<PeLineObject> createPeLineParser() {
-		return new AbstractUniprotLineParser<PeLineObject, PeLineLexer, PeLineParser>(
+		return new DefaultUniprotLineParser<PeLineObject, PeLineLexer, PeLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Pe.getFactory(),
 				new PeLineModelListener()
 		);
@@ -140,7 +151,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<SqLineObject> createSqLineParser() {
-		return new AbstractUniprotLineParser<SqLineObject, SqLineLexer, SqLineParser>(
+		return new DefaultUniprotLineParser<SqLineObject, SqLineLexer, SqLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Sq.getFactory(),
 				new SqLineModelListener()
 		);
@@ -148,7 +159,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RnLineObject> createRnLineParser() {
-		return new AbstractUniprotLineParser<RnLineObject, RnLineLexer, RnLineParser>(
+		return new DefaultUniprotLineParser<RnLineObject, RnLineLexer, RnLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rn.getFactory(),
 				new RnLineModelListener()
 		);
@@ -156,7 +167,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RtLineObject> createRtLineParser() {
-		return new AbstractUniprotLineParser<RtLineObject, RtLineLexer, RtLineParser>(
+		return new DefaultUniprotLineParser<RtLineObject, RtLineLexer, RtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rt.getFactory(),
 				new RtLineModelListener()
 		);
@@ -165,7 +176,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RpLineObject> createRpLineParser() {
-		return new AbstractUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
+		return new DefaultUniprotLineParser<RpLineObject, RpLineLexer, RpLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rp.getFactory(),
 				new RpLineModelListener()
 		);
@@ -173,7 +184,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RaLineObject> createRaLineParser() {
-		return new AbstractUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
+		return new DefaultUniprotLineParser<RaLineObject, RaLineLexer, RaLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ra.getFactory(),
 				new RaLineModelListener()
 		);
@@ -181,7 +192,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RgLineObject> createRgLineParser() {
-		return new AbstractUniprotLineParser<RgLineObject, RgLineLexer, RgLineParser>(
+		return new DefaultUniprotLineParser<RgLineObject, RgLineLexer, RgLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rg.getFactory(),
 				new RgLineModelListener()
 		);
@@ -189,7 +200,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RcLineObject> createRcLineParser() {
-		return new AbstractUniprotLineParser<RcLineObject, RcLineLexer, RcLineParser>(
+		return new DefaultUniprotLineParser<RcLineObject, RcLineLexer, RcLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rc.getFactory(),
 				new RcLineModelListener()
 		);
@@ -197,7 +208,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RxLineObject> createRxLineParser() {
-		return new AbstractUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
+		return new DefaultUniprotLineParser<RxLineObject, RxLineLexer, RxLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rx.getFactory(),
 				new RxLineModelListener()
 		);
@@ -205,7 +216,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<RlLineObject> createRlLineParser() {
-		return new AbstractUniprotLineParser<RlLineObject, RlLineLexer, RlLineParser>(
+		return new DefaultUniprotLineParser<RlLineObject, RlLineLexer, RlLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Rl.getFactory(),
 				new RlLineModelListener()
 		);
@@ -213,7 +224,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<FtLineObject> createFtLineParser() {
-		return new AbstractUniprotLineParser<FtLineObject, FtLineLexer, FtLineParser>(
+		return new DefaultUniprotLineParser<FtLineObject, FtLineLexer, FtLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ft.getFactory(),
 				new FtLineModelListener()
 		);
@@ -221,7 +232,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<OcLineObject> createOcLineParser() {
-		return new AbstractUniprotLineParser<OcLineObject, OcLineLexer, OcLineParser>(
+		return new DefaultUniprotLineParser<OcLineObject, OcLineLexer, OcLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Oc.getFactory(),
 				new OcLineModelListener()
 		);
@@ -229,7 +240,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<OxLineObject> createOxLineParser() {
-		return new AbstractUniprotLineParser<OxLineObject, OxLineLexer, OxLineParser>(
+		return new DefaultUniprotLineParser<OxLineObject, OxLineLexer, OxLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Ox.getFactory(),
 				new OxLineModelListener()
 		);
@@ -237,7 +248,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<OhLineObject> createOhLineParser() {
-		return new AbstractUniprotLineParser<OhLineObject, OhLineLexer, OhLineParser>(
+		return new DefaultUniprotLineParser<OhLineObject, OhLineLexer, OhLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Oh.getFactory(),
 				new OhLineModelListener()
 		);
@@ -245,7 +256,7 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 
 	@Override
 	public UniprotLineParser<CcLineObject> createCcLineParser() {
-		return new AbstractUniprotLineParser<CcLineObject, CcLineLexer, CcLineParser>(
+		return new DefaultUniprotLineParser<CcLineObject, CcLineLexer, CcLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Cc.getFactory(),
 				new CcLineModelListener()
 		);

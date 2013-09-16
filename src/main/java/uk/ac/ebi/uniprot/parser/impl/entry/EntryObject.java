@@ -33,7 +33,6 @@ import java.util.List;
  * User: wudong, Date: 16/09/13, Time: 10:46
  */
 public class EntryObject {
-
 	 public AcLineObject ac;
 	 public CcLineObject cc;
 	 public DeLineObject de;
@@ -61,8 +60,6 @@ public class EntryObject {
 	     public RcLineObject rc;
 	     public RgLineObject rg;
 	     public RlLineObject rl;
-
-
      }
 
 }

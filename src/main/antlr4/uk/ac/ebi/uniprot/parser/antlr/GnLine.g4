@@ -7,7 +7,7 @@ GN   ORFNames=<name1>[, <name2>...];
 
 grammar GnLine;
 
-@members {
+@lexer::members {
   private boolean name=false;
 }
 

@@ -17,14 +17,15 @@ public interface GrammarFactory<L extends Lexer, P extends Parser> {
 	public static final String packageName = "uk.ac.ebi.uniprot.parser.antlr";
 
 	public static enum GrammarFactoryEnum {
-		Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og, Rn, Rt, Rp, Ra, Rg, Rc, Rx, De, Rl, Ft, Oc, Ox, Oh, Cc;
+		Uniprot, Ac, Id, Dt, Kw, Dr, Sq, Gn, Pe, Os, Og, Rn, Rt, Rp, Ra, Rg, Rc, Rx, De, Rl, Ft, Oc, Ox, Oh, Cc;
 
 		private GrammarFactory factory;
 
 		private GrammarFactory createFactory() {
 			final String name = this.name();
-			final String lexerName = packageName + "." + name + "LineLexer";
-			final String parserName = packageName + "." + name + "LineParser";
+
+			final String lexerName = packageName + "." + name + (name.equals("Uniprot")?"":"Line") + "Lexer";
+			final String parserName = packageName + "." + name + (name.equals("Uniprot")?"":"Line") +"Parser";
 
 			return new GrammarFactory() {
 				@Override
@@ -53,6 +54,7 @@ public interface GrammarFactory<L extends Lexer, P extends Parser> {
 
 				@Override
 				public String getTopRuleName() {
+					if (name.equals("Uniprot")) return "entry";
 					return (name + "_" + name).toLowerCase();
 				}
 			};

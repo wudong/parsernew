@@ -7,7 +7,7 @@ FT                                /FTId=VSP_004370.
 
 grammar FtLine;
 
-@members {
+@lexer::members {
   private int loc = 0;
   private boolean word=false;
 }

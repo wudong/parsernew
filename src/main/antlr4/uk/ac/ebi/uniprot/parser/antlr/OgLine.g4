@@ -4,7 +4,7 @@ OG   Plasmid IncFII R1-19 (R1 drd-19).
 */
 grammar OgLine;
 
-@members {
+@lexer::members {
   private boolean plasmid=false;
 }
 

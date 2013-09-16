@@ -26,6 +26,7 @@ import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rg.RgLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rl.RlLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rn.RnLineObject;
+import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rx.RxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
@@ -59,9 +60,9 @@ public class EntryModelListener extends UniprotParserBaseListener implements Par
 
 	@Override
 	public void exitRp(@NotNull UniprotParser.RpContext ctx) {
-		UniprotLineParser<DtLineObject> kwLineParser = parserFactory.createDtLineParser();
-		DtLineObject parse = kwLineParser.parse(ctx.getText());
-		object.dt = parse;
+		UniprotLineParser<RpLineObject> kwLineParser = parserFactory.createRpLineParser();
+		RpLineObject parse = kwLineParser.parse(ctx.getText());
+		ref.rp = parse;
 	}
 
 	@Override
