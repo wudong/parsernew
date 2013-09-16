@@ -9,11 +9,14 @@ cc_lines: cc_common | cc_web_resource|cc_biophyiochemical
           |cc_alternative_products|cc_sequence_caution
           |cc_mass_spectrometry;
 
+cc_properties_text : CC_PROPERTIES_TEXT_CHANGE_LINE ?
+           CC_PROPERTIES_TEXT (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT)*;
+
 cc_common: CC_TOPIC_START CC_TOPIC_COMMON COLON SPACE
            cc_common_text
            NEW_LINE;
 cc_common_text: CC_COMMON_TEXT_WORD (cc_common_text_separator CC_COMMON_TEXT_WORD)* ;
-cc_common_text_separator: SPACE | CHANGE_OF_LINE;
+cc_common_text_separator: SPACE | CC_COMMON_CHANGE_OF_LINE;
 
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
 cc_web_resource:  CC_TOPIC_START CC_TOPIC_WEB_RESOURCE COLON SPACE
@@ -21,7 +24,7 @@ cc_web_resource:  CC_TOPIC_START CC_TOPIC_WEB_RESOURCE COLON SPACE
                   (SEMICOLON cc_web_separator cc_web_resource_note )?
                   (SEMICOLON cc_web_separator cc_web_resource_url)?
                    (SEMICOLON|DOT) NEW_LINE;
-cc_web_separator: SPACE | CHANGE_OF_LINE;
+cc_web_separator: SPACE | CC_WR_CHANGE_OF_LINE;
 cc_web_resource_name: CC_WR_NAME_START CC_WR_TEXT  ;
 cc_web_resource_note: CC_WR_NOTE_START CC_WR_TEXT ;
 cc_web_resource_url: CC_WR_URL_START CC_WR_URL  ;
@@ -37,18 +40,23 @@ cc_biophyiochemical_properties:
                     |cc_biophyiochemical_kinetic
                     ;
 cc_biophyiochemical_absorption: CC_HEADER_1  CC_BP_ABSORPTION COLON NEW_LINE
-                 CC_HEADER_2  CC_BP_ABS  CC_BP_DIGIT SPACE CC_BP_NM SEMICOLON NEW_LINE
-                 CC_HEADER_2  CC_BP_NOTE CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE;
+                 CC_HEADER_2 cc_biophyiochemical_absorption_bas  NEW_LINE
+                 CC_HEADER_2  cc_biophyiochemical_absorption_note NEW_LINE;
+cc_biophyiochemical_absorption_bas:  CC_BP_ABS  CC_BP_DIGIT SPACE CC_BP_NM SEMICOLON;
+cc_biophyiochemical_absorption_note : CC_BP_NOTE cc_properties_text SEMICOLON;
 cc_biophyiochemical_ph:   CC_HEADER_1  CC_BP_PH_DEPENDENCE
-                 CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE    ;
+                 cc_properties_text  SEMICOLON NEW_LINE    ;
 cc_biophyiochemical_temperature:   CC_HEADER_1  CC_BP_TEMPERATURE_DEPENDENCE
-                 CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE      ;
+                 cc_properties_text  SEMICOLON NEW_LINE      ;
 cc_biophyiochemical_redox:   CC_HEADER_1  CC_BP_REDOX_POTENTIAL
-                 CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE      ;
+                 cc_properties_text  SEMICOLON NEW_LINE      ;
 cc_biophyiochemical_kinetic: CC_HEADER_1 CC_BP_KINETIC_PARAMETERS COLON NEW_LINE
-                  (CC_HEADER_2 CC_BP_KM CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE)*
-                  (CC_HEADER_2 CC_BP_VMAX CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE)*
-                  (CC_HEADER_2 CC_BP_NOTE CC_PROPERTIES_TEXT  SEMICOLON NEW_LINE)?;
+                  (CC_HEADER_2 cc_biophyiochemical_kinetic_km NEW_LINE)*
+                  (CC_HEADER_2 cc_biophyiochemical_kinetic_bpmax NEW_LINE)*
+                  (CC_HEADER_2 cc_biophyiochemical_kinetic_note SEMICOLON NEW_LINE)?;
+cc_biophyiochemical_kinetic_km: CC_BP_KM cc_properties_text  SEMICOLON;
+cc_biophyiochemical_kinetic_bpmax: CC_BP_VMAX cc_properties_text  SEMICOLON;
+cc_biophyiochemical_kinetic_note: CC_BP_NOTE cc_properties_text  SEMICOLON;
 
 cc_interaction: CC_TOPIC_START  CC_TOPIC_INTERACTION  COLON NEW_LINE
                    cc_interaction_line+;
@@ -56,7 +64,6 @@ cc_interaction_line: CC_HEADER_1 cc_interaction_sp cc_interaction_nbexp cc_inter
 cc_interaction_sp: ( CC_IR_SELF | ( CC_IR_AC COLON (CC_IR_AC|DASH) (SPACE CC_IR_XENO)?)) SEMICOLON SPACE;
 cc_interaction_nbexp: CC_IR_NBEXP INTEGER SEMICOLON SPACE;
 cc_interaction_intact: CC_IR_INTACT CC_IR_AC COMA SPACE CC_IR_AC SEMICOLON NEW_LINE;
-
 
 cc_subcellular_location: CC_TOPIC_START CC_TOPIC_SUBCELLUR_LOCATION COLON SPACE
                          (
@@ -84,7 +91,7 @@ cc_subcellular_note:
 
 cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
 cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;
-cc_subcellular_text_separator: SPACE | CHANGE_OF_LINE;
+cc_subcellular_text_separator: SPACE | CC_SL_CHANGE_OF_LINE;
 
 cc_alternative_products:
                CC_TOPIC_START CC_TOPIC_ALTERNATIVE_PRODUCTS COLON NEW_LINE
@@ -97,7 +104,7 @@ cc_alternative_products_event:
 cc_alternative_products_event_event: CC_AP_EVENT cc_alternative_value
                                     (COMA SPACE cc_alternative_value)* SEMICOLON;
 cc_alternative_products_event_namedisoforms: CC_AP_NAMED_ISOFORMS cc_alternative_value SEMICOLON;
-cc_alternative_products_event_comment: CC_AP_COMMENT CC_PROPERTIES_TEXT SEMICOLON ;
+cc_alternative_products_event_comment: CC_AP_COMMENT cc_properties_text SEMICOLON ;
 
 cc_alternative_value: CC_AP_WORD (SPACE CC_AP_WORD)*;
 
@@ -115,7 +122,7 @@ cc_alternative_products_sequence_value:
                 (CC_AP_DISPLAYED|CC_AP_EXTERNAL|CC_AP_NOT_DESCRIBED|cc_alternative_products_sequence_value_identifiers);
 cc_alternative_products_sequence_value_identifiers:
                 CC_AP_FEATURE_IDENTIFIER (COMA SPACE CC_AP_FEATURE_IDENTIFIER)*;
-cc_alternative_products_note: CC_AP_NOTE CC_PROPERTIES_TEXT SEMICOLON;
+cc_alternative_products_note: CC_AP_NOTE cc_properties_text SEMICOLON;
 
 /*
 CC   -!- SEQUENCE CAUTION:
@@ -137,9 +144,9 @@ cc_mass_spectrometry:
         CC_TOPIC_START CC_TOPIC_MASS_SPECTROMETRY COLON SPACE
         cc_mass_spectrometry_mass (SPACE cc_mass_spectrometry_mass_error)?
         SPACE cc_mass_spectrometry_mass_method
-        cc_mass_separator cc_mass_spectrometry_mass_range
-        (cc_mass_separator cc_mass_spectrometry_mass_note)?
-        cc_mass_separator cc_mass_spectrometry_mass_source
+        (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range
+        ((SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_note)?
+        (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_source
         NEW_LINE;
 
 cc_mass_spectrometry_mass:
@@ -151,14 +158,14 @@ cc_mass_spectrometry_mass_method:
 cc_mass_spectrometry_mass_range:
         CC_MS_RANGE cc_mass_spectrometry_mass_range_value SEMICOLON;
 cc_mass_spectrometry_mass_range_value:
-        CC_MS_R_V_NUMBER DASH CHANGE_OF_LINE ? CC_MS_R_V_NUMBER
+        CC_MS_R_V_NUMBER DASH CC_MS_R_V_CHANGE_OF_LINE ? CC_MS_R_V_NUMBER
         ( CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_WORD CC_MS_R_V_LEFT_BRACKET)?;
 cc_mass_spectrometry_mass_note:
         CC_MS_NOTE cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_source:
          CC_MS_SOURCE  cc_mass_spectrometry_value SEMICOLON ;
-cc_mass_spectrometry_value: CC_MS_V_WORD (cc_mass_separator CC_MS_V_WORD)*;
-cc_mass_separator: SPACE|CHANGE_OF_LINE;
+cc_mass_spectrometry_value: CC_MS_V_WORD ((SPACE|CC_MS_V_CHANGE_OF_LINE) CC_MS_V_WORD)*;
+
 
 
 

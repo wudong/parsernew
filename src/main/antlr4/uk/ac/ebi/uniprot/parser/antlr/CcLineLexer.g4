@@ -1,8 +1,10 @@
 lexer grammar CcLineLexer;
 
+options { superClass=uk.ac.ebi.uniprot.antlr.RememberLastTokenLexer; }
+
 //define the tokens that is common in all the modes.
 tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
- COLON, DOT, NEW_LINE, CHANGE_OF_LINE,
+ COLON, DOT, NEW_LINE,
  CC_HEADER_1, CC_HEADER_2, INTEGER, DASH}
 
 CC_TOPIC_START  : 'CC   -!- ';
@@ -31,8 +33,8 @@ CC_TOPIC_SEQUENCE_CAUTION:
 
 //the common mode for most of the CC lines;
 mode CC_COMMON;
-CC_COMMON_CC_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
-CC_COMMON_CHANGE_OF_LINE: '\nCC       '              -> type (CHANGE_OF_LINE) ;
+CC_COMMON_CC_TOPIC_START  : 'CC   -!- '               ->  popMode, type(CC_TOPIC_START) ;
+CC_COMMON_CHANGE_OF_LINE: '\nCC       '          {replaceChangeOfLine();};
 CC_COMMON_SPACE : ' '                                -> type (SPACE);
 CC_COMMON_SEMICOLON : ';'                            -> type (SEMICOLON);
 CC_COMMON_COLON: ':'                                 -> type (COLON);
@@ -44,9 +46,10 @@ fragment TL: ~[\n\r\t ];
 mode CC_PROPERTIES_TEXT_MODE;
 CC_PROPERTIES_TEXT_END : ';'                                -> popMode, type (SEMICOLON) ;
 fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
-CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         ';
-CC_PROPERTIES_TEXT : CC_PROPERTIES_TEXT_CHANGE_LINE ?
-            CC_PROPERTIES_TEXT_LETTER+ (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT_LETTER+)*;
+CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         '                   {replaceChangeOfLine();};
+CC_PROPERTIES_TEXT: CC_PROPERTIES_TEXT_LETTER+;
+//: CC_PROPERTIES_TEXT_CHANGE_LINE ?
+//           CC_PROPERTIES_TEXT_LETTER+ (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT_LETTER+)*;
 
 /*CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
   CC       Absorption:
@@ -105,8 +108,8 @@ CC_SL_SPACE : ' '                            -> type (SPACE);
 CC_SL_DOT : '.'                            -> type (DOT);
 CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_SL_CHANGE_OF_LINE: '\nCC       '                 -> type (CHANGE_OF_LINE);
 CC_SL_NOTE: 'Note=';
+CC_SL_CHANGE_OF_LINE: '\nCC         '         {replaceChangeOfLine();}   ;
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
 CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
@@ -135,12 +138,13 @@ CC_AP_NAMED_ISOFORMS: 'Named isoforms='             -> pushMode ( CC_ALTERNATIVE
 mode CC_ALTERNATIVE_PRODUCTS_VALUE;
 CC_AP_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
 CC_AP_VALUE_SPACE : ' '                            -> type (SPACE);
+CC_AP_VALUE_COMA : ','                               -> type (COMA);
 CC_AP_DISPLAYED: 'Displayed' ;
 CC_AP_EXTERNAL: 'External';
 CC_AP_NOT_DESCRIBED: 'Not described';
 CC_AP_FEATURE_IDENTIFIER: 'VSP_'[0-9]*;
 CC_AP_WORD:  CC_AP_WORD_LETTER+;
-fragment CC_AP_WORD_LETTER: ~[ ;\n\r\t];
+fragment CC_AP_WORD_LETTER: ~[ ,;\n\r\t];
 
 mode CC_SEQUENCE_CAUTION;
 CC_SC_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
@@ -166,7 +170,7 @@ CC_WR_CC_TOPIC_START  : 'CC   -!- '                 -> popMode, type(CC_TOPIC_ST
 CC_WR_NAME_START: 'Name='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
 CC_WR_NOTE_START: 'Note='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
 CC_WR_URL_START: 'URL='                             -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_CHANGE_OF_LINE: '\nCC       '                 -> type (CHANGE_OF_LINE);
+CC_WR_CHANGE_OF_LINE: '\nCC       '  {replaceChangeOfLine();}   ;
 CC_WR_SPACE : ' '                                   -> type (SPACE);
 CC_WR_SEMICOLON : ';'                               -> type (SEMICOLON);
 CC_WR_COLON: ':'                                    -> type (COLON);
@@ -192,11 +196,12 @@ CC_MS_METHOD: 'Method='                            -> pushMode ( CC_MASS_SPECTRO
 CC_MS_RANGE: 'Range='                              -> pushMode ( CC_MASS_SPECTROMETRY_RANGE_VALUE );
 CC_MS_NOTE: 'Note='                               -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
 CC_MS_SOURCE: 'Source='                           -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_CHANGE_OF_LINE: '\nCC       ';
 
 mode CC_MASS_SPECTROMETRY_VALUE;
 CC_MS_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
 CC_MS_V_SPACE : ' '                                   -> type (SPACE);
-CC_MS_V_CHANGE_OF_LINE : '\nCC       '                    -> type (CHANGE_OF_LINE);
+CC_MS_V_CHANGE_OF_LINE : '\nCC       '        {replaceChangeOfLine();}   ;
 CC_MS_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
 CC_MS_V_WORD:  CS_MS_V_LETTER+;
 fragment CS_MS_V_LETTER: ~[ ;\n\r\t];
@@ -207,7 +212,7 @@ CC_MS_R_V_LEFT_BRACKET : '('  ;
 CC_MS_R_V_RIGHT_BRACKET : ')' ;
 CC_MS_R_V_DASH : '-'                                   -> type (DASH);
 CC_MS_R_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
-CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '                    -> type (CHANGE_OF_LINE);
+CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '           ;
 CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
 fragment CS_MS_R_V_LETTER: ~[ -;\n\r\t];
 
