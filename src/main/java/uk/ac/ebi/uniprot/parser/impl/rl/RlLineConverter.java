@@ -75,14 +75,14 @@ public class RlLineConverter implements Converter<RlLineObject, Citation> {
 	private Citation convert(RlLineObject.EPub ep){
 		String line = ep.title;
 		ElectronicArticle citation = factory.buildElectronicArticle();
-		if (line.startsWith("(er) Plant Gene Register ")) {
+		if (line.startsWith("Plant Gene Register ")) {
 			citation.setJournalName(factory.buildJournalName("Plant Gene Register"));
-			citation.setLocator(factory.buildLocator(line.substring(line.lastIndexOf(" ") + 1, line.length() - 1)));
-		} else if (line.startsWith("(er) Worm Breeder's Gazette")) {
+			citation.setLocator(factory.buildLocator(line.substring(line.lastIndexOf(" ") + 1, line.length() )));
+		} else if (line.startsWith("Worm Breeder's Gazette")) {
 			citation.setJournalName(factory.buildJournalName("Worm Breeder's Gazette"));
-			citation.setLocator(factory.buildLocator(line.substring(line.lastIndexOf(" ") + 1, line.length() - 1)));
+			citation.setLocator(factory.buildLocator(line.substring(line.lastIndexOf(" ") + 1, line.length())));
 		} else {
-			citation.setJournalName(factory.buildJournalName(line.substring(4, line.length() - 1)));
+			citation.setJournalName(factory.buildJournalName(line));
 		}
 		return citation;
 	}

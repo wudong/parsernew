@@ -1,12 +1,17 @@
 package uk.ac.ebi.kraken.parser.converter;
 
+import static junit.framework.TestCase.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import uk.ac.ebi.kraken.interfaces.common.Value;
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
@@ -15,6 +20,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.description.FlagType;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.NameType;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Section;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 
@@ -185,11 +191,124 @@ public class DeLineConverterTest {
 		
 		
 	}
+	@Test
+	public void testEvidence(){
+		/*
+		 *   val deLines = """DE   RecName: Full=Annexin A5{EI1};
+                    |DE            Short=Annexin-5{EI1, EI2};
+                    |DE   AltName: Full=Annexin V{EI1};
+                    |DE   AltName: Full=Lipocortin V{EI1};
+                    |DE   AltName: Full=Placental anticoagulant protein I{EI1};
+                    |DE            Short=PAP-I{EI2};
+                    |DE   AltName: Full=PP4{EI1};
+                    |DE   AltName: Full=Thromboplastin inhibitor{EI3};
+                    |DE   Flags: Precursor{EI1, EI2, EI3};
+		 */
+		DeLineObject deObject = new DeLineObject();
+		deObject.recName = new DeLineObject.Name();
+		deObject.recName.fullName = "Annexin A5";
+		
+		Map<String, List<String> > evidences = new TreeMap<>();
+		List<String> evs = new ArrayList<>();
+		evs.add("EI1");
+		deObject.getEvidenceInfo().evidences.put("Annexin A5", evs);
+		evidences.put("Annexin A5", evs);
+		
+		deObject.recName.shortNames.add( "Annexin-5");
+		evs = new ArrayList<>();
+		evs.add("EI2");
+		deObject.getEvidenceInfo().evidences.put("Annexin-5", evs);
+		evidences.put("Annexin-5", evs);
+		deObject.altName.add(createName("Annexin V"));
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		deObject.getEvidenceInfo().evidences.put("Annexin V", evs);
+		evidences.put("Annexin V", evs);
+		deObject.altName.add(createName("Lipocortin V"));
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		deObject.getEvidenceInfo().evidences.put("Lipocortin V", evs);
+		evidences.put("Lipocortin V", evs);
+		
+		deObject.altName.add(createName("Placental anticoagulant protein I", "PAP-I"));
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		deObject.getEvidenceInfo().evidences.put("Placental anticoagulant protein I", evs);
+		evidences.put("Placental anticoagulant protein I", evs);
+		evs = new ArrayList<>();
+		evs.add("EI2");
+		deObject.getEvidenceInfo().evidences.put("PAP-I", evs);
+	
+		evidences.put("PAP-I", evs);
+		
+		deObject.altName.add(createName("PP4"));
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		deObject.getEvidenceInfo().evidences.put("PP4", evs);
+		evidences.put("PP4", evs);
+		deObject.altName.add(createName("Thromboplastin inhibitor"));
+		evs = new ArrayList<>();
+		evs.add("EI3");
+		deObject.getEvidenceInfo().evidences.put("Thromboplastin inhibitor", evs);
+		evidences.put("Thromboplastin inhibitor", evs);
+		
+		deObject.flag =DeLineObject.FlagType.Precursor;
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		evs.add("EI2");
+		evs.add("EI3");
+		deObject.getEvidenceInfo().evidences.put(deObject.flag, evs);
+		ProteinDescription pDesc = converter.convert(deObject);
+		Name recName =pDesc.getRecommendedName();
+		
+		List<String> ecs = new ArrayList<>();
+		List<Name> names = new ArrayList<Name>();
+		names.add(recName);
+		
+		
+		validate( "Annexin A5", "Annexin-5", ecs, NameType.RECNAME, names, evidences );
+		
+		names = pDesc.getAlternativeNames();
+		validate( "Annexin V",  null, ecs, NameType.ALTNAME, names, evidences);
+		validate( "Lipocortin V",  null, ecs, NameType.ALTNAME, names, evidences);
+		validate( "Placental anticoagulant protein I", "PAP-I", ecs, NameType.ALTNAME, names, evidences);
+		validate( "PP4",  null, ecs, NameType.ALTNAME, names, evidences);
+		validate( "Thromboplastin inhibitor",  null, ecs, NameType.ALTNAME, names, evidences );
+	
+		List<Flag> flags =pDesc.getFlags();
+		TestCase.assertEquals(1, flags.size());
+		Flag flag = flags.get(0);
+		TestCase.assertEquals(FlagType.PRECURSOR, flag.getFlagType());
+		
+		List<EvidenceId> evids = flag.getEvidenceIds();
+		TestCase.assertEquals(3, evids.size());
+		evs = new ArrayList<>();
+		evs.add("EI1");
+		evs.add("EI2");
+		evs.add("EI3");
+		for(EvidenceId ev:evids){
+			TestCase.assertTrue(evs.contains(ev.getValue()));
+		}
+		
+		
+	}
+	private void validate(List<String> expected, List<EvidenceId> vals){
+		if((expected ==null) ||(expected.size()==0) )
+			return;
+		TestCase.assertEquals(expected.size(),  vals.size());
+		for(EvidenceId val:vals){
+			TestCase.assertTrue(expected.contains(val.getValue()));
+		}
+	}
+	
 	private void validate(String fullName, String shortName, NameType type,  List<Name> names){
 		List<String> ecs = new ArrayList<>();
 		validate(fullName, shortName, ecs, type, names);
 	}
 	private void validate(String fullName, String shortName, List<String> ecs, NameType type,  List<Name> names){
+		validate(fullName, shortName, ecs, type, names, new TreeMap<String, List<String> >());
+	}
+	private void validate(String fullName, String shortName, List<String> ecs, NameType type,  List<Name> names, Map<String, List<String> > evidences){
 		boolean fullNameFound =false;
 		boolean shortNameFound =false;
 	
@@ -203,6 +322,7 @@ public class DeLineConverterTest {
 				if(field.getType() ==FieldType.FULL){
 					if(field.getValue().equals(fullName)){
 						fullNameFound =true;
+						validate(evidences.get(fullName), field.getEvidenceIds());
 						break;
 					}
 				}
@@ -212,6 +332,7 @@ public class DeLineConverterTest {
 					if(shortName !=null){
 						if(field.getType() ==FieldType.SHORT){
 							if(field.getValue().equals(shortName)){
+								validate(evidences.get(shortName), field.getEvidenceIds());
 								shortNameFound =true;
 							}
 						}
@@ -233,7 +354,9 @@ public class DeLineConverterTest {
 				boolean ecsFound =false;
 				for(Field field:ecFields){
 					if(ec.equals(field.getValue())){
+						validate(evidences.get(ec), field.getEvidenceIds());
 						ecsFound =true;
+						break;
 					}
 				}
 				TestCase.assertTrue(ecsFound);
