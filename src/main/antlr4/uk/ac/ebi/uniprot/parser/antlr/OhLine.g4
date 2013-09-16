@@ -6,7 +6,7 @@ The length of an OH line may exceed 75 characters.
 
 grammar OhLine;
 
-@members{
+@lexer::members{
 private boolean hostname = false;
 }
 

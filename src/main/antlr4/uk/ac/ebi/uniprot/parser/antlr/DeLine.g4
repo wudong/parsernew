@@ -1,6 +1,6 @@
 grammar DeLine;
 
-@members {
+@lexer::members {
 private boolean name=false;
 }
 

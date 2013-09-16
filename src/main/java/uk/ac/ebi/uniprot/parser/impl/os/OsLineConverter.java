@@ -18,7 +18,7 @@ public class OsLineConverter implements Converter<OsLineObject, Organism> {
 	        int level = 0;
 	        boolean uppercase = false;
 	        StringBuffer sb = new StringBuffer();
-	        for (int iii = value.length() - 2; iii > -1; iii--) {
+	        for (int iii = value.length() - 1; iii > -1; iii--) {
 	            char c = value.charAt(iii);
 	            if (c == '(') {
 	                level --;

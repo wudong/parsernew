@@ -45,4 +45,16 @@ class OcLineParserTest extends FunSuite  {
     obj.nodes should contain ("Euteleostomi")
   }
 
+  test ("an oc") {
+    val osOneLiner= "OC   Viruses; dsDNA viruses, no RNA stage; Iridoviridae; Ranavirus.\n"
+    val parser = (new DefaultUniprotLineParserFactory).createOcLineParser();
+    val obj = parser.parse(osOneLiner)
+
+    obj.nodes should have size (4)
+    obj.nodes should contain ("Viruses")
+    obj.nodes should contain ("dsDNA viruses, no RNA stage")
+    obj.nodes should contain ("Iridoviridae")
+    obj.nodes should contain ("Ranavirus")
+  }
+
 }

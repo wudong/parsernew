@@ -2,7 +2,7 @@ grammar RlLine;
 
 //This number in the Lexer to determine if the Lexer running on ePUB,
 //for the purpose to handle free text in epub.
-@members {
+@lexer::members {
   private boolean inEpub=false;
   private boolean inBook=false;
   private boolean inBook_2=false;

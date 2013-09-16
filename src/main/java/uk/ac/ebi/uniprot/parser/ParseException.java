@@ -9,9 +9,15 @@ package uk.ac.ebi.uniprot.parser;
  */
 public class ParseException extends RuntimeException{
 
-    public ParseException(){}
+	private final String parsingString;
 
-    public ParseException(String s){
-        super(s);
+    public ParseException(String message, String parsingString, Throwable parent){
+		super(message, parent);
+	    this.parsingString = parsingString;
     }
+
+	public String getParsingString() {
+		return parsingString;
+	}
+
 }
