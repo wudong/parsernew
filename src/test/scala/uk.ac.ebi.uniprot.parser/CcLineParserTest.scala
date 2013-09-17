@@ -516,4 +516,35 @@ class CcLineParserTest extends FunSuite {
     ms.source should be ("PubMed:10531593")
 
   }
+
+  test("subcellur location 1"){
+
+    val lines = """CC   -!- SUBCELLULAR LOCATION: Cytoplasm. Endoplasmic reticulum membrane;
+                   |CC       Peripheral membrane protein. Golgi apparatus membrane; Peripheral
+                   |CC       membrane protein.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SubcullarLocation]
+    val sl = cc1.`object`.asInstanceOf[SubcullarLocation]
+
+    sl.locations should have size (3)
+    val l1: LocationObject = sl.locations.get(0)
+    l1.subcellular_location should be ("Cytoplasm")
+    l1.subcellular_location_flag should be (null)
+
+    val l2: LocationObject = sl.locations.get(1)
+    l2.subcellular_location should be ("Endoplasmic reticulum membrane")
+    l2.subcellular_location_flag should be (null)
+    l2.topology should be ("Peripheral membrane protein")
+    l2.topology_flag should be (null)
+
+    val l3: LocationObject = sl.locations.get(2)
+    l3.subcellular_location should be ("Golgi apparatus membrane")
+    l3.topology should be ("Peripheral membrane protein")
+  }
 }

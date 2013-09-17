@@ -68,26 +68,29 @@ cc_interaction_intact: CC_IR_INTACT CC_IR_AC COMA SPACE CC_IR_AC SEMICOLON NEW_L
 cc_subcellular_location: CC_TOPIC_START CC_TOPIC_SUBCELLUR_LOCATION COLON SPACE
                          (
                              (((cc_subcellular_location_molecule COLON SPACE)?
-                              cc_subcellular_location_location (cc_subcellular_text_separator cc_subcellular_location_location)*?)
+                              cc_subcellular_location_section )?
                               (cc_subcellular_text_separator cc_subcellular_note)? )
                              | cc_subcellular_note
                          )
                          NEW_LINE;
 
+cc_subcellular_location_section:
+            cc_subcellular_location_location (cc_subcellular_text_separator cc_subcellular_location_location)*;
+
 cc_subcellular_location_molecule: cc_subcellular_words ;
 cc_subcellular_location_location :
                               (
-                               (cc_subcellular_location_value)|
-                               (cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)|
-                               (cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value
-                                                             SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)
+                               (cc_subcellular_location_value)
+                               |(cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)
+                               |(cc_subcellular_location_value SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value
+                                  SEMICOLON cc_subcellular_text_separator cc_subcellular_location_value)
                               ) DOT ;
 
 cc_subcellular_location_value:
                 cc_subcellular_words (cc_subcellular_location_flag)?;
 
 cc_subcellular_note:
-                CC_SL_NOTE cc_subcellular_words DOT;
+                CC_SL_NOTE cc_subcellular_words (cc_subcellular_location_flag)? DOT;
 
 cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
 cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;

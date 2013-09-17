@@ -28,7 +28,10 @@ CC_TOPIC_ALTERNATIVE_PRODUCTS:
 CC_TOPIC_MASS_SPECTROMETRY:
                  'MASS SPECTROMETRY'                 -> pushMode ( CC_MASS_SPECTROMETRY );
 CC_TOPIC_SEQUENCE_CAUTION:
-                 'SEQUENCE CAUTION'                 -> pushMode ( CC_SEQUENCE_CAUTION );
+                 'SEQUENCE CAUTION'                  -> pushMode ( CC_SEQUENCE_CAUTION );
+
+CC_TOPIC_RNA_EDITING:
+                'RNA EDITING'                          -> pushMode ( CC_RNA_EDITING );
 
 
 //the common mode for most of the CC lines;
@@ -48,8 +51,6 @@ CC_PROPERTIES_TEXT_END : ';'                                -> popMode, type (SE
 fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
 CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         '                   {replaceChangeOfLine();};
 CC_PROPERTIES_TEXT: CC_PROPERTIES_TEXT_LETTER+;
-//: CC_PROPERTIES_TEXT_CHANGE_LINE ?
-//           CC_PROPERTIES_TEXT_LETTER+ (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT_LETTER+)*;
 
 /*CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
   CC       Absorption:
@@ -109,7 +110,7 @@ CC_SL_DOT : '.'                            -> type (DOT);
 CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
 CC_SL_NOTE: 'Note=';
-CC_SL_CHANGE_OF_LINE: '\nCC         '         {replaceChangeOfLine();}   ;
+CC_SL_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();}   ;
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
 CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
@@ -215,6 +216,16 @@ CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '           ;
 CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
 fragment CS_MS_R_V_LETTER: ~[ ();\n\r\t];
 
+mode CC_RNA_EDITING;
+CC_RE_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_RE_NOTE: 'Note=' ;
+CC_RE_MODIFIED_POSITION: 'Modified_positions=';
+CC_RE_INT: [1-9][0-9]*                        -> type (INTEGER);
+CC_RE_COMA: ','                        -> type (COMA);
+CC_RE_SEMICOLON: ','                        -> type (SEMICOLON);
+CC_RE_DOT: '.'                        -> type (DOT);
+CC_RE_SPACE: ' '                        -> type (SPACE);
+CC_RE_CHANGE_OF_LINE : '\nCC       '        {replaceChangeOfLine();}   ;
 
 
 

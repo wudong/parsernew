@@ -227,6 +227,70 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 	}
 
 	@Override
+	public void exitCc_subcellular_location(@NotNull CcLineParser.Cc_subcellular_locationContext ctx) {
+
+		CcLineObject.CC cc = new CcLineObject.CC();
+
+		cc.topic = CcLineObject.CCTopicEnum.SUBCELLULAR_LOCATION;
+		CcLineObject.SubcullarLocation sl = new CcLineObject.SubcullarLocation();
+		cc.object = sl;
+
+		CcLineParser.Cc_subcellular_location_moleculeContext cc_subcellular_location_moleculeContext = ctx.cc_subcellular_location_molecule();
+		if (cc_subcellular_location_moleculeContext!=null){
+			String word = cc_subcellular_location_moleculeContext.cc_subcellular_words().getText();
+			sl.molecule=word;
+		}
+
+		CcLineParser.Cc_subcellular_noteContext cc_subcellular_noteContext = ctx.cc_subcellular_note();
+		if (cc_subcellular_noteContext!=null){
+			sl.note = cc_subcellular_noteContext.cc_subcellular_words().getText();
+			CcLineParser.Cc_subcellular_location_flagContext flagContext = cc_subcellular_noteContext.cc_subcellular_location_flag();
+			if (flagContext!=null){
+				sl.noteFlag = CcLineObject.LocationFlatEnum.fromSting(flagContext.CC_SL_FLAG().getText());
+			}
+		}
+
+		CcLineParser.Cc_subcellular_location_sectionContext cc_subcellular_location_sectionContext = ctx.cc_subcellular_location_section();
+		if (cc_subcellular_location_sectionContext!=null){
+			List<CcLineParser.Cc_subcellular_location_locationContext> cc_subcellular_location_locationContexts = cc_subcellular_location_sectionContext.cc_subcellular_location_location();
+			for (CcLineParser.Cc_subcellular_location_locationContext locationContext : cc_subcellular_location_locationContexts) {
+				CcLineObject.LocationObject locationObject = new CcLineObject.LocationObject();
+
+				List<CcLineParser.Cc_subcellular_location_valueContext> valueContexts = locationContext.cc_subcellular_location_value();
+				int size = valueContexts.size();
+				if (size>=1){
+					CcLineParser.Cc_subcellular_location_valueContext locationValueContext = valueContexts.get(0);
+					locationObject.subcellular_location = locationValueContext.cc_subcellular_words().getText();
+					if (locationValueContext.cc_subcellular_location_flag()!=null){
+						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
+						locationObject.subcellular_location_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+					}
+				}
+				if (size>=2){
+					CcLineParser.Cc_subcellular_location_valueContext locationValueContext = valueContexts.get(1);
+					locationObject.topology = locationValueContext.cc_subcellular_words().getText();
+					if (locationValueContext.cc_subcellular_location_flag()!=null){
+						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
+						locationObject.topology_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+					}
+				}
+				if (size>=3){
+					CcLineParser.Cc_subcellular_location_valueContext locationValueContext = valueContexts.get(2);
+					locationObject.orientation = locationValueContext.cc_subcellular_words().getText();
+					if (locationValueContext.cc_subcellular_location_flag()!=null){
+						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
+						locationObject.orientation_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+					}
+				}
+
+				sl.locations.add(locationObject);
+			}
+		}
+
+		object.ccs.add(cc);
+	}
+
+	@Override
 	public void exitCc_alternative_products(@NotNull CcLineParser.Cc_alternative_productsContext ctx) {
 		CcLineObject.CC cc = new CcLineObject.CC();
 		cc.topic = CcLineObject.CCTopicEnum.ALTERNATIVE_PRODUCTS;
