@@ -246,7 +246,8 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 			sl.note = cc_subcellular_noteContext.cc_subcellular_words().getText();
 			CcLineParser.Cc_subcellular_location_flagContext flagContext = cc_subcellular_noteContext.cc_subcellular_location_flag();
 			if (flagContext!=null){
-				sl.noteFlag = CcLineObject.LocationFlatEnum.fromSting(flagContext.CC_SL_FLAG().getText());
+				String text = flagContext.CC_SL_FLAG().getText();
+				sl.noteFlag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
 			}
 		}
 
@@ -263,7 +264,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 					locationObject.subcellular_location = locationValueContext.cc_subcellular_words().getText();
 					if (locationValueContext.cc_subcellular_location_flag()!=null){
 						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
-						locationObject.subcellular_location_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+						locationObject.subcellular_location_flag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
 					}
 				}
 				if (size>=2){
@@ -271,7 +272,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 					locationObject.topology = locationValueContext.cc_subcellular_words().getText();
 					if (locationValueContext.cc_subcellular_location_flag()!=null){
 						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
-						locationObject.topology_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+						locationObject.topology_flag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
 					}
 				}
 				if (size>=3){
@@ -279,7 +280,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 					locationObject.orientation = locationValueContext.cc_subcellular_words().getText();
 					if (locationValueContext.cc_subcellular_location_flag()!=null){
 						String text = locationValueContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
-						locationObject.orientation_flag = CcLineObject.LocationFlatEnum.fromSting(text);
+						locationObject.orientation_flag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
 					}
 				}
 

@@ -89,24 +89,24 @@ public class CcLineObject {
 		 public String molecule;
 		 public List<LocationObject> locations = new ArrayList<LocationObject>();
 		 public String note;
-		 public LocationFlatEnum noteFlag;
+		 public LocationFlagEnum noteFlag;
 	}
 
 	public static class LocationObject {
 		public String subcellular_location;
-		public LocationFlatEnum subcellular_location_flag;
+		public LocationFlagEnum subcellular_location_flag;
 		public String topology;
-		public LocationFlatEnum topology_flag;
+		public LocationFlagEnum topology_flag;
 		public String orientation;
-		public LocationFlatEnum orientation_flag;
+		public LocationFlagEnum orientation_flag;
 	}
 
-	public static enum LocationFlatEnum {
-		By_similarity, Probable,Potential;
+	public static enum LocationFlagEnum {
+		By_similarity, Probable, Potential;
 
-		public static LocationFlatEnum fromSting(String s) {
+		public static LocationFlagEnum fromSting(String s) {
 			String replace = s.replace(' ', '_');
-			return LocationFlatEnum.valueOf(replace);
+			return LocationFlagEnum.valueOf(replace);
 		}
 	}
 

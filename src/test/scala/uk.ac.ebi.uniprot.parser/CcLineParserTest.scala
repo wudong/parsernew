@@ -532,6 +532,9 @@ class CcLineParserTest extends FunSuite {
     cc1.`object`.isInstanceOf[SubcullarLocation]
     val sl = cc1.`object`.asInstanceOf[SubcullarLocation]
 
+    sl.note should be (null)
+    sl.molecule should be (null)
+
     sl.locations should have size (3)
     val l1: LocationObject = sl.locations.get(0)
     l1.subcellular_location should be ("Cytoplasm")
@@ -546,5 +549,50 @@ class CcLineParserTest extends FunSuite {
     val l3: LocationObject = sl.locations.get(2)
     l3.subcellular_location should be ("Golgi apparatus membrane")
     l3.topology should be ("Peripheral membrane protein")
+  }
+
+  test("subcellur location 2"){
+    val lines = """CC   -!- SUBCELLULAR LOCATION: Cell membrane; Peripheral membrane protein
+                  |CC       (By similarity). Secreted (By similarity). Note=The last 22 C-
+                  |CC       terminal amino acids may participate in cell membrane attachment.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SubcullarLocation]
+    val sl = cc1.`object`.asInstanceOf[SubcullarLocation]
+
+    sl.note should be ("The last 22 C-terminal amino acids may participate in cell membrane attachment");
+    sl.noteFlag should be (null)
+    sl.locations should have size (2)
+    val l1: LocationObject = sl.locations.get(0)
+    l1.subcellular_location should be ("Cell membrane")
+    l1.topology should be ("Peripheral membrane protein")
+    l1.topology_flag should be (LocationFlagEnum.By_similarity)
+
+    val l2: LocationObject = sl.locations.get(1)
+    l2.subcellular_location should be ("Secreted")
+    l2.subcellular_location_flag should be (LocationFlagEnum.By_similarity)
+  }
+
+
+  test("subcellur location 3"){
+    val lines =  """CC   -!- SUBCELLULAR LOCATION: Isoform 2: Cytoplasm (Probable).
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[SubcullarLocation]
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+    sl2.molecule should be ("Isoform 2")
+    sl2.locations should have size (1)
+    val l3: LocationObject = sl2.locations.get(0)
+    l3.subcellular_location should be ("Cytoplasm")
+    l3.subcellular_location_flag should be (LocationFlagEnum.Probable)
   }
 }

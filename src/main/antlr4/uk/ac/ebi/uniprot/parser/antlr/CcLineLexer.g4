@@ -116,7 +116,7 @@ CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
 CC_SL_BY_PROBABLE:'(Probable)';
 CC_SL_BY_POTENTIAL:'(Potential)';
-fragment CC_SL_WORD_LETTER: ~[ :,.;\n\r\t];
+fragment CC_SL_WORD_LETTER: ~[ :,.;=\n\r\t];
 
 mode CC_ALTERNATIVE_PRODUCTS;
 CC_AP_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
