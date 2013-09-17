@@ -9,7 +9,7 @@ tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
 
 CC_TOPIC_START  : 'CC   -!- ';
 CC_TOPIC_COMMON : ('ALLERGEN'|'BIOTECHNOLOGY'|'CATALYTIC ACTIVITY'|'CAUTION'|'COFACTOR'
-                |'DEVELOPMENTAL STAGE'|'DISEASE'|'DISRUPTION PHENOTYPE'|'DOMAIN'
+                |'DEVELOPMENTAL STAGE'|'DISRUPTION PHENOTYPE'|'DOMAIN'
                 |'ENZYME REGULATION'|'FUNCTION'|'INDUCTION'|'MISCELLANEOUS'
                 |'PATHWAY'|'PHARMACEUTICAL'|'POLYMORPHISM'|'PTM'|'SIMILARITY'
                 |'SUBUNIT'|'TISSUE SPECIFICITY'|'TOXIC DOSE'
@@ -29,9 +29,10 @@ CC_TOPIC_MASS_SPECTROMETRY:
                  'MASS SPECTROMETRY'                 -> pushMode ( CC_MASS_SPECTROMETRY );
 CC_TOPIC_SEQUENCE_CAUTION:
                  'SEQUENCE CAUTION'                  -> pushMode ( CC_SEQUENCE_CAUTION );
-
 CC_TOPIC_RNA_EDITING:
                 'RNA EDITING'                          -> pushMode ( CC_RNA_EDITING );
+CC_TOPIC_DISEASE:
+                 'DISEASE'                            -> pushMode ( CC_DISEASE );
 
 
 //the common mode for most of the CC lines;
@@ -165,13 +166,19 @@ CC_SC_HEADER_1: 'CC       '                 -> type (CC_HEADER_1);
 CC_SC_NEW_LINE: '\n'                                -> type (NEW_LINE);
 CC_SC_SEQUENCE : 'Sequence=';
 CC_SC_TYPE : 'Type=';
-CC_SC_POSITIONS : 'Positions=';
+CC_SC_POSITIONS : 'Positions='                -> pushMode ( CC_SEQUENCE_CAUTION_POSITION );
 CC_SC_NOTE : 'Note=';
 CC_SC_TYPE_VALUE: 'Frameshift' | 'Erroneous initiation' | 'Erroneous termination'
                    |'Erroneous gene model prediction'|'Erroneous translation'
                    |'Miscellaneous discrepancy';
 CC_SC_WORD: CC_SC_WORD_LETTER+;
 fragment CC_SC_WORD_LETTER: ~[ =;\n\r\t];
+
+mode CC_SEQUENCE_CAUTION_POSITION;
+CC_SC_P_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_SC_P_SPACE : ' '                                   -> type (SPACE);
+CC_SC_P_COMA : ','                                    -> type (COMA);
+CC_SC_P_INT : [1-9][0-9]*                             -> type (INTEGER);
 
 //the cc web resource model;
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
@@ -247,7 +254,8 @@ CC_RE_N_DOT: '.'                                -> type (DOT);
 fragment CS_RE_LETTER: ~[ .\n\r\t];
 
 
-
+mode CC_DISEASE;
+CC_D_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
 
 
 

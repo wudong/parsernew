@@ -52,7 +52,11 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 			CcLineParser.Cc_sequence_caution_positionContext cc_sequence_caution_positionContext = lineContext.cc_sequence_caution_position();
 			if (cc_sequence_caution_positionContext != null) {
-				object1.position = cc_sequence_caution_positionContext.cc_sequence_caution_value().getText();
+				CcLineParser.Cc_sequence_caution_position_valueContext ccc = cc_sequence_caution_positionContext.cc_sequence_caution_position_value();
+				List<TerminalNode> integer = ccc.INTEGER();
+				for (TerminalNode terminalNode : integer) {
+					object1.positions.add(Integer.parseInt(terminalNode.getText()));
+				}
 			}
 
 			CcLineParser.Cc_sequence_caution_noteContext cc_sequence_caution_noteContext = lineContext.cc_sequence_caution_note();

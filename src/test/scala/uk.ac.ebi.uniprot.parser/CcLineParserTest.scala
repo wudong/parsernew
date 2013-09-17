@@ -1,5 +1,7 @@
 package uk.ac.ebi.uniprot.parser
 
+import scala.collection.JavaConverters._
+
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
@@ -8,6 +10,7 @@ import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -417,7 +420,7 @@ class CcLineParserTest extends FunSuite {
     co.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
     co.sequence should be ("CAI24940.1")
     co.note should be (null)
-    co.position should be (null)
+    co.positions should be ('empty)
   }
 
   test("sequence caution with all field") {
@@ -437,7 +440,8 @@ class CcLineParserTest extends FunSuite {
     val co: SequenceCautionObject = sc.sequenceCautionObjects.get(0)
     co.`type` should be (SequenceCautionType.Erroneous_termination)
     co.sequence should be ("AAG34697.1")
-    co.position should be ("388")
+    co.positions should have size (1)
+    co.positions.asScala should equal (List(388))
     co.note should be ("Translated as Ser")
   }
 
@@ -445,7 +449,7 @@ class CcLineParserTest extends FunSuite {
   test("sequence caution 2 lines.") {
     val lines = """CC   -!- SEQUENCE CAUTION:
                   |CC       Sequence=CAI12537.1; Type=Erroneous gene model prediction;
-                  |CC       Sequence=CAI39742.1; Type=Erroneous gene model prediction;
+                  |CC       Sequence=CAI39742.1; Type=Erroneous gene model prediction; Positions=388, 399;
                   |""".stripMargin.replace("\r", "")
 
     val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
@@ -461,13 +465,13 @@ class CcLineParserTest extends FunSuite {
     co.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
     co.sequence should be ("CAI12537.1")
     co.note should be (null)
-    co.position should be (null)
+    co.positions should be ('empty)
 
     val co2: SequenceCautionObject = sc.sequenceCautionObjects.get(1)
     co2.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
     co2.sequence should be ("CAI39742.1")
     co2.note should be (null)
-    co2.position should be (null)
+    co2.positions.asScala should equal (List(388, 399))
   }
 
   test("mass spectrometry 1") {
@@ -648,6 +652,24 @@ class CcLineParserTest extends FunSuite {
     re.locations.get(0) should be (11)
     re.locations.get(1) should be (62)
     re.note should be (null)
+  }
+
+  test("RNA Editing 3"){
+    val lines = """CC   -!- RNA EDITING: Modified_positions=1, 56, 89, 103, 126, 164, 165,
+                  |CC       167, 179, 191, 194, 212, 225, 242, 248, 252, 275, 300, 310, 313;
+                  |CC       Note=The initiator methionine is created by RNA editing.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[RnaEditing]
+    val re = cc2.`object`.asInstanceOf[RnaEditing]
+    re.locations should have size (20)
+    re.locations.get(0) should be (1)
+    re.locations.get(19) should be (313)
+    re.note should be ("The initiator methionine is created by RNA editing.")
   }
 
 }

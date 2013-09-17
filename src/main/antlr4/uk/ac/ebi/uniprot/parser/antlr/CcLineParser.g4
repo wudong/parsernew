@@ -144,7 +144,8 @@ cc_sequence_caution_line:
            NEW_LINE;
 cc_sequence_caution_sequence: CC_SC_SEQUENCE cc_sequence_caution_value SEMICOLON;
 cc_sequence_caution_type: CC_SC_TYPE CC_SC_TYPE_VALUE SEMICOLON;
-cc_sequence_caution_position: CC_SC_POSITIONS cc_sequence_caution_value SEMICOLON;
+cc_sequence_caution_position: CC_SC_POSITIONS cc_sequence_caution_position_value SEMICOLON;
+cc_sequence_caution_position_value:   INTEGER (COMA SPACE INTEGER)*;
 cc_sequence_caution_note: CC_SC_NOTE cc_sequence_caution_value SEMICOLON;
 cc_sequence_caution_value: CC_SC_WORD (SPACE CC_SC_WORD)*;
 
