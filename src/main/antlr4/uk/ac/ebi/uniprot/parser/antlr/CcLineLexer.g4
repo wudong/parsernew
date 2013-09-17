@@ -109,7 +109,7 @@ CC_SL_SPACE : ' '                            -> type (SPACE);
 CC_SL_DOT : '.'                            -> type (DOT);
 CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_SL_NOTE: 'Note=';
+CC_SL_NOTE: 'Note='                          ;
 CC_SL_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();}   ;
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
 CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
@@ -117,6 +117,15 @@ CC_SL_BY_SIMILARITY:'(By similarity)';
 CC_SL_BY_PROBABLE:'(Probable)';
 CC_SL_BY_POTENTIAL:'(Potential)';
 fragment CC_SL_WORD_LETTER: ~[ :,.;=\n\r\t];
+
+/*
+mode CC_SUBCELLULAR_LOCATION_NOTE;
+CC_SL_N_NEW_LINE: '\n'                         -> type (NEW_LINE), popMode;
+CC_SL_N_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();};
+CC_SL_N_NOTE:  CC_SL_N_WORD_LETTER+;
+fragment CC_SL_N_WORD_LETTER: ~[\n\r\t];
+*/
+
 
 mode CC_ALTERNATIVE_PRODUCTS;
 CC_AP_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
@@ -218,14 +227,26 @@ fragment CS_MS_R_V_LETTER: ~[ ();\n\r\t];
 
 mode CC_RNA_EDITING;
 CC_RE_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
-CC_RE_NOTE: 'Note=' ;
 CC_RE_MODIFIED_POSITION: 'Modified_positions=';
 CC_RE_INT: [1-9][0-9]*                        -> type (INTEGER);
 CC_RE_COMA: ','                        -> type (COMA);
-CC_RE_SEMICOLON: ','                        -> type (SEMICOLON);
+CC_RE_SEMICOLON: ';'                        -> type (SEMICOLON);
+CC_RE_COLON: ':'                        -> type (COLON);
 CC_RE_DOT: '.'                        -> type (DOT);
 CC_RE_SPACE: ' '                        -> type (SPACE);
-CC_RE_CHANGE_OF_LINE : '\nCC       '        {replaceChangeOfLine();}   ;
+CC_RE_CHANGE_OF_LINE : '\nCC       '     {replaceChangeOfLine();}   ;
+CC_RE_NOTE: 'Note='                      -> pushMode (CC_RNA_EDITING_NOTE);
+CC_RE_NEW_LINE: '\n'                          -> type (NEW_LINE);
+
+mode CC_RNA_EDITING_NOTE;
+CC_RE_N_SPACE: ' '                              -> type (SPACE);
+CC_RE_N_WORD :  CS_RE_LETTER+;
+CC_RE_N_CHANGE_OF_LINE : '\nCC       '          {replaceChangeOfLine();}   ;
+CC_RE_N_NEW_LINE: '\n'                          -> type (NEW_LINE), popMode;
+CC_RE_N_DOT: '.'                                -> type (DOT);
+fragment CS_RE_LETTER: ~[ .\n\r\t];
+
+
 
 
 

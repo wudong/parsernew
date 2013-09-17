@@ -63,7 +63,7 @@ public class CcLineObject {
 		PATHWAY, PHARMACEUTICAL, POLYMORPHISM, PTM, SIMILARITY,
 		SUBUNIT, TISSUE_SPECIFICITY, TOXIC_DOSE, ALTERNATIVE_PRODUCTS,
 		BIOPHYSICOCHEMICAL_PROPERTIES, WEB_RESOURCE, INTERACTION,
-		SUBCELLULAR_LOCATION, SEQUENCE_CAUTION, MASS_SPECTROMETRY;
+		SUBCELLULAR_LOCATION, SEQUENCE_CAUTION, MASS_SPECTROMETRY, RNA_EDITING;
 
 		public static CCTopicEnum fromSting(String s) {
 			String replace = s.replace(' ', '_');
@@ -110,6 +110,11 @@ public class CcLineObject {
 		}
 	}
 
+	public static class RnaEditing {
+		public List<Integer> locations = new ArrayList<Integer>();
+		public String note;
+	}
+
 	public static class SequenceCaution {
 		public List<SequenceCautionObject> sequenceCautionObjects = new ArrayList<SequenceCautionObject>();
 	}
@@ -134,6 +139,7 @@ public class CcLineObject {
 		public String position;
 		public String note;
 	}
+
 
 	public static class MassSpectrometry {
 		public int mass;

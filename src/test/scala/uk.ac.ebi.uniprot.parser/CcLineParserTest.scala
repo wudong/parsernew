@@ -595,4 +595,59 @@ class CcLineParserTest extends FunSuite {
     l3.subcellular_location should be ("Cytoplasm")
     l3.subcellular_location_flag should be (LocationFlagEnum.Probable)
   }
+
+  test("subcellur location with more than one note separated by DOT"){
+     val lines=  """CC   -!- SUBCELLULAR LOCATION: Golgi apparatus, trans-Golgi network
+                    |CC       membrane; Multi-pass membrane protein (By similarity).
+                    |CC       Note=Predominantly found in the trans-Golgi network (TGN). Not
+                    |CC       redistributed to the plasma membrane in response to elevated
+                    |CC       copper levels.
+                    |""".stripMargin.replace("\r", "")
+
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[SubcullarLocation]
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+    sl2.note should be ("Predominantly found in the trans-Golgi network (TGN). Not " +
+      "redistributed to the plasma membrane in response to elevated " +
+      "copper levels")
+  }
+
+  test("RNA Editing 1"){
+        val lines = """CC   -!- RNA EDITING: Modified_positions=59, 78, 94, 98, 102, 121; Note=The
+                      |CC       nonsense codon at position 59 is modified to a sense codon. The
+                      |CC       stop codon at position 121 is created by RNA editing.
+                      |""".stripMargin.replace("\r", "")
+
+        val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+        val obj = parser.parse(lines)
+        val cc2 = obj.ccs.get(0)
+
+        cc2.`object`.isInstanceOf[RnaEditing]
+        val re = cc2.`object`.asInstanceOf[RnaEditing]
+        re.locations should have size (6)
+
+        re.note should be ("The nonsense codon at position 59 is modified to a sense codon. " +
+          "The stop codon at position 121 is created by RNA editing.")
+  }
+
+  test("RNA Editing 2"){
+    val lines = """CC   -!- RNA EDITING: Modified_positions=11, 62, 72, 97, 117.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[RnaEditing]
+    val re = cc2.`object`.asInstanceOf[RnaEditing]
+    re.locations should have size (5)
+    re.locations.get(0) should be (11)
+    re.locations.get(1) should be (62)
+    re.note should be (null)
+  }
+
 }

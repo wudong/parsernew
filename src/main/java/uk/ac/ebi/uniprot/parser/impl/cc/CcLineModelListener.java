@@ -227,6 +227,30 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 	}
 
 	@Override
+	public void exitCc_rna_editing(@NotNull CcLineParser.Cc_rna_editingContext ctx) {
+
+		CcLineObject.CC cc = new CcLineObject.CC();
+
+		cc.topic = CcLineObject.CCTopicEnum.RNA_EDITING;
+		CcLineObject.RnaEditing re = new CcLineObject.RnaEditing();
+		cc.object = re;
+
+		CcLineParser.Cc_rna_editing_positionContext positionContext = ctx.cc_rna_edigint_modified_position().cc_rna_editing_position();
+		List<TerminalNode> integer = positionContext.INTEGER();
+		for (TerminalNode terminalNode : integer) {
+			String text = terminalNode.getText();
+			re.locations.add(Integer.parseInt(text));
+		}
+
+		if (ctx.cc_rna_edigint_note()!=null){
+			String text = ctx.cc_rna_edigint_note().cc_re_note_value().getText();
+			re.note = text;
+		}
+
+		object.ccs.add(cc);
+	}
+
+	@Override
 	public void exitCc_subcellular_location(@NotNull CcLineParser.Cc_subcellular_locationContext ctx) {
 
 		CcLineObject.CC cc = new CcLineObject.CC();
@@ -243,7 +267,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		CcLineParser.Cc_subcellular_noteContext cc_subcellular_noteContext = ctx.cc_subcellular_note();
 		if (cc_subcellular_noteContext!=null){
-			sl.note = cc_subcellular_noteContext.cc_subcellular_words().getText();
+			sl.note = cc_subcellular_noteContext.cc_subcellular_note_value().getText();
 			CcLineParser.Cc_subcellular_location_flagContext flagContext = cc_subcellular_noteContext.cc_subcellular_location_flag();
 			if (flagContext!=null){
 				String text = flagContext.CC_SL_FLAG().getText();
