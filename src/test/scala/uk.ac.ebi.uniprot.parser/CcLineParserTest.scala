@@ -1,5 +1,7 @@
 package uk.ac.ebi.uniprot.parser
 
+import scala.collection.JavaConverters._
+
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
@@ -8,6 +10,7 @@ import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,13 +39,13 @@ class CcLineParserTest extends FunSuite {
     obj.ccs should have size (2)
     val cc = obj.ccs.get(0)
 
-    cc.topic should equal(CcLineObject.CCTopicEnum.FUNCTION)
-    cc.`object` should equal("This enzyme is necessary for target cell lysis in cell-mediated immune responses. " +
+    cc.topic should be(CcLineObject.CCTopicEnum.FUNCTION)
+    cc.`object` should be("This enzyme is necessary for target cell lysis in cell-mediated immune responses. " +
       "It cleaves after Lys or Arg. May be involved in apoptosis.")
 
     val cc2 = obj.ccs.get(1)
-    cc2.topic should equal(CcLineObject.CCTopicEnum.CAUTION)
-    cc2.`object` should equal("Exons 1a and 1b of the sequence reported in " +
+    cc2.topic should be(CcLineObject.CCTopicEnum.CAUTION)
+    cc2.`object` should be("Exons 1a and 1b of the sequence reported in " +
       "PubMed:17180578 are of human origin, however exon 2 shows strong " +
       "similarity to the rat sequence.")
   }
@@ -68,38 +71,38 @@ class CcLineParserTest extends FunSuite {
     cc1.`object`.isInstanceOf[AlternativeProducts]
     val ap = cc1.`object`.asInstanceOf[AlternativeProducts]
     ap.events should have size (1)
-    ap.events.get(0) should equal ("Alternative splicing")
-    ap.namedIsoforms should equal ("3")
-    ap.comment should equal ("Additional isoforms seem to exist. Experimental confirmation may be lacking for some isoforms")
+    ap.events.get(0) should be ("Alternative splicing")
+    ap.namedIsoforms should be ("3")
+    ap.comment should be ("Additional isoforms seem to exist. Experimental confirmation may be lacking for some isoforms")
     ap.names should have size (3)
-    ap.names.get(0).name should equal ("1")
+    ap.names.get(0).name should be ("1")
     ap.names.get(0).isoId should have size (1)
-    ap.names.get(0).isoId.get(0) should equal ("O43918-1")
-    ap.names.get(0).sequence_enum should equal (AlternativeNameSequenceEnum.Displayed)
+    ap.names.get(0).isoId.get(0) should be ("O43918-1")
+    ap.names.get(0).sequence_enum should be (AlternativeNameSequenceEnum.Displayed)
     ap.names.get(0).sequence_FTId should be ('empty)
     ap.names.get(0).synNames should have size (1)
-    ap.names.get(0).synNames.get(0) should equal ("AIRE-1")
+    ap.names.get(0).synNames.get(0) should be ("AIRE-1")
 
-    ap.names.get(1).name should equal ("2")
+    ap.names.get(1).name should be ("2")
     ap.names.get(1).isoId should have size (1)
-    ap.names.get(1).isoId.get(0) should equal ("O43918-2")
+    ap.names.get(1).isoId.get(0) should be ("O43918-2")
     ap.names.get(1).sequence_enum should be (null)
     ap.names.get(1).sequence_FTId should have size 1
     ap.names.get(1).sequence_FTId should contain ("VSP_004089")
 
     ap.names.get(1).synNames should have size (1)
-    ap.names.get(1).synNames.get(0) should equal ("AIRE-2")
+    ap.names.get(1).synNames.get(0) should be ("AIRE-2")
 
-    ap.names.get(2).name should equal ("3")
+    ap.names.get(2).name should be ("3")
     ap.names.get(2).isoId should have size (1)
-    ap.names.get(2).isoId.get(0) should equal ("O43918-3")
+    ap.names.get(2).isoId.get(0) should be ("O43918-3")
     ap.names.get(2).sequence_enum should be (null)
     ap.names.get(2).sequence_FTId should have size 2
     ap.names.get(2).sequence_FTId should contain ("VSP_004089")
     ap.names.get(2).sequence_FTId should contain ("VSP_004090")
 
     ap.names.get(2).synNames should have size (1)
-    ap.names.get(2).synNames.get(0) should equal ("AIRE-3")
+    ap.names.get(2).synNames.get(0) should be ("AIRE-3")
   }
 
   test ("alternative products 1"){
@@ -119,19 +122,19 @@ class CcLineParserTest extends FunSuite {
     cc1.`object`.isInstanceOf[AlternativeProducts]
     val ap = cc1.`object`.asInstanceOf[AlternativeProducts]
     ap.events should have size (1)
-    ap.events.get(0) should equal ("Alternative promoter usage")
-    ap.namedIsoforms should equal ("2")
+    ap.events.get(0) should be ("Alternative promoter usage")
+    ap.namedIsoforms should be ("2")
 
     ap.names should have size (2)
-    ap.names.get(0).name should equal ("alpha")
+    ap.names.get(0).name should be ("alpha")
     ap.names.get(0).isoId should have size (1)
-    ap.names.get(0).isoId.get(0) should equal ("P12544-1")
-    ap.names.get(0).sequence_enum should equal (AlternativeNameSequenceEnum.Displayed)
+    ap.names.get(0).isoId.get(0) should be ("P12544-1")
+    ap.names.get(0).sequence_enum should be (AlternativeNameSequenceEnum.Displayed)
     ap.names.get(0).sequence_FTId should be ('empty)
 
-    ap.names.get(1).name should equal ("beta")
+    ap.names.get(1).name should be ("beta")
     ap.names.get(1).isoId should have size (1)
-    ap.names.get(1).isoId.get(0) should equal ("P12544-2")
+    ap.names.get(1).isoId.get(0) should be ("P12544-2")
     ap.names.get(1).sequence_enum should be (null)
     ap.names.get(1).sequence_FTId should have size (2)
     ap.names.get(1).sequence_FTId should  contain ("VSP_038571")
@@ -158,11 +161,11 @@ class CcLineParserTest extends FunSuite {
     val bp = cc1.`object`.asInstanceOf[BiophysicochemicalProperties]
 
     bp.kms should have size (1)
-    bp.kms.get(0) should equal ("1.3 mM for L,L-SDAP (in the presence of Zn(2+) at 25 degrees Celsius and at pH 7.6)")
+    bp.kms.get(0) should be ("1.3 mM for L,L-SDAP (in the presence of Zn(2+) at 25 degrees Celsius and at pH 7.6)")
 
     bp.vmaxs should have size (1)
-    bp.vmaxs.get(0) should equal ("1.9 mmol/min/mg enzyme")
-    bp.ph_dependence should equal ("Optimum pH is 7.75")
+    bp.vmaxs.get(0) should be ("1.9 mmol/min/mg enzyme")
+    bp.ph_dependence should be ("Optimum pH is 7.75")
   }
 
   test ("biophysiocalproperties 1"){
@@ -217,9 +220,456 @@ class CcLineParserTest extends FunSuite {
     cc1.`object`.isInstanceOf[WebResource]
     val wr = cc1.`object`.asInstanceOf[WebResource]
 
-    wr.name should equal ("CD40Lbase")
-    wr.note should equal ("CD40L defect database")
-    wr.url should equal ("http://bioinf.uta.fi/CD40Lbase/")
+    wr.name should be ("CD40Lbase")
+    wr.note should be ("CD40L defect database")
+    wr.url should be ("http://bioinf.uta.fi/CD40Lbase/")
+  }
+
+  test ("interaction 1"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       P11450:fcp3c; NbExp=1; IntAct=EBI-126914, EBI-159556;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-126914")
+    unit.secondId should be ("EBI-159556")
+    unit.gene should be ("fcp3c")
+    unit.spAc should be ("P11450")
+    unit.isSelf should be (false)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+  }
+
+  test ("interaction 2"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       Q9W1K5-1:CG11299; NbExp=1; IntAct=EBI-133844, EBI-212772;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-133844")
+    unit.secondId should be ("EBI-212772")
+    unit.gene should be ("CG11299")
+    unit.spAc should be ("Q9W1K5-1")
+    unit.isSelf should be (false)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+  }
+
+
+  test ("interaction"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       Q9W1K5-1:CG11299; NbExp=1; IntAct=EBI-133844, EBI-212772;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-133844")
+    unit.secondId should be ("EBI-212772")
+    unit.gene should be ("CG11299")
+    unit.spAc should be ("Q9W1K5-1")
+    unit.isSelf should be (false)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+  }
+
+  test ("interaction 3"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       Q8NI08:-; NbExp=1; IntAct=EBI-80809, EBI-80799;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-80809")
+    unit.secondId should be ("EBI-80799")
+    unit.gene should be ("-")
+    unit.spAc should be ("Q8NI08")
+    unit.isSelf should be (false)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+  }
+  test ("interaction 4"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       Self; NbExp=1; IntAct=EBI-123485, EBI-123485;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-123485")
+    unit.secondId should be ("EBI-123485")
+    unit.gene should be (null)
+    unit.spAc should be (null)
+    unit.isSelf should be (true)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+  }
+  test ("interaction 5"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       Q8C1S0:2410018M14Rik (xeno); NbExp=1; IntAct=EBI-394562, EBI-398761;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (1)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-394562")
+    unit.secondId should be ("EBI-398761")
+    unit.gene should be ("2410018M14Rik")
+    unit.spAc should be ("Q8C1S0")
+    unit.isSelf should be (false)
+    unit.xeno should be (true)
+    unit.nbexp should be (1)
+  }
+
+  test ("two interactions case"){
+    val lines = """CC   -!- INTERACTION:
+                  |CC       P51617:IRAK1; NbExp=1; IntAct=EBI-448466, EBI-358664;
+                  |CC       P51617:IRAK1; NbExp=1; IntAct=EBI-448472, EBI-358664;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[Interaction]
+    val ir = cc1.`object`.asInstanceOf[Interaction]
+
+    ir.interactions should have size (2)
+    val unit: InteractionObject = ir.interactions.get(0)
+    unit.firstId should be ("EBI-448466")
+    unit.secondId should be ("EBI-358664")
+    unit.gene should be ("IRAK1")
+    unit.spAc should be ("P51617")
+    unit.isSelf should be (false)
+    unit.xeno should be (false)
+    unit.nbexp should be (1)
+
+    val unit2: InteractionObject = ir.interactions.get(1)
+    unit2.firstId should be ("EBI-448472")
+    unit2.secondId should be ("EBI-358664")
+    unit2.gene should be ("IRAK1")
+    unit2.spAc should be ("P51617")
+    unit2.isSelf should be (false)
+    unit2.xeno should be (false)
+    unit2.nbexp should be (1)
+  }
+
+  test("sequence caution 1") {
+    val lines = """CC   -!- SEQUENCE CAUTION:
+                  |CC       Sequence=CAI24940.1; Type=Erroneous gene model prediction;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SequenceCaution]
+    val sc = cc1.`object`.asInstanceOf[SequenceCaution]
+
+    sc.sequenceCautionObjects should have size (1)
+    val co: SequenceCautionObject = sc.sequenceCautionObjects.get(0)
+    co.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
+    co.sequence should be ("CAI24940.1")
+    co.note should be (null)
+    co.positions should be ('empty)
+  }
+
+  test("sequence caution with all field") {
+    val lines = """CC   -!- SEQUENCE CAUTION:
+                  |CC       Sequence=AAG34697.1; Type=Erroneous termination; Positions=388; Note=Translated as Ser;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SequenceCaution]
+    val sc = cc1.`object`.asInstanceOf[SequenceCaution]
+
+    sc.sequenceCautionObjects should have size (1)
+    val co: SequenceCautionObject = sc.sequenceCautionObjects.get(0)
+    co.`type` should be (SequenceCautionType.Erroneous_termination)
+    co.sequence should be ("AAG34697.1")
+    co.positions should have size (1)
+    co.positions.asScala should equal (List(388))
+    co.note should be ("Translated as Ser")
+  }
+
+
+  test("sequence caution 2 lines.") {
+    val lines = """CC   -!- SEQUENCE CAUTION:
+                  |CC       Sequence=CAI12537.1; Type=Erroneous gene model prediction;
+                  |CC       Sequence=CAI39742.1; Type=Erroneous gene model prediction; Positions=388, 399;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SequenceCaution]
+    val sc = cc1.`object`.asInstanceOf[SequenceCaution]
+
+    sc.sequenceCautionObjects should have size (2)
+    val co: SequenceCautionObject = sc.sequenceCautionObjects.get(0)
+    co.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
+    co.sequence should be ("CAI12537.1")
+    co.note should be (null)
+    co.positions should be ('empty)
+
+    val co2: SequenceCautionObject = sc.sequenceCautionObjects.get(1)
+    co2.`type` should be (SequenceCautionType.Erroneous_gene_model_prediction)
+    co2.sequence should be ("CAI39742.1")
+    co2.note should be (null)
+    co2.positions.asScala should equal (List(388, 399))
+  }
+
+  test("mass spectrometry 1") {
+    val lines = """CC   -!- MASS SPECTROMETRY: Mass=24948; Mass_error=6; Method=MALDI;
+                  |CC       Range=1-228; Source=PubMed:11101899;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[MassSpectrometry]
+    val ms = cc1.`object`.asInstanceOf[MassSpectrometry]
+
+    ms.mass should be (24948)
+    ms.mass_error should be (6)
+    ms.method should be ("MALDI")
+    ms.range_start should be (1)
+    ms.range_end should be (228)
+    ms.range_isoform should be (null)
+    ms.range_note should be (null)
+    ms.source should be ("PubMed:11101899")
+  }
+
+  test("mass spectrometry 2") {
+    val lines = """CC   -!- MASS SPECTROMETRY: Mass=13822; Method=MALDI; Range=19-140 (P15522-
+                  |CC       2); Source=PubMed:10531593;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[MassSpectrometry]
+    val ms = cc1.`object`.asInstanceOf[MassSpectrometry]
+
+    ms.mass should be (13822)
+    ms.mass_error should be (0)
+    ms.method should be ("MALDI")
+    ms.range_start should be (19)
+    ms.range_end should be (140)
+    ms.range_isoform should be ("P15522-2")
+    ms.range_note should be (null)
+    ms.source should be ("PubMed:10531593")
+
+  }
+
+  test("subcellur location 1"){
+
+    val lines = """CC   -!- SUBCELLULAR LOCATION: Cytoplasm. Endoplasmic reticulum membrane;
+                   |CC       Peripheral membrane protein. Golgi apparatus membrane; Peripheral
+                   |CC       membrane protein.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SubcullarLocation]
+    val sl = cc1.`object`.asInstanceOf[SubcullarLocation]
+
+    sl.note should be (null)
+    sl.molecule should be (null)
+
+    sl.locations should have size (3)
+    val l1: LocationObject = sl.locations.get(0)
+    l1.subcellular_location should be ("Cytoplasm")
+    l1.subcellular_location_flag should be (null)
+
+    val l2: LocationObject = sl.locations.get(1)
+    l2.subcellular_location should be ("Endoplasmic reticulum membrane")
+    l2.subcellular_location_flag should be (null)
+    l2.topology should be ("Peripheral membrane protein")
+    l2.topology_flag should be (null)
+
+    val l3: LocationObject = sl.locations.get(2)
+    l3.subcellular_location should be ("Golgi apparatus membrane")
+    l3.topology should be ("Peripheral membrane protein")
+  }
+
+  test("subcellur location 2"){
+    val lines = """CC   -!- SUBCELLULAR LOCATION: Cell membrane; Peripheral membrane protein
+                  |CC       (By similarity). Secreted (By similarity). Note=The last 22 C-
+                  |CC       terminal amino acids may participate in cell membrane attachment.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[SubcullarLocation]
+    val sl = cc1.`object`.asInstanceOf[SubcullarLocation]
+
+    sl.note should be ("The last 22 C-terminal amino acids may participate in cell membrane attachment");
+    sl.noteFlag should be (null)
+    sl.locations should have size (2)
+    val l1: LocationObject = sl.locations.get(0)
+    l1.subcellular_location should be ("Cell membrane")
+    l1.topology should be ("Peripheral membrane protein")
+    l1.topology_flag should be (LocationFlagEnum.By_similarity)
+
+    val l2: LocationObject = sl.locations.get(1)
+    l2.subcellular_location should be ("Secreted")
+    l2.subcellular_location_flag should be (LocationFlagEnum.By_similarity)
+  }
+
+
+  test("subcellur location 3"){
+    val lines =  """CC   -!- SUBCELLULAR LOCATION: Isoform 2: Cytoplasm (Probable).
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[SubcullarLocation]
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+    sl2.molecule should be ("Isoform 2")
+    sl2.locations should have size (1)
+    val l3: LocationObject = sl2.locations.get(0)
+    l3.subcellular_location should be ("Cytoplasm")
+    l3.subcellular_location_flag should be (LocationFlagEnum.Probable)
+  }
+
+  test("subcellur location with more than one note separated by DOT"){
+     val lines=  """CC   -!- SUBCELLULAR LOCATION: Golgi apparatus, trans-Golgi network
+                    |CC       membrane; Multi-pass membrane protein (By similarity).
+                    |CC       Note=Predominantly found in the trans-Golgi network (TGN). Not
+                    |CC       redistributed to the plasma membrane in response to elevated
+                    |CC       copper levels.
+                    |""".stripMargin.replace("\r", "")
+
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[SubcullarLocation]
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+    sl2.note should be ("Predominantly found in the trans-Golgi network (TGN). Not " +
+      "redistributed to the plasma membrane in response to elevated " +
+      "copper levels")
+  }
+
+  test("RNA Editing 1"){
+        val lines = """CC   -!- RNA EDITING: Modified_positions=59, 78, 94, 98, 102, 121; Note=The
+                      |CC       nonsense codon at position 59 is modified to a sense codon. The
+                      |CC       stop codon at position 121 is created by RNA editing.
+                      |""".stripMargin.replace("\r", "")
+
+        val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+        val obj = parser.parse(lines)
+        val cc2 = obj.ccs.get(0)
+
+        cc2.`object`.isInstanceOf[RnaEditing]
+        val re = cc2.`object`.asInstanceOf[RnaEditing]
+        re.locations should have size (6)
+
+        re.note should be ("The nonsense codon at position 59 is modified to a sense codon. " +
+          "The stop codon at position 121 is created by RNA editing.")
+  }
+
+  test("RNA Editing 2"){
+    val lines = """CC   -!- RNA EDITING: Modified_positions=11, 62, 72, 97, 117.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[RnaEditing]
+    val re = cc2.`object`.asInstanceOf[RnaEditing]
+    re.locations should have size (5)
+    re.locations.get(0) should be (11)
+    re.locations.get(1) should be (62)
+    re.note should be (null)
+  }
+
+  test("RNA Editing 3"){
+    val lines = """CC   -!- RNA EDITING: Modified_positions=1, 56, 89, 103, 126, 164, 165,
+                  |CC       167, 179, 191, 194, 212, 225, 242, 248, 252, 275, 300, 310, 313;
+                  |CC       Note=The initiator methionine is created by RNA editing.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.`object`.isInstanceOf[RnaEditing]
+    val re = cc2.`object`.asInstanceOf[RnaEditing]
+    re.locations should have size (20)
+    re.locations.get(0) should be (1)
+    re.locations.get(19) should be (313)
+    re.note should be ("The initiator methionine is created by RNA editing.")
   }
 
 }

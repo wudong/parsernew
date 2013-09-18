@@ -33,11 +33,11 @@ public class CcLineObject {
 		public String note;
 	}
 
-	public static class BiophysicochemicalProperties{
+	public static class BiophysicochemicalProperties {
 		public String bsorption_note;
 		public int bsorption_abs;
-		public List<String> kms= new ArrayList<String>();
-		public List<String> vmaxs= new ArrayList<String>();
+		public List<String> kms = new ArrayList<String>();
+		public List<String> vmaxs = new ArrayList<String>();
 		public String kp_note;
 		public String ph_dependence;
 		public String rdox_potential;
@@ -61,7 +61,9 @@ public class CcLineObject {
 		DEVELOPMENTAL_STAGE, DISEASE, DISRUPTION_PHENOTYPE, DOMAIN,
 		ENZYME_REGULATION, FUNCTION, INDUCTION, MISCELLANEOUS,
 		PATHWAY, PHARMACEUTICAL, POLYMORPHISM, PTM, SIMILARITY,
-		SUBUNIT, TISSUE_SPECIFICITY, TOXIC_DOSE, ALTERNATIVE_PRODUCTS, BIOPHYSICOCHEMICAL_PROPERTIES, WEB_RESOURCE, INTERACTION;
+		SUBUNIT, TISSUE_SPECIFICITY, TOXIC_DOSE, ALTERNATIVE_PRODUCTS,
+		BIOPHYSICOCHEMICAL_PROPERTIES, WEB_RESOURCE, INTERACTION,
+		SUBCELLULAR_LOCATION, SEQUENCE_CAUTION, MASS_SPECTROMETRY, RNA_EDITING;
 
 		public static CCTopicEnum fromSting(String s) {
 			String replace = s.replace(' ', '_');
@@ -73,5 +75,82 @@ public class CcLineObject {
 		public List<InteractionObject> interactions = new ArrayList<InteractionObject>();
 	}
 
-	public static class InteractionObject {}
+	public static class InteractionObject {
+		public boolean isSelf;
+		public String spAc;
+		public String gene;
+		public boolean xeno;
+		public int nbexp;
+		public String firstId;
+		public String secondId;
+	}
+
+	public static class SubcullarLocation {
+		 public String molecule;
+		 public List<LocationObject> locations = new ArrayList<LocationObject>();
+		 public String note;
+		 public LocationFlagEnum noteFlag;
+	}
+
+	public static class LocationObject {
+		public String subcellular_location;
+		public LocationFlagEnum subcellular_location_flag;
+		public String topology;
+		public LocationFlagEnum topology_flag;
+		public String orientation;
+		public LocationFlagEnum orientation_flag;
+	}
+
+	public static enum LocationFlagEnum {
+		By_similarity, Probable, Potential;
+
+		public static LocationFlagEnum fromSting(String s) {
+			String replace = s.replace(' ', '_');
+			return LocationFlagEnum.valueOf(replace);
+		}
+	}
+
+	public static class RnaEditing {
+		public List<Integer> locations = new ArrayList<Integer>();
+		public String note;
+	}
+
+	public static class SequenceCaution {
+		public List<SequenceCautionObject> sequenceCautionObjects = new ArrayList<SequenceCautionObject>();
+	}
+
+	public static enum SequenceCautionType {
+		Frameshift,
+		Erroneous_initiation,
+		Erroneous_termination,
+		Erroneous_gene_model_prediction,
+		Erroneous_translation,
+		Miscellaneous_discrepancy;
+
+		public static SequenceCautionType fromSting(String s) {
+			String replace = s.replace(' ', '_');
+			return SequenceCautionType.valueOf(replace);
+		}
+	}
+
+	public static class SequenceCautionObject {
+		public String sequence;
+		public SequenceCautionType type;
+		public List<Integer> positions = new ArrayList<Integer>();
+		public String note;
+	}
+
+
+	public static class MassSpectrometry {
+		public int mass;
+		public int mass_error;
+		public String method;
+		public int range_start;
+		public int range_end;
+		public String range_isoform;
+		public String range_note;
+		public String source;
+	}
+
+
 }

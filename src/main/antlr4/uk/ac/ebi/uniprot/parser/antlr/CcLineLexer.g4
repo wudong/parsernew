@@ -9,7 +9,7 @@ tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
 
 CC_TOPIC_START  : 'CC   -!- ';
 CC_TOPIC_COMMON : ('ALLERGEN'|'BIOTECHNOLOGY'|'CATALYTIC ACTIVITY'|'CAUTION'|'COFACTOR'
-                |'DEVELOPMENTAL STAGE'|'DISEASE'|'DISRUPTION PHENOTYPE'|'DOMAIN'
+                |'DEVELOPMENTAL STAGE'|'DISRUPTION PHENOTYPE'|'DOMAIN'
                 |'ENZYME REGULATION'|'FUNCTION'|'INDUCTION'|'MISCELLANEOUS'
                 |'PATHWAY'|'PHARMACEUTICAL'|'POLYMORPHISM'|'PTM'|'SIMILARITY'
                 |'SUBUNIT'|'TISSUE SPECIFICITY'|'TOXIC DOSE'
@@ -28,7 +28,11 @@ CC_TOPIC_ALTERNATIVE_PRODUCTS:
 CC_TOPIC_MASS_SPECTROMETRY:
                  'MASS SPECTROMETRY'                 -> pushMode ( CC_MASS_SPECTROMETRY );
 CC_TOPIC_SEQUENCE_CAUTION:
-                 'SEQUENCE CAUTION'                 -> pushMode ( CC_SEQUENCE_CAUTION );
+                 'SEQUENCE CAUTION'                  -> pushMode ( CC_SEQUENCE_CAUTION );
+CC_TOPIC_RNA_EDITING:
+                'RNA EDITING'                          -> pushMode ( CC_RNA_EDITING );
+CC_TOPIC_DISEASE:
+                 'DISEASE'                            -> pushMode ( CC_DISEASE );
 
 
 //the common mode for most of the CC lines;
@@ -48,8 +52,6 @@ CC_PROPERTIES_TEXT_END : ';'                                -> popMode, type (SE
 fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
 CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         '                   {replaceChangeOfLine();};
 CC_PROPERTIES_TEXT: CC_PROPERTIES_TEXT_LETTER+;
-//: CC_PROPERTIES_TEXT_CHANGE_LINE ?
-//           CC_PROPERTIES_TEXT_LETTER+ (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT_LETTER+)*;
 
 /*CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
   CC       Absorption:
@@ -108,14 +110,23 @@ CC_SL_SPACE : ' '                            -> type (SPACE);
 CC_SL_DOT : '.'                            -> type (DOT);
 CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_SL_NOTE: 'Note=';
-CC_SL_CHANGE_OF_LINE: '\nCC         '         {replaceChangeOfLine();}   ;
+CC_SL_NOTE: 'Note='                          ;
+CC_SL_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();}   ;
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
 CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
 CC_SL_BY_PROBABLE:'(Probable)';
 CC_SL_BY_POTENTIAL:'(Potential)';
-fragment CC_SL_WORD_LETTER: ~[ :,.;\n\r\t];
+fragment CC_SL_WORD_LETTER: ~[ :,.;=\n\r\t];
+
+/*
+mode CC_SUBCELLULAR_LOCATION_NOTE;
+CC_SL_N_NEW_LINE: '\n'                         -> type (NEW_LINE), popMode;
+CC_SL_N_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();};
+CC_SL_N_NOTE:  CC_SL_N_WORD_LETTER+;
+fragment CC_SL_N_WORD_LETTER: ~[\n\r\t];
+*/
+
 
 mode CC_ALTERNATIVE_PRODUCTS;
 CC_AP_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
@@ -155,13 +166,19 @@ CC_SC_HEADER_1: 'CC       '                 -> type (CC_HEADER_1);
 CC_SC_NEW_LINE: '\n'                                -> type (NEW_LINE);
 CC_SC_SEQUENCE : 'Sequence=';
 CC_SC_TYPE : 'Type=';
-CC_SC_POSITIONS : 'Positions=';
+CC_SC_POSITIONS : 'Positions='                -> pushMode ( CC_SEQUENCE_CAUTION_POSITION );
 CC_SC_NOTE : 'Note=';
 CC_SC_TYPE_VALUE: 'Frameshift' | 'Erroneous initiation' | 'Erroneous termination'
                    |'Erroneous gene model prediction'|'Erroneous translation'
                    |'Miscellaneous discrepancy';
 CC_SC_WORD: CC_SC_WORD_LETTER+;
 fragment CC_SC_WORD_LETTER: ~[ =;\n\r\t];
+
+mode CC_SEQUENCE_CAUTION_POSITION;
+CC_SC_P_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_SC_P_SPACE : ' '                                   -> type (SPACE);
+CC_SC_P_COMA : ','                                    -> type (COMA);
+CC_SC_P_INT : [1-9][0-9]*                             -> type (INTEGER);
 
 //the cc web resource model;
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
@@ -210,13 +227,35 @@ mode CC_MASS_SPECTROMETRY_RANGE_VALUE;
 CC_MS_R_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
 CC_MS_R_V_LEFT_BRACKET : '('  ;
 CC_MS_R_V_RIGHT_BRACKET : ')' ;
-CC_MS_R_V_DASH : '-'                                   -> type (DASH);
-CC_MS_R_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
+CC_MS_R_V_SPACE : ' '                                   -> type (SPACE);
 CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '           ;
 CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
-fragment CS_MS_R_V_LETTER: ~[ -;\n\r\t];
+fragment CS_MS_R_V_LETTER: ~[ ();\n\r\t];
+
+mode CC_RNA_EDITING;
+CC_RE_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_RE_MODIFIED_POSITION: 'Modified_positions=';
+CC_RE_INT: [1-9][0-9]*                        -> type (INTEGER);
+CC_RE_COMA: ','                        -> type (COMA);
+CC_RE_SEMICOLON: ';'                        -> type (SEMICOLON);
+CC_RE_COLON: ':'                        -> type (COLON);
+CC_RE_DOT: '.'                        -> type (DOT);
+CC_RE_SPACE: ' '                        -> type (SPACE);
+CC_RE_CHANGE_OF_LINE : '\nCC       '     {replaceChangeOfLine();}   ;
+CC_RE_NOTE: 'Note='                      -> pushMode (CC_RNA_EDITING_NOTE);
+CC_RE_NEW_LINE: '\n'                          -> type (NEW_LINE);
+
+mode CC_RNA_EDITING_NOTE;
+CC_RE_N_SPACE: ' '                              -> type (SPACE);
+CC_RE_N_WORD :  CS_RE_LETTER+;
+CC_RE_N_CHANGE_OF_LINE : '\nCC       '          {replaceChangeOfLine();}   ;
+CC_RE_N_NEW_LINE: '\n'                          -> type (NEW_LINE), popMode;
+CC_RE_N_DOT: '.'                                -> type (DOT);
+fragment CS_RE_LETTER: ~[ .\n\r\t];
 
 
+mode CC_DISEASE;
+CC_D_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
 
 
 

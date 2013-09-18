@@ -7,7 +7,6 @@ import uk.ac.ebi.uniprot.parser.antlr.OgLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

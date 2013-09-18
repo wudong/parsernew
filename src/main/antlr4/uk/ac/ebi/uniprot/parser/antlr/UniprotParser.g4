@@ -17,6 +17,7 @@ entry:
         oh?
         reference+
         cc?
+        copyright?
         dr?
         pe
         kw?
@@ -35,6 +36,7 @@ reference:
         rl;
 
 sq: SQ_LINE SEQUENCE_LINE+;
+copyright: CC_COPY_RIGHT;
 
 id: ID_LINE;
 ac: AC_LINE+;
