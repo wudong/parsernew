@@ -491,7 +491,8 @@ class CcLineParserTest extends FunSuite {
     ms.method should be ("MALDI")
     ms.ranges should have size (1)
     val range: MassSpectrometryRange = ms.ranges.get(0)
-    range should have ('start (1), 'end (228), 'isoform (null))
+    range should have ('start (1), 'end (228))
+    ms.range_isoform should be (null)
     ms.note should be (null)
     ms.source should be ("PubMed:11101899")
   }
@@ -514,7 +515,8 @@ class CcLineParserTest extends FunSuite {
     ms.method should be ("MALDI")
     ms.ranges should have size (1)
     val range: MassSpectrometryRange = ms.ranges.get(0)
-    range should have ('start (19), 'end (140), 'isoform ("P15522-2"))
+    range should have ('start (19), 'end (140))
+    ms.range_isoform should be ("P15522-2")
     ms.note should be (null)
     ms.source should be ("PubMed:10531593")
   }

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
+import uk.ac.ebi.uniprot.parser.impl.entry.EntryObject.ReferenceObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,12 +70,19 @@ class EntryParserTest extends FunSuite {
 
     val parser = (new DefaultUniprotLineParserFactory).createEntryParser();
     val obj = parser.parse(e)
-    obj.ac should not be null
+    obj.ac should not be (null)
     obj.ac.primaryAcc should be ("Q6GZX4")
     obj.ac.secondaryAcc should be ('empty)
 
+    obj.id should not be (null)
+    obj.id should have ('reviewed (true), 'entryName ("001R_FRG3G"), 'sequenceLength (256) )
 
-
+    obj.ref should have size (1)
+    val refo: ReferenceObject = obj.ref.get(0)
+    refo.ra.authors should have size (4)
+    refo.rc should be (null)
+    refo.rg should be (null)
+    refo.rn.number should be (1)
   }
 
 }

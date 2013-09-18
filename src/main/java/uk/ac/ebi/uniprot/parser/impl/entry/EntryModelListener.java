@@ -40,9 +40,14 @@ import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
  */
 public class EntryModelListener extends UniprotParserBaseListener implements ParseTreeObjectExtractor<EntryObject> {
 
-	private EntryObject object = new EntryObject();
+	private EntryObject object ;
 	private EntryObject.ReferenceObject ref;
 	private DefaultUniprotLineParserFactory parserFactory = new DefaultUniprotLineParserFactory();
+
+	@Override
+	public void enterEntry(@NotNull UniprotParser.EntryContext ctx) {
+		object = new EntryObject();
+	}
 
 	@Override
 	public void exitKw(@NotNull UniprotParser.KwContext ctx) {
