@@ -3,9 +3,9 @@ package uk.ac.ebi.uniprot.parser.impl.ft;
 import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.FtLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.FtLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.FtLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.FtLineParserBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
 
 /**
@@ -15,7 +15,7 @@ import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class FtLineModelListener extends FtLineBaseListener implements ParseTreeObjectExtractor<FtLineObject> {
+public class FtLineModelListener extends FtLineParserBaseListener implements ParseTreeObjectExtractor<FtLineObject> {
 
 	private FtLineObject object = new FtLineObject();
 
@@ -37,14 +37,14 @@ public class FtLineModelListener extends FtLineBaseListener implements ParseTree
 	   ft.type = FtLineObject.FTType.valueOf(ctx.FT_KEY().getText());
 	}
 
-	@Override
-	public void exitSeparator(@NotNull FtLineParser.SeparatorContext ctx) {
-		if (ctx.CHANGE_OF_LINE() != null) {
-			WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
-			symbol.setText(" ");
-			symbol.setType(FtLineLexer.SPACE);
-		}
-	}
+//	@Override
+//	public void exitSeparator(@NotNull FtLineParser.SeparatorContext ctx) {
+//		if (ctx.CHANGE_OF_LINE() != null) {
+//			WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
+//			symbol.setText(" ");
+//			symbol.setType(FtLineLexer.SPACE);
+//		}
+//	}
 
 	@Override
 	public void exitLoc_end(@NotNull FtLineParser.Loc_endContext ctx) {
