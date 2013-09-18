@@ -33,7 +33,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-<!--  
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>interfaces</artifactId>
@@ -50,7 +50,6 @@
             <version>${project.version}</version>
         </dependency>
 
--->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4</artifactId>

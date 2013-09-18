@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.uniprot.parser
 
 import org.scalatest.FunSuite
@@ -41,11 +42,6 @@ class EntryParserTest extends FunSuite {
               |RT   "Comparative genomic analyses of frog virus 3, type species of the
               |RT   genus Ranavirus (family Iridoviridae).";
               |RL   Virology 323:70-84(2004).
-              |CC   -!- FUNCTION: Transcription activation (Potential).
-              |CC   -----------------------------------------------------------------------
-              |CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-              |CC   Distributed under the Creative Commons Attribution-NoDerivs License
-              |CC   -----------------------------------------------------------------------
               |DR   EMBL; AY548484; AAT09660.1; -; Genomic_DNA.
               |DR   RefSeq; YP_031579.1; NC_005946.1.
               |DR   ProteinModelPortal; Q6GZX4; -.
