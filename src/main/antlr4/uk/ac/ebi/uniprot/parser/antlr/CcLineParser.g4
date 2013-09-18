@@ -92,7 +92,7 @@ cc_subcellular_location_value:
 cc_subcellular_note:
                 CC_SL_NOTE cc_subcellular_note_value (cc_subcellular_location_flag)? DOT;
 cc_subcellular_note_value:
-                cc_subcellular_words (DOT cc_subcellular_text_separator cc_subcellular_words);
+                cc_subcellular_words (DOT cc_subcellular_text_separator cc_subcellular_words)*;
 
 cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
 cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;
@@ -155,6 +155,7 @@ cc_mass_spectrometry:
         cc_mass_spectrometry_mass (SPACE cc_mass_spectrometry_mass_error)?
         SPACE cc_mass_spectrometry_mass_method
         (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range
+        //((SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range)*
         ((SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_note)?
         (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_source
         NEW_LINE;
@@ -166,10 +167,10 @@ cc_mass_spectrometry_mass_error:
 cc_mass_spectrometry_mass_method:
         CC_MS_METHOD cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_range:
-        CC_MS_RANGE cc_mass_spectrometry_mass_range_value SEMICOLON;
+        CC_MS_RANGE cc_mass_spectrometry_mass_range_value (COMA (SPACE|CC_MS_R_V_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range_value)*
+        ( SPACE CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_ISO CC_MS_R_V_RIGHT_BRACKET)? SEMICOLON;
 cc_mass_spectrometry_mass_range_value:
-        CC_MS_R_V_NUMBER DASH CC_MS_R_V_CHANGE_OF_LINE ? CC_MS_R_V_NUMBER
-        ( SPACE CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_WORD CC_MS_R_V_RIGHT_BRACKET)?;
+        INTEGER DASH CC_MS_R_V_CHANGE_OF_LINE ? INTEGER;
 cc_mass_spectrometry_mass_note:
         CC_MS_NOTE cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_source:
