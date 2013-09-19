@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.rc;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +24,16 @@ public class RcLineObject {
         TISSUE
     }
 
-    public static class RC {
+    public static class RC implements HasEvidence {
         public RcTokenEnum tokenType;
         public List<String> values = new ArrayList<String>();
+
+	    public EvidenceInfo evidenceInfo=new EvidenceInfo();
+
+	    @Override
+	    public EvidenceInfo getEvidenceInfo() {
+		    return evidenceInfo;
+	    }
     }
 
 
