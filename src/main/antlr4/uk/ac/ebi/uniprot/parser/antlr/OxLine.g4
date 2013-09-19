@@ -16,7 +16,7 @@ tax: TAX;
 TAX: [1-9][0-9]*;
 
 evidence: LEFT_B  EV_TAG (SEPARATOR EV_TAG)* RIGHT_B;
-SEPARATOR: ', ';
+SEPARATOR: ',';
 EV_TAG : ('EI'|'EA') [1-9][0-9]*;
 LEFT_B : '{';
 RIGHT_B : '}';

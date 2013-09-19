@@ -68,9 +68,8 @@ FRAGMENTS: 'Fragments';
 CONTINUE_OF_NAME: 'DE            ';
 SUB_CONTINUE_OF_NAME: 'DE              ';
 
-evidence: LEFT_B  EV_TAG (COMMA SPACE EV_TAG)* RIGHT_B;
+evidence: LEFT_B  EV_TAG (COMMA EV_TAG)* RIGHT_B;
 EV_TAG : ('EI'|'EA') [1-9][0-9]*;
-SPACE : ' ';
 LEFT_B : '{' {name=false;}  ;
 RIGHT_B : '}';
 COMMA: ',';

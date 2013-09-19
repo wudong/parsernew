@@ -38,7 +38,7 @@ CHLOROPLAST: 'Chloroplast';
 NON_PHOTOSYNTHETIC_PLASTID: 'Non-photosynthetic plastid';
 PLASMID: 'Plasmid ' {plasmid=true;};
 
-evidence: LEFT_B  EV_TAG (COMMA SPACE EV_TAG)* RIGHT_B;
+evidence: LEFT_B  EV_TAG (COMMA EV_TAG)* RIGHT_B;
 EV_TAG : ('EI'|'EA') [1-9][0-9]*;
 LEFT_B : '{' {plasmid=false;};
 RIGHT_B : '}';
