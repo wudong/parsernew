@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.RcLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RcLineParser;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 import java.util.List;
 
@@ -39,8 +40,13 @@ public class RcLineModelListener extends RcLineBaseListener implements ParseTree
 
         List<RcLineParser.Rc_valueContext> rc_valueContexts = ctx.rc_text().rc_value();
         for (RcLineParser.Rc_valueContext rc_valueContext : rc_valueContexts) {
-            String text = rc_valueContext.getText();
+            String text = rc_valueContext.rc_value_v().getText();
             rc.values.add(text);
+
+	        RcLineParser.EvidenceContext evidence = rc_valueContext.evidence();
+	        if (evidence !=null){
+		        EvidenceInfo.processEvidence(rc.getEvidenceInfo(), text, evidence.EV_TAG());
+	        }
         }
         object.rcs.add(rc);
     }

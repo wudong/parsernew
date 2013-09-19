@@ -78,35 +78,42 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		CcLineParser.Cc_mass_spectrometry_massContext cc_mass_spectrometry_massContext = ctx.cc_mass_spectrometry_mass();
 		String text = cc_mass_spectrometry_massContext.CC_MS_V_NUMBER().getText();
-		ms.mass = Integer.parseInt(text);
+		ms.mass = Float.parseFloat(text);
 
 		CcLineParser.Cc_mass_spectrometry_mass_errorContext cc_mass_spectrometry_mass_errorContext = ctx.cc_mass_spectrometry_mass_error();
 		if (cc_mass_spectrometry_mass_errorContext != null) {
 			String text1 = cc_mass_spectrometry_mass_errorContext.CC_MS_V_NUMBER().getText();
-			ms.mass_error = Integer.parseInt(text1);
+			ms.mass_error = Float.parseFloat(text1);
 		}
-
 
 		CcLineParser.Cc_mass_spectrometry_mass_methodContext cc_mass_spectrometry_mass_methodContext = ctx.cc_mass_spectrometry_mass_method();
 		String text1 = cc_mass_spectrometry_mass_methodContext.cc_mass_spectrometry_value().getText();
 		ms.method = text1;
 
-		CcLineParser.Cc_mass_spectrometry_mass_rangeContext cc_mass_spectrometry_mass_rangeContext = ctx.cc_mass_spectrometry_mass_range();
-		CcLineParser.Cc_mass_spectrometry_mass_range_valueContext cc_mass_spectrometry_mass_range_valueContext = cc_mass_spectrometry_mass_rangeContext.cc_mass_spectrometry_mass_range_value();
-		TerminalNode terminalNode = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_NUMBER(0);
-		ms.range_start = Integer.parseInt(terminalNode.getText());
+		CcLineParser.Cc_mass_spectrometry_mass_rangeContext rangeContext = ctx.cc_mass_spectrometry_mass_range();
 
-		TerminalNode terminalNode2 = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_NUMBER(1);
-		ms.range_end = Integer.parseInt(terminalNode2.getText());
+		List<CcLineParser.Cc_mass_spectrometry_mass_range_valueContext> range_valueContexts = rangeContext.cc_mass_spectrometry_mass_range_value();
+		for (CcLineParser.Cc_mass_spectrometry_mass_range_valueContext range_valueContext : range_valueContexts) {
+			CcLineObject.MassSpectrometryRange range = new CcLineObject.MassSpectrometryRange();
+			TerminalNode terminalNode = range_valueContext.INTEGER(0);
+			range.start = Integer.parseInt(terminalNode.getText());
 
-		TerminalNode terminalNode3 = cc_mass_spectrometry_mass_range_valueContext.CC_MS_R_V_WORD();
-		if (terminalNode3 != null) {
-			ms.range_isoform = terminalNode3.getText();
+			TerminalNode terminalNode2 = range_valueContext.INTEGER(1);
+			range.end = Integer.parseInt(terminalNode2.getText());
+
+			ms.ranges.add(range);
+		}
+
+		TerminalNode iso = rangeContext.CC_MS_R_V_ISO();
+		if (iso != null) {
+			//there are some wrapping problem here.
+			//TODO should be checked. could the wrapping really happen here.
+			ms.range_isoform = iso.getText().replace("\nCC       ", "");
 		}
 
 		CcLineParser.Cc_mass_spectrometry_mass_noteContext noteContext = ctx.cc_mass_spectrometry_mass_note();
 		if (noteContext != null) {
-			ms.range_note = noteContext.cc_mass_spectrometry_value().getText();
+			ms.note = noteContext.cc_mass_spectrometry_value().getText();
 		}
 
 		CcLineParser.Cc_mass_spectrometry_mass_sourceContext sourceContext = ctx.cc_mass_spectrometry_mass_source();

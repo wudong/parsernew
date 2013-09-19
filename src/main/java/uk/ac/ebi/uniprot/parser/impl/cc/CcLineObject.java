@@ -142,15 +142,18 @@ public class CcLineObject {
 
 
 	public static class MassSpectrometry {
-		public int mass;
-		public int mass_error;
+		public float mass;
+		public float mass_error;
 		public String method;
-		public int range_start;
-		public int range_end;
+		public List<MassSpectrometryRange> ranges = new ArrayList<MassSpectrometryRange>();
 		public String range_isoform;
-		public String range_note;
+		public String note;
 		public String source;
 	}
 
+	public static class MassSpectrometryRange {
+		public int start;
+		public int end;
+	}
 
 }

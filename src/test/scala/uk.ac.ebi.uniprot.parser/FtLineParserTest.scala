@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.ft.FtLineObject.FTType
+import uk.ac.ebi.uniprot.parser.impl.ft.FtLineObject.{FT, FTType}
 
 /**
  * Created with IntelliJ IDEA.
@@ -106,5 +106,30 @@ class FtLineParserTest extends FunSuite {
       ( ft1.`type`, ft1.location_start, ft1.location_end, ft1.ft_text, ft1.ftId )
     }
   }
+
+  test("an ft "){
+    val line  ="""FT   CHAIN         1    256       Putative transcription factor 001R.
+                 |FT                                /FTId=PRO_0000410512.
+                 |FT   COMPBIAS     14     17       Poly-Arg.
+                 |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser();
+    val obj = parser.parse(line)
+    obj.fts should have size (2)
+
+    val ft: FT = obj.fts.get(0)
+    ft.`type` should be (FTType.CHAIN)
+    ft.ftId should be ("PRO_0000410512")
+    ft.ft_text should be ("Putative transcription factor 001R.")
+    ft.location_start should be (1)
+    ft.location_end should be (256)
+
+    val ft2: FT = obj.fts.get(1)
+    ft2.`type` should be (FTType.COMPBIAS)
+    ft2.ft_text should be ("Poly-Arg.")
+    ft2.location_start should be (14)
+    ft2.location_end should be (17)
+  }
+
 
 }

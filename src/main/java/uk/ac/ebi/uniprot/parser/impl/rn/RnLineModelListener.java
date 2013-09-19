@@ -4,9 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.RnLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RnLineParser;
-import uk.ac.ebi.uniprot.parser.antlr.SqLineBaseListener;
-import uk.ac.ebi.uniprot.parser.antlr.SqLineParser;
-import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,4 +26,9 @@ public class RnLineModelListener extends RnLineBaseListener implements ParseTree
     public RnLineObject getObject() {
         return object;
     }
+
+	@Override
+	public void exitEvidence(@NotNull RnLineParser.EvidenceContext ctx) {
+		EvidenceInfo.processEvidence(object.getEvidenceInfo(), object.number, ctx.EV_TAG());
+	}
 }

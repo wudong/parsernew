@@ -219,18 +219,23 @@ mode CC_MASS_SPECTROMETRY_VALUE;
 CC_MS_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
 CC_MS_V_SPACE : ' '                                   -> type (SPACE);
 CC_MS_V_CHANGE_OF_LINE : '\nCC       '        {replaceChangeOfLine();}   ;
-CC_MS_V_NUMBER :  [[0-9]+ ('.'[0-9]+)?           ;
+CC_MS_V_NUMBER :  [0-9]+ ('.'[0-9]+)?           ;
 CC_MS_V_WORD:  CS_MS_V_LETTER+;
-fragment CS_MS_V_LETTER: ~[ ;\n\r\t];
+fragment CS_MS_V_LETTER: ~[ .;\n\r\t];
 
 mode CC_MASS_SPECTROMETRY_RANGE_VALUE;
 CC_MS_R_V_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
-CC_MS_R_V_LEFT_BRACKET : '('  ;
-CC_MS_R_V_RIGHT_BRACKET : ')' ;
+CC_MS_R_V_COMA : ','                                    -> type (COMA);
+CC_MS_R_V_LEFT_BRACKET : '('                            -> pushMode (CC_MASS_SPECTROMETRY_RANGE_VALUE_ISOFORM);
 CC_MS_R_V_SPACE : ' '                                   -> type (SPACE);
-CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '           ;
-CC_MS_R_V_WORD: CS_MS_R_V_LETTER+;
-fragment CS_MS_R_V_LETTER: ~[ ();\n\r\t];
+CC_MS_R_V_DASH : '-'                                   -> type (DASH);
+CC_MS_R_V_INTEGER: [1-9][0-9]*                         -> type (INTEGER);
+CC_MS_R_V_CHANGE_OF_LINE : '\nCC       '                ;
+
+mode CC_MASS_SPECTROMETRY_RANGE_VALUE_ISOFORM;
+CC_MS_R_V_RIGHT_BRACKET : ')'                           -> popMode;
+CC_MS_R_V_ISO : CC_MS_R_V_ISO_L+                        ;
+fragment CC_MS_R_V_ISO_L : ~[)]                         ;
 
 mode CC_RNA_EDITING;
 CC_RE_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;

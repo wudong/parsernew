@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.dr;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +13,17 @@ import java.util.List;
  * Time: 09:20
  * To change this template use File | Settings | File Templates.
  */
-public class DrLineObject {
+public class DrLineObject implements HasEvidence{
 
     public List<DrObject> drObjects = new ArrayList<DrObject>();
+	public EvidenceInfo evidenceInfo = new EvidenceInfo();
 
-    public static class DrObject {
+	@Override
+	public EvidenceInfo getEvidenceInfo() {
+		return evidenceInfo;
+	}
+
+	public static class DrObject {
         public String DbName;
         public List<String> attributes = new ArrayList<String>();
     }

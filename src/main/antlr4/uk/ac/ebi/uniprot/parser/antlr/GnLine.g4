@@ -26,7 +26,7 @@ ol_name:  OLNAMES names SEMICOLON;
 
 name: GENE_NAME evidence?;
 names: name (COMMA (SPACE|CHANGE_OF_LINE) name)*;
-evidence: '{' EV_TAG (COMMA SPACE EV_TAG)* '}';
+evidence: '{' EV_TAG (COMMA EV_TAG)* '}';
 
 CHANGE_OF_LINE: '\nGN   ';
 GN_NAME_SEPARATOR: '\nGN   and' NEWLINE;

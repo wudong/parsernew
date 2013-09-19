@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.uniprot.parser
 
 import org.scalatest.FunSuite
@@ -6,6 +7,7 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
+import uk.ac.ebi.uniprot.parser.impl.entry.EntryObject.ReferenceObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,11 +43,6 @@ class EntryParserTest extends FunSuite {
               |RT   "Comparative genomic analyses of frog virus 3, type species of the
               |RT   genus Ranavirus (family Iridoviridae).";
               |RL   Virology 323:70-84(2004).
-              |CC   -!- FUNCTION: Transcription activation (Potential).
-              |CC   -----------------------------------------------------------------------
-              |CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
-              |CC   Distributed under the Creative Commons Attribution-NoDerivs License
-              |CC   -----------------------------------------------------------------------
               |DR   EMBL; AY548484; AAT09660.1; -; Genomic_DNA.
               |DR   RefSeq; YP_031579.1; NC_005946.1.
               |DR   ProteinModelPortal; Q6GZX4; -.
@@ -73,12 +70,19 @@ class EntryParserTest extends FunSuite {
 
     val parser = (new DefaultUniprotLineParserFactory).createEntryParser();
     val obj = parser.parse(e)
-    obj.ac should not be null
+    obj.ac should not be (null)
     obj.ac.primaryAcc should be ("Q6GZX4")
     obj.ac.secondaryAcc should be ('empty)
 
+    obj.id should not be (null)
+    obj.id should have ('reviewed (true), 'entryName ("001R_FRG3G"), 'sequenceLength (256) )
 
-
+    obj.ref should have size (1)
+    val refo: ReferenceObject = obj.ref.get(0)
+    refo.ra.authors should have size (4)
+    refo.rc should be (null)
+    refo.rg should be (null)
+    refo.rn.number should be (1)
   }
 
 }

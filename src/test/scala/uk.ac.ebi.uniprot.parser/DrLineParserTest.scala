@@ -6,6 +6,11 @@ import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
+import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject.DrObject
+
+import scala.collection.JavaConverters._
+import java.util
+;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,21 +21,20 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
  */
 @RunWith(classOf[JUnitRunner])
 class DrLineParserTest extends FunSuite  {
-
-  val drLine = """DR   EMBL; AY548484; AAT09660.1; -; Genomic_DNA.
-                 |DR   RefSeq; YP_031579.1; NC_005946.1.
-                 |DR   ProteinModelPortal; Q6GZX4; -.
-                 |DR   GeneID; 2947773; -.
-                 |DR   ProtClustDB; CLSP2511514; -.
-                 |DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:UniProtKB-KW.
-                 |DR   GO; GO:0046782; P:regulation of viral transcription; IEA:InterPro.
-                 |DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW.
-                 |DR   InterPro; IPR007031; Poxvirus_VLTF3.
-                 |DR   Pfam; PF04947; Pox_VLTF3; 1.
-                 |""".stripMargin.replace("\r","");
-
-
   test("A valid DR Line blocks") {
+
+    val drLine = """DR   EMBL; AY548484; AAT09660.1; -; Genomic_DNA.
+                   |DR   RefSeq; YP_031579.1; NC_005946.1.
+                   |DR   ProteinModelPortal; Q6GZX4; -.
+                   |DR   GeneID; 2947773; -.
+                   |DR   ProtClustDB; CLSP2511514; -.
+                   |DR   GO; GO:0006355; P:regulation of transcription, DNA-dependent; IEA:UniProtKB-KW.
+                   |DR   GO; GO:0046782; P:regulation of viral transcription; IEA:InterPro.
+                   |DR   GO; GO:0006351; P:transcription, DNA-dependent; IEA:UniProtKB-KW.
+                   |DR   InterPro; IPR007031; Poxvirus_VLTF3.
+                   |DR   Pfam; PF04947; Pox_VLTF3; 1.
+                   |""".stripMargin.replace("\r","");
+
     val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
     val obj = parser.parse(drLine)
 
@@ -48,17 +52,17 @@ class DrLineParserTest extends FunSuite  {
       (dr1.DbName, dr1.attributes.get(0), dr1.attributes.get(1))
     }
 
-    expectResult( ("ProteinModelPortal", "Q6GZX4", 1)){
+    expectResult( ("ProteinModelPortal", "Q6GZX4", 2)){
       val dr1: DrLineObject.DrObject = obj.drObjects.get(2);
       (dr1.DbName, dr1.attributes.get(0), dr1.attributes.size())
     }
 
-    expectResult( ("GeneID", "2947773", 1)){
+    expectResult( ("GeneID", "2947773", 2)){
       val dr1: DrLineObject.DrObject = obj.drObjects.get(3);
       (dr1.DbName, dr1.attributes.get(0), dr1.attributes.size())
     }
 
-    expectResult( ("ProtClustDB", "CLSP2511514", 1)){
+    expectResult( ("ProtClustDB", "CLSP2511514", 2)){
       val dr1: DrLineObject.DrObject = obj.drObjects.get(4);
       (dr1.DbName, dr1.attributes.get(0), dr1.attributes.size())
     }
@@ -90,5 +94,50 @@ class DrLineParserTest extends FunSuite  {
     }
 
   }
+
+  test("a Go line"){
+    val drLine = """DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+                    |DR   GO; GO:0004674; F:protein serine/threonine kinase activity; IEA:UniProtKB-KW.
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (2);
+    val drObject: DrObject = obj.drObjects.get(0)
+    drObject.DbName should be ("GO")
+    drObject.attributes.asScala should be (List("GO:0005524", "F:ATP binding", "IEA:UniProtKB-KW"))
+        
+    val dro2: DrObject = obj.drObjects.get(1)
+    dro2.DbName should be ("GO")
+    dro2.attributes.asScala should be (List("GO:0004674", "F:protein serine/threonine kinase activity", "IEA:UniProtKB-KW"))
+  }
+
+  test("Dr Line with Evidence"){
+    val drLine =
+        """DR   EMBL; CP001509; ACT41999.1; -; Genomic_DNA.{EI3}
+          |DR   EMBL; AM946981; CAQ30614.1; -; Genomic_DNA.{EI4}
+          |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (2);
+
+    val drObject: DrObject = obj.drObjects.get(0)
+    val list: util.List[String] = obj.getEvidenceInfo.evidences.get(drObject)
+    list should not be (null)
+    list should contain ("EI3")
+
+    val drObject2: DrObject = obj.drObjects.get(1)
+    val list2: util.List[String] = obj.getEvidenceInfo.evidences.get(drObject2)
+    list2 should not be (null)
+    list2 should contain ("EI4")
+  }
+
 
 }
