@@ -1,7 +1,5 @@
 package uk.ac.ebi.kraken.parser.converter;
 
-import static junit.framework.TestCase.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +9,6 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import uk.ac.ebi.kraken.interfaces.common.Value;
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
