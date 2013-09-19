@@ -65,7 +65,7 @@ class FtLineParserTest extends FunSuite {
     ft.ftId should equal ("VSP_004370")
     ft.location_start should equal ("33")
     ft.location_end should equal ("83")
-    ft.ft_text should equal ("TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL DGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)");
+    ft.ft_text should equal ("TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPLDGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)");
   }
 
   test("three combined ft"){
@@ -84,7 +84,7 @@ class FtLineParserTest extends FunSuite {
     obj.fts should have size (4)
 
     expectResult((FTType.VAR_SEQ, "33", "83",
-      "TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL DGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)",
+      "TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPLDGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)",
       "VSP_004370")){
       val ft1 = obj.fts.get(0)
       ( ft1.`type`, ft1.location_start, ft1.location_end, ft1.ft_text, ft1.ftId )
@@ -111,25 +111,54 @@ class FtLineParserTest extends FunSuite {
     val line  ="""FT   CHAIN         1    256       Putative transcription factor 001R.
                  |FT                                /FTId=PRO_0000410512.
                  |FT   COMPBIAS     14     17       Poly-Arg.
-                 |""".stripMargin.replace("\r", "");
+                 |""".stripMargin.replace("\r", "")
 
-    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser();
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
     val obj = parser.parse(line)
     obj.fts should have size (2)
 
     val ft: FT = obj.fts.get(0)
     ft.`type` should be (FTType.CHAIN)
     ft.ftId should be ("PRO_0000410512")
-    ft.ft_text should be ("Putative transcription factor 001R.")
-    ft.location_start should be (1)
-    ft.location_end should be (256)
+    ft.ft_text should be ("Putative transcription factor 001R")
+    ft.location_start should be ("1")
+    ft.location_end should be ("256")
 
     val ft2: FT = obj.fts.get(1)
     ft2.`type` should be (FTType.COMPBIAS)
-    ft2.ft_text should be ("Poly-Arg.")
-    ft2.location_start should be (14)
-    ft2.location_end should be (17)
+    ft2.ft_text should be ("Poly-Arg")
+    ft2.location_start should be ("14")
+    ft2.location_end should be ("17")
   }
 
+  test("ft with evidence"){
+    val line ="""FT   REGION      237    240       Sulfate 1 binding.
+                |FT   REGION      275    277       Phosphate 2 binding{EI2}.
+                |FT   BINDING     103    103       Sucrose; via carbonyl oxygen{EI1}.
+                |FT   BINDING     139    139       Sucrose; via carbonyl oxygen{EI1}.
+                |FT   BINDING     156    156       Phosphate 1{EI2}.
+                |FT   BINDING     161    161       Phosphate 1{EI2}.
+                |FT   BINDING     168    168       Sucrose{EI1,EI2}.
+                |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
+    val obj = parser.parse(line)
+    obj.fts should have size (7)
+
+    val ft1: FT = obj.fts.get(0)
+    obj.getEvidenceInfo.evidences.get(ft1) should be (null)
+
+    val ft2: FT = obj.fts.get(1)
+    obj.getEvidenceInfo.evidences.get(ft2) should contain ("EI2")
+
+    val ft3: FT = obj.fts.get(2)
+    obj.getEvidenceInfo.evidences.get(ft3) should contain ("EI1")
+
+    val ft4: FT = obj.fts.get(3)
+    obj.getEvidenceInfo.evidences.get(ft4) should contain ("EI1")
+
+    val ft5: FT = obj.fts.get(6)
+    obj.getEvidenceInfo.evidences.get(ft5) should (contain ("EI1") and contain ("EI2"))
+  }
 
 }

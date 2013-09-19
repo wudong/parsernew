@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.ft;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,15 @@ import java.util.List;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class FtLineObject {
+public class FtLineObject implements HasEvidence{
 
 	public List<FT> fts = new  ArrayList<FT>();
+	public EvidenceInfo evidenceInfo = new EvidenceInfo();
+
+	@Override
+	public EvidenceInfo getEvidenceInfo() {
+		return evidenceInfo;
+	}
 
 	public static class FT {
 		public FTType type;

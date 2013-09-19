@@ -85,4 +85,70 @@ class EntryParserTest extends FunSuite {
     refo.rn.number should be (1)
   }
 
+  test ("an entry with evidence"){
+    val line =
+    """ID   C5W346_ECOBD            Unreviewed;       170 AA.
+      |AC   C5W346; C6VHH0;
+      |DT   01-SEP-2009, integrated into UniProtKB/TrEMBL.
+      |DT   01-SEP-2009, sequence version 1.
+      |DT   21-SEP-2011, entry version 17.
+      |DE   SubName: Full=SecA regulator SecM{EI3};
+      |DE   SubName: Full=Secretion monitor that regulates SecA translation (General Secretory Pathway){EI4};
+      |GN   Name=yacA{EI3}; OrderedLocusNames=B21_00097{EI2}, ECD_00098{EI2};
+      |OS   Escherichia coli (strain B / BL21-DE3).
+      |OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+      |OC   Enterobacteriaceae; Escherichia.
+      |OX   NCBI_TaxID=469008{EI2};
+      |RN   [1]{EI2,EI3}
+      |RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+      |RC   STRAIN=B / BL21-DE3 [Korea]{EI2};
+      |RX   PubMed=19786035; DOI=10.1016/j.jmb.2009.09.052;
+      |RA   Jeong H., Barbe V., Lee C.H., Vallenet D., Yu D.S., Choi S.H.,
+      |RA   Couloux A., Lee S.W., Yoon S.H., Cattolico L., Hur C.G., Park H.S.,
+      |RA   Segurens B., Kim S.C., Oh T.K., Lenski R.E., Studier F.W.,
+      |RA   Daegelen P., Kim J.F.;
+      |RT   "Genome sequences of Escherichia coli B strains REL606 and
+      |RT   BL21(DE3).";
+      |RL   J. Mol. Biol. 394:644-652(2009).
+      |RN   [2]{EI2}
+      |RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+      |RC   STRAIN=B / BL21-DE3 [Austria]{EI2};
+      |RA   Leparc G., Striedner G., Bayer K., Kreil D., Krempl P.M.;
+      |RT   "Sequencing and gene expression analysis of Escherichia coli BL21.";
+      |RL   Submitted (JUN-2009) to the EMBL/GenBank/DDBJ databases.
+      |DR   EMBL; CP001509; ACT41999.1; -; Genomic_DNA.{EI3}
+      |DR   EMBL; AM946981; CAQ30614.1; -; Genomic_DNA.{EI4}
+      |DR   ProteinModelPortal; C5W346; -.
+      |DR   STRING; C6VHH0; -.
+      |DR   EnsemblBacteria; EBESCT00000158229; EBESCP00000149220; EBESCG00000156299.
+      |DR   EnsemblBacteria; EBESCT00000188594; EBESCP00000176258; EBESCG00000186912.
+      |DR   GenomeReviews; AM946981_GR; B21_00097.
+      |DR   GenomeReviews; CP001509_GR; ECD_00098.
+      |DR   GeneTree; EBGT00050000010756; -.
+      |DR   OMA; FAMAPQA; -.
+      |DR   GO; GO:0005829; C:cytosol; IEA:HAMAP.
+      |DR   GO; GO:0045182; F:translation regulator activity; IEA:InterPro.
+      |DR   HAMAP; MF_01332; SecM; 1; -.
+      |DR   InterPro; IPR009502; SecM.
+      |DR   Pfam; PF06558; SecM; 1.
+      |DR   PIRSF; PIRSF004572; SecM; 1.
+      |DR   ProDom; PD089227; SecM; 1.
+      |PE   3: Inferred from homology;
+      |KW   Complete proteome{EI2}.
+      |**
+      |**   #################    INTERNAL SECTION    ##################
+      |**EV EI2; ProtImp; -; -; 11-SEP-2009.
+      |**EV EI3; EMBL; -; ACT41999.1; 22-JUN-2010.
+      |**EV EI4; EMBL; -; CAQ30614.1; 18-DEC-2010.
+      |SQ   SEQUENCE   170 AA;  18880 MW;  5F5B3001056CAD22 CRC64;
+      |     MSGILTRWRQ FGKRYFWPHL LLGMVAASLG LPALSNAAEP NAPAKATTRN HEPSAKVNFG
+      |     QLALLEANTR RPNSNYSVDY WHQHAIRTVI RHLSFAMAPQ TLPVAEESLP LQAQHLALLD
+      |     TLSALLTQEG TPSEKGYRID YAHFTPQAKF STPVWISQAQ GIRAGPQRLT
+      |//
+      |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createEntryParser();
+    val obj = parser.parse(line)
+  }
+
 }

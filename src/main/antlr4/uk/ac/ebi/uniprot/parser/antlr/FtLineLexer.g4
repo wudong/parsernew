@@ -17,6 +17,7 @@ tokens{FT_HEADER, NEW_LINE, CHANGE_OF_LINE}
 
 FT_HEADER: 'FT   '                                 {loc=0;ft=false;};
 FT_LOCATION: SPACE+[1-9][0-9]* {loc++;};
+fragment SPACE: ' ';
 FT_HEADER_2: 'FT                                ';
 
 FT_KEY:
@@ -29,12 +30,16 @@ FT_KEY:
       ;
 
 SPACE7: '       ' {loc==2}?     {ft=true;};
-fragment SPACE: ' ';
+
+COMA: ',';
+EV_TAG : ('EI'|'EA') [1-9][0-9]*;
+LEFT_B : '{'  {ft=false;};
+RIGHT_B : '}';
 
 DOT: '.\n'           {ft=false;};
 ID_WORD: ('VSP_'| 'CAR_'|'PRO_'|'VSP_') [0-9]+;
 FTID: '/FTId=';
 ALL_LETTER :  LT+ {ft}?;
 CHANGE_OF_LINE: '\nFT                                ' {ft}?;
-fragment LT:~[.\n\r];
-
+NEW_LINE:'\n';
+fragment LT:~[.\n\r{}];
