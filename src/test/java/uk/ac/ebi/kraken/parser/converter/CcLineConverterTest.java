@@ -151,8 +151,10 @@ public class CcLineConverterTest {
 		CcLineObject.MassSpectrometry wr =new CcLineObject.MassSpectrometry();
 		wr.mass =13822;
 		wr.method ="MALDI";
-		wr.range_start=19;
-		wr.range_end =140;
+		CcLineObject.MassSpectrometryRange mrange = new CcLineObject.MassSpectrometryRange ();
+		mrange.start =19;
+		mrange.end = 140;
+		wr.ranges.add(mrange);
 		wr.range_isoform ="P15522-2";
 		wr.source ="PubMed:10531593";
 		cc1.object =wr;

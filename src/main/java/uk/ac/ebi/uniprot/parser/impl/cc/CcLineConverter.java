@@ -390,8 +390,9 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 		comment.setMethod( MassSpectrometryMethod.toType(cObj.method));
 		comment.setMolWeight(cObj.mass);
 		comment.setMolWeightError(cObj.mass_error);
-		if((cObj.range_note !=null) &&(!cObj.range_note.isEmpty())){
-			comment.setNote(factory.buildMassSpectrometryCommentNote(cObj.range_note));
+		
+		if((cObj.note !=null) &&(!cObj.note.isEmpty())){
+			comment.setNote(factory.buildMassSpectrometryCommentNote(cObj.note));
 		}
 		if((cObj.source !=null) &&(!cObj.source.isEmpty())){
 			List<MassSpectrometryCommentSource> sources = new ArrayList<>();		
@@ -399,12 +400,17 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 			comment.setSources(sources);
 		}
 		List<MassSpectrometryRange> ranges= new ArrayList<>();
-		MassSpectrometryRange range = factory.buildMassSpectrometryRange();
-		range.setStart(cObj.range_start);
-		range.setEnd(cObj.range_end);
-		if((cObj.range_isoform !=null) &&(! cObj.range_isoform.isEmpty()))
-			range.setIsoformId(factory.buildMassSpectrometryIsoformId(cObj.range_isoform));
-		ranges.add(range);
+		for(CcLineObject.MassSpectrometryRange mrange: cObj.ranges){
+			MassSpectrometryRange range = factory.buildMassSpectrometryRange();
+		
+			range.setStart(mrange.start);
+			range.setEnd(mrange.end);
+			if((cObj.range_isoform !=null) &&(! cObj.range_isoform.isEmpty()))
+				range.setIsoformId(factory.buildMassSpectrometryIsoformId(cObj.range_isoform));
+			ranges.add(range);
+		}
+		
+	
 		comment.setRanges(ranges);
 	}
 	private void updateRNAEditing(RnaEditingComment comment, CcLineObject.RnaEditing cObj){
