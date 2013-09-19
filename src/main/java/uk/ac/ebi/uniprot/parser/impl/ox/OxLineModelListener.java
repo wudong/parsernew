@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.OxLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OxLineParser;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 
 /**
@@ -21,6 +22,11 @@ public class OxLineModelListener extends OxLineBaseListener implements ParseTree
 	public void exitTax(@NotNull OxLineParser.TaxContext ctx) {
 		String text = ctx.getText();
 		object.taxonomy_id = Integer.parseInt(text);
+	}
+
+	@Override
+	public void exitEvidence(@NotNull OxLineParser.EvidenceContext ctx) {
+		EvidenceInfo.processEvidence(object.getEvidenceInfo(), object.taxonomy_id,ctx.EV_TAG());
 	}
 
 	public OxLineObject getObject() {
