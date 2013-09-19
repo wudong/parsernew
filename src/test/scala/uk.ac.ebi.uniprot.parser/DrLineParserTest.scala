@@ -8,7 +8,9 @@ import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject.DrObject
 
-import scala.collection.JavaConverters._;
+import scala.collection.JavaConverters._
+import java.util
+;
 
 /**
  * Created with IntelliJ IDEA.
@@ -112,5 +114,30 @@ class DrLineParserTest extends FunSuite  {
     dro2.DbName should be ("GO")
     dro2.attributes.asScala should be (List("GO:0004674", "F:protein serine/threonine kinase activity", "IEA:UniProtKB-KW"))
   }
+
+  test("Dr Line with Evidence"){
+    val drLine =
+        """DR   EMBL; CP001509; ACT41999.1; -; Genomic_DNA.{EI3}
+          |DR   EMBL; AM946981; CAQ30614.1; -; Genomic_DNA.{EI4}
+          |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (2);
+
+    val drObject: DrObject = obj.drObjects.get(0)
+    val list: util.List[String] = obj.getEvidenceInfo.evidences.get(drObject)
+    list should not be (null)
+    list should contain ("EI3")
+
+    val drObject2: DrObject = obj.drObjects.get(1)
+    val list2: util.List[String] = obj.getEvidenceInfo.evidences.get(drObject2)
+    list2 should not be (null)
+    list2 should contain ("EI4")
+  }
+
 
 }

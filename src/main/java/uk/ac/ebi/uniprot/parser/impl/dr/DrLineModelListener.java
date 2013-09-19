@@ -1,9 +1,13 @@
 package uk.ac.ebi.uniprot.parser.impl.dr;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.DrLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.DrLineParserBaseListener;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,6 +49,11 @@ public class DrLineModelListener extends DrLineParserBaseListener implements Par
 		}
 
 		object.drObjects.add(drObject);
+
+		if (ctx.evidence()!=null){
+			List<TerminalNode> terminalNodes = ctx.evidence().EV_TAG();
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), drObject, terminalNodes);
+		}
 	}
 
 }

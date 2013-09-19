@@ -20,8 +20,17 @@ DB_NAME: [A-Z][A-Za-z]* -> pushMode (DR_ATTR);
 
 mode DR_ATTR;
 SEPARATOR: '; '  ;
-END_OF_LINE: '.\n'         -> popMode;
+END_OF_LINE: '\n'         -> popMode;
+
+COMA: ',';
+EV_TAG : ('EI'|'EA') [1-9][0-9]*;
+LEFT_B : '{';
+RIGHT_B : '}';
+
 DASH: '-';
 ATTRIBUTE: LT+ (DOT [1-9][0-9]*)? ;
 DOT: '.';
-fragment LT: ~[.;\n\r\t];
+fragment LT: ~[.;\n\r\t{}];
+
+
+
