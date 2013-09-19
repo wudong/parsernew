@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.kw;
 
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
+import uk.ac.ebi.uniprot.parser.impl.HasEvidence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,14 @@ import java.util.List;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class KwLineObject {
+public class KwLineObject implements HasEvidence{
     public List<String> keywords = new ArrayList<String>();
+
+	public EvidenceInfo evidenceInfo = new EvidenceInfo();
+
+	@Override
+	public EvidenceInfo getEvidenceInfo() {
+		return evidenceInfo;
+	}
+
 }

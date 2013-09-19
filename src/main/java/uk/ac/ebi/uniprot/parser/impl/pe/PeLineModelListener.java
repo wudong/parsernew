@@ -2,12 +2,8 @@ package uk.ac.ebi.uniprot.parser.impl.pe;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.KwLineBaseListener;
-import uk.ac.ebi.uniprot.parser.antlr.KwLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.PeLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.PeLineParser;
-import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
-import uk.ac.ebi.uniprot.parser.impl.kw.KwLineObject;
 
 /**
  * Created with IntelliJ IDEA.
