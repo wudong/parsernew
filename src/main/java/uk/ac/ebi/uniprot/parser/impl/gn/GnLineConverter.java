@@ -13,19 +13,17 @@ import uk.ac.ebi.kraken.interfaces.uniprot.genename.OrderedLocusName;
 import uk.ac.ebi.kraken.model.factories.DefaultUniProtFactory;
 import uk.ac.ebi.uniprot.parser.Converter;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceHelper;
-import uk.ac.ebi.uniprot.parser.impl.EvidenceInfoConverter;
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineObject.GnName;
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineObject.GnObject;
 
 public class GnLineConverter implements Converter<GnLineObject, List<Gene>> {
-	private final EvidenceInfoConverter evConverter = new EvidenceInfoConverter();
 	@Override
 	public List<Gene> convert(GnLineObject f) {
 		List<Gene> genes = new ArrayList<>();
 		for(GnObject gno :f.gnObjects){
 			Gene gene = DefaultUniProtFactory.getInstance().buildGene();
 			for(GnName gn:gno.names){
-				Map<Object, List<EvidenceId> > evidences = evConverter.convert(gn.getEvidenceInfo());
+				Map<Object, List<EvidenceId> > evidences = EvidenceHelper.convert(gn.getEvidenceInfo());
 				switch(gn.type){
 				case GENAME:
 					if(!gn.names.isEmpty()){

@@ -2,20 +2,24 @@ package uk.ac.ebi.uniprot.parser.impl.dr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import uk.ac.ebi.uniprot.parser.Converter;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.DBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.FourFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.ThreeFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.TwoFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.XRefDBType;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.kraken.model.factories.DefaultXRefNewFactory;
+import uk.ac.ebi.uniprot.parser.Converter;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceHelper;
 
 public class DrLineConverter implements Converter<DrLineObject, List<DBCrossReference> > {
 	private final DefaultXRefNewFactory factory =DefaultXRefNewFactory.getInstance();
 	@Override
 	public List<DBCrossReference> convert(DrLineObject f) {
 		List<DBCrossReference> dbXrefs = new ArrayList<>();
+		Map<Object, List<EvidenceId> > evidences = EvidenceHelper.convert(f.getEvidenceInfo());
 		for(DrLineObject.DrObject drline: f.drObjects){
 			XRefDBType dbtype =XRefDBType.getType(drline.DbName);
 			DBCrossReference xref =factory.buildDBCrossReference(dbtype);
@@ -33,7 +37,9 @@ public class DrLineConverter implements Converter<DrLineObject, List<DBCrossRefe
 				((FourFieldDBCrossReference) xref).setThird(factory.buildXDBAttribute(drline.attributes.get(2)));
 				((FourFieldDBCrossReference) xref).setFourth(factory.buildXDBAttribute(drline.attributes.get(3)));
 			}
-			//set evidence ids
+			EvidenceHelper.setEvidences(xref, evidences, drline);
+		
+				
 			dbXrefs.add(xref);
 		}
 		return dbXrefs;

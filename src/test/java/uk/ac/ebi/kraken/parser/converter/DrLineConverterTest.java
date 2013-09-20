@@ -1,5 +1,6 @@
 package uk.ac.ebi.kraken.parser.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -10,6 +11,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.FourFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.ThreeFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.TwoFieldDBCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbxNew.XRefDBType;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineObject;
 
@@ -52,6 +54,46 @@ public class DrLineConverterTest {
 				"GO:0046782", "P:regulation of viral transcription", "IEA:InterPro", null );
 		validate( xrefs.get(6), XRefDBType.INTERPRO,
 				"IPR007031", "Poxvirus_VLTF3", null, null );
+	}
+	@Test
+	public void testEvidence(){
+		//"DR   EMBL; CP001509; ACT41999.1; -; Genomic_DNA.{EI3}
+        //DR   EMBL; AM946981; CAQ30614.1; -; Genomic_DNA.{EI4}
+		//DR   GeneID; 2947773; -.
+		
+		DrLineObject obj = new DrLineObject();
+		DrLineObject.DrObject obj1 =creatDrObject("EMBL", "CP001509", "ACT41999.1", "-", "Genomic_DNA"  );
+		DrLineObject.DrObject obj2 =creatDrObject("EMBL", "AM946981", "CAQ30614.1", "-", "Genomic_DNA"  );
+		DrLineObject.DrObject obj3 =creatDrObject("GeneID", "2947773", "-", null, null );
+		obj.drObjects.add(obj1);
+		obj.drObjects.add(obj2);
+		obj.drObjects.add(obj3);
+		List<String> evIds = new ArrayList<String>();
+		evIds.add("EI3");
+		obj.evidenceInfo.evidences.put(obj1, evIds);
+		evIds = new ArrayList<String>();
+		evIds.add("EI4");
+		obj.evidenceInfo.evidences.put(obj2, evIds);
+		List<DBCrossReference> xrefs = converter.convert(obj);
+		assertEquals(3, xrefs.size());
+		DBCrossReference xref1 =xrefs.get(0);
+		DBCrossReference xref2=xrefs.get(1);
+		DBCrossReference xref3=xrefs.get(2);
+		validate(xref1 , XRefDBType.EMBL,
+				"CP001509", "ACT41999.1", "-", "Genomic_DNA");
+		validate(xref2 , XRefDBType.EMBL,
+				"AM946981", "CAQ30614.1", "-", "Genomic_DNA");
+		validate( xref3, XRefDBType.GENEID,
+				"2947773", "-", null, null);
+		List<EvidenceId> eviIds1 = xref1.getEvidenceIds();
+		List<EvidenceId> eviIds2 = xref2.getEvidenceIds();
+		List<EvidenceId> eviIds3 = xref3.getEvidenceIds();
+		assertEquals(1, eviIds1.size());
+		assertEquals(1, eviIds2.size());
+		assertEquals(0, eviIds3.size());
+		assertEquals("EI3", eviIds1.get(0).getValue());
+		assertEquals("EI4", eviIds2.get(0).getValue());
+		
 	}
 	private void validate(DBCrossReference xref, XRefDBType type,
 			String first, String second,
