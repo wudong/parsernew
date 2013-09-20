@@ -101,4 +101,23 @@ class RxLineParserTest extends FunSuite {
 
   }
 
+  test("a DOI"){
+    val rxLine = "RX   PubMed=16912294; DOI=10.1128/JVI.00464-06;\n"
+
+    val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
+    val obj = parser.parse(rxLine)
+    obj.rxs should have size (2);
+
+    expectResult(("PubMed", "16912294")) {
+      val v = obj.rxs.get(0);
+      (v.`type`.name(), v.value)
+    }
+
+    expectResult(("DOI", "10.1128/JVI.00464-06")) {
+      val v = obj.rxs.get(1);
+      (v.`type`.name(), v.value)
+    }
+
+  }
+
 }

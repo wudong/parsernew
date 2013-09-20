@@ -219,7 +219,7 @@ class DeLineParserTest extends FunSuite {
                     |DE     AltName: Full=Ornithine transacetylase;
                     |DE   Includes:
                     |DE     RecName: Full=Amino-acid acetyltransferase;
-                    |DE              EC=2.3.1.1;
+                    |DE              EC=2.3.1.-;
                     |DE     AltName: Full=N-acetylglutamate synthase;
                     |DE              Short=AGS;
                     |DE   Contains:
@@ -260,7 +260,7 @@ class DeLineParserTest extends FunSuite {
     val block2: NameBlock = obj.includedNames.get(1)
     block2.recName.fullName should equal("Amino-acid acetyltransferase")
     block2.recName.ecs should have size (1)
-    block2.recName.ecs.get(0) should equal("2.3.1.1")
+    block2.recName.ecs.get(0) should equal("2.3.1.-")
     block2.recName.shortNames should be('empty)
 
     block2.altName should have size (1)

@@ -139,5 +139,20 @@ class DrLineParserTest extends FunSuite  {
     list2 should contain ("EI4")
   }
 
+  test("Dr Line with dot value in middle"){
+    val drLine = """DR   EMBL; AY548484; AAT09696.1; -; Genomic_DNA.
+                   |DR   Gene3D; 3.40.50.1000; -; 2.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (2);
+    val drObject: DrObject = obj.drObjects.get(1)
+    drObject.DbName should be ("Gene3D")
+    drObject.attributes.asScala should be (List("3.40.50.1000", "-", "2"))
+  }
 
 }
