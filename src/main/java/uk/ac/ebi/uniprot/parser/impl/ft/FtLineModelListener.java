@@ -1,12 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.ft;
 
-import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.FtLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.FtLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.FtLineParserBaseListener;
-import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,23 +35,19 @@ public class FtLineModelListener extends FtLineParserBaseListener implements Par
 	   ft.type = FtLineObject.FTType.valueOf(ctx.FT_KEY().getText());
 	}
 
-//	@Override
-//	public void exitSeparator(@NotNull FtLineParser.SeparatorContext ctx) {
-//		if (ctx.CHANGE_OF_LINE() != null) {
-//			WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
-//			symbol.setText(" ");
-//			symbol.setType(FtLineLexer.SPACE);
-//		}
-//	}
+	@Override
+	public void exitEvidence(@NotNull FtLineParser.EvidenceContext ctx) {
+		EvidenceInfo.processEvidence(object.getEvidenceInfo(), ft, ctx.EV_TAG());
+	}
 
 	@Override
 	public void exitLoc_end(@NotNull FtLineParser.Loc_endContext ctx) {
-		ft.location_end = ctx.FT_LOCATION().getText();
+		ft.location_end = ctx.FT_LOCATION().getText().trim();
 	}
 
 	@Override
 	public void exitLoc_start(@NotNull FtLineParser.Loc_startContext ctx) {
-		ft.location_start = ctx.FT_LOCATION().getText();
+		ft.location_start = ctx.FT_LOCATION().getText().trim();
 	}
 
 	@Override

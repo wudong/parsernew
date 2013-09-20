@@ -16,7 +16,7 @@ lexer grammar DrLineLexer;
 tokens {SEPARATOR}
 
 DR_HEADER : 'DR   ';
-DB_NAME: [A-Z][A-Za-z]* -> pushMode (DR_ATTR);
+DB_NAME: [A-Z][A-Za-z0-9]* -> pushMode (DR_ATTR);
 
 mode DR_ATTR;
 SEPARATOR: '; '  ;
@@ -28,7 +28,7 @@ LEFT_B : '{';
 RIGHT_B : '}';
 
 DASH: '-';
-ATTRIBUTE: LT+ (DOT [1-9][0-9]*)? ;
+ATTRIBUTE: LT ((LT|DOT)* LT)?;
 DOT: '.';
 fragment LT: ~[.;\n\r\t{}];
 

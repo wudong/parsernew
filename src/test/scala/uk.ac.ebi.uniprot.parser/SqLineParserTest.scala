@@ -60,4 +60,29 @@ class SqLineParserTest extends FunSuite {
     assert (obj.sequence.endsWith("WKFTPL"))
   }
 
+
+  test("SQ line 1"){
+    val sqLine = """SQ   SEQUENCE   128 AA;  13707 MW;  9DD5475975A4405F CRC64;
+                   |     MRSIKPLRCC NAHGRHVSQE YGRCTLLLFR EKLFLQTGLV CNKQCNAPNN DGAESKHHGI
+                   |     HHGSRGALAL RGAGVHLLAS AALGPRVLAG LVPTGRSVQG SVGQCGRVAQ IGRARDVAAR
+                   |     KQESYCEK
+                   |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createSqLineParser();
+    val obj = parser.parse(sqLine)
+    assert (obj.sequence.endsWith("KQESYCEK"))
+  }
+
+  test("SQ line 2"){
+    val sqLine = """SQ   SEQUENCE   128 AA;  13707 MW;  9DD5475975A4405F CRC64;
+                   |     MRSIKPLRCC NAHGRHVSQE YGRCTLLLFR EKLFLQTGLV CNKQCNAPNN DGAESKHHGI
+                   |     HHGSRGALAL RGAGVHLLAS AALGPRVLAG LVPTGRSVQG SVGQCGRVAQ IGRARDVAAR
+                   |     HHGSRGALAL D
+                   |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createSqLineParser();
+    val obj = parser.parse(sqLine)
+    assert (obj.sequence.endsWith("HHGSRGALALD"))
+  }
+
 }

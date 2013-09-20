@@ -2,8 +2,8 @@ package uk.ac.ebi.uniprot.parser.impl.sq;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.SqLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.SqLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.SqLineParserBaseListener;
 import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
 
@@ -14,7 +14,7 @@ import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class SqLineModelListener extends SqLineBaseListener implements ParseTreeObjectExtractor<SqLineObject> {
+public class SqLineModelListener extends SqLineParserBaseListener implements ParseTreeObjectExtractor<SqLineObject> {
 
     private SqLineObject object = new SqLineObject();
     private StringBuilder sb = new StringBuilder();
