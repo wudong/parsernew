@@ -2,9 +2,11 @@ package uk.ac.ebi.uniprot.parser.impl.ft;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import uk.ac.ebi.kraken.interfaces.factories.FeatureFactory;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocationModifier;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureSequence;
@@ -19,6 +21,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.features.VariantFeature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.VariantReport;
 import uk.ac.ebi.kraken.model.factories.DefaultFeatureFactory;
 import uk.ac.ebi.uniprot.parser.Converter;
+import uk.ac.ebi.uniprot.parser.impl.EvidenceHelper;
 
 public class FtLineConverter implements Converter<FtLineObject, List<Feature>> {
 	private final FeatureFactory factory =DefaultFeatureFactory.getInstance();
@@ -26,6 +29,7 @@ public class FtLineConverter implements Converter<FtLineObject, List<Feature>> {
 	public List<Feature> convert(FtLineObject f) {
 		List<Feature> features = new ArrayList<Feature>();
 		for(FtLineObject.FT ft: f.fts){
+			Map<Object, List<EvidenceId> > evidences = EvidenceHelper.convert(f.getEvidenceInfo());
 			Feature feature = factory.buildFeature(convert(ft.type));
 			updateFeatureLocation(feature, ft.location_start, ft.location_end);
 			String text = consumeFeatureStatus(feature, ft.ft_text);
@@ -47,6 +51,7 @@ public class FtLineConverter implements Converter<FtLineObject, List<Feature>> {
 			if(feature instanceof HasAlternativeSequence){
 				consumeAlternativeSequence((HasAlternativeSequence) feature, text);
 			}
+			EvidenceHelper.setEvidences(feature, evidences, ft);
 			features.add(feature);
 		}
 		return features;
