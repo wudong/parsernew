@@ -1,20 +1,12 @@
 package uk.ac.ebi.uniprot.parser.impl.os;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.OsLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OsLineLexer;
 import uk.ac.ebi.uniprot.parser.antlr.OsLineParser;
-import uk.ac.ebi.uniprot.parser.impl.dt.DtLineObject;
-import uk.ac.ebi.uniprot.parser.impl.og.OgLineObject;
-import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
