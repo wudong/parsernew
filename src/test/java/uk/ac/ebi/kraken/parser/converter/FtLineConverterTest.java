@@ -7,6 +7,7 @@ import static junit.framework.TestCase.*;
 
 import org.junit.Test;
 
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocation;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocationModifier;
@@ -90,6 +91,8 @@ public class FtLineConverterTest {
 		
 		
 	}
+	
+	
 	@Test 
 	public void testMutagen() throws Exception {
 		/*
@@ -190,6 +193,107 @@ public class FtLineConverterTest {
 		validateAltSeq(mFeature, "V", altSeq );
 	
 	}
+	
+	@Test
+	public void testEvidence(){
+		//"FT   HELIX      33     83{EI1,EI2}
+		//"FT    SIGNAL     <1     34       Potential{EI2,EI3}.
+		FtLineObject fobj  =new FtLineObject();
+		FtLineObject.FT ft = new FtLineObject.FT ();
+		ft.type =FtLineObject.FTType.HELIX;
+		ft.location_start ="33";
+		ft.location_end ="83";
+		List<String> evIds = new ArrayList<String>();
+		evIds.add("EI1");
+		evIds.add("EI2");
+		fobj.evidenceInfo.evidences.put(ft, evIds);
+		fobj.fts.add(ft);
+		FtLineObject.FT ft2 = new FtLineObject.FT ();
+		ft2.type =FtLineObject.FTType.SIGNAL;
+		ft2.location_start ="<1";
+		ft2.location_end ="34";
+		ft2.ft_text ="Potential";
+		evIds = new ArrayList<String>();
+		evIds.add("EI2");
+		evIds.add("EI3");
+		fobj.evidenceInfo.evidences.put(ft2, evIds);
+		fobj.fts.add(ft2);
+		
+		FtLineObject.FT ft3 = new FtLineObject.FT ();
+		ft3.type =FtLineObject.FTType.NP_BIND;
+		ft3.location_start ="1";
+		ft3.location_end =">17";
+		ft3.ft_text ="NAD (By similarity)";
+		evIds = new ArrayList<String>();
+		evIds.add("EI3");
+		fobj.evidenceInfo.evidences.put(ft3, evIds);		
+		fobj.fts.add(ft3);
+		
+		FtLineObject.FT ft4 = new FtLineObject.FT ();
+		ft4.type =FtLineObject.FTType.NP_BIND;
+		ft4.location_start ="1";
+		ft4.location_end =">17";
+		ft4.ft_text ="NAD";
+		fobj.fts.add(ft4);
+		
+		List<Feature> features = converter.convert(fobj);
+		assertEquals(4, features.size());
+		Feature feature1 = features.get(0);
+		Feature feature2 = features.get(1);
+		Feature feature3 = features.get(2);
+		Feature feature4 = features.get(3);
+		assertTrue(feature1 instanceof HelixFeature);
+		assertTrue(feature2 instanceof SignalFeature);
+		assertTrue(feature3 instanceof NpBindFeature);
+		assertTrue(feature4 instanceof NpBindFeature);
+		
+		List<EvidenceId> eviIds = feature1.getEvidenceIds();
+		assertEquals(2, eviIds.size());
+		EvidenceId eviId = eviIds.get(0);
+		EvidenceId eviId2 = eviIds.get(1);
+		assertEquals("EI1", eviId.getValue());
+		assertEquals("EI2", eviId2.getValue());
+		
+		eviIds = feature2.getEvidenceIds();
+		assertEquals(2, eviIds.size());
+		 eviId = eviIds.get(0);
+		 eviId2 = eviIds.get(1);
+		assertEquals("EI2", eviId.getValue());
+		assertEquals("EI3", eviId2.getValue());
+		
+		eviIds = feature3.getEvidenceIds();
+		assertEquals(1, eviIds.size());
+		 eviId = eviIds.get(0);	
+		assertEquals("EI3", eviId.getValue());
+		eviIds = feature4.getEvidenceIds();
+		assertEquals(0, eviIds.size());
+		
+		validateLocation(feature1.getFeatureLocation(),
+				33, 83, FeatureLocationModifier.EXACT, FeatureLocationModifier.EXACT);
+		assertEquals(FeatureType.HELIX, feature1.getType());
+		assertEquals( feature1.getFeatureStatus(),FeatureStatus.EXPERIMENTAL );
+		validateLocation(feature2.getFeatureLocation(),
+				1, 34, FeatureLocationModifier.OUTSIDE_KNOWN_SEQUENCE, FeatureLocationModifier.EXACT);
+		assertEquals(FeatureType.SIGNAL, feature2.getType());
+		assertEquals( feature2.getFeatureStatus(),FeatureStatus.POTENTIAL );
+		assertEquals(((SignalFeature)feature2).getFeatureDescription().getValue(), "");
+		
+		validateLocation(feature3.getFeatureLocation(),
+				1, 17, FeatureLocationModifier.EXACT, FeatureLocationModifier.OUTSIDE_KNOWN_SEQUENCE);
+		assertEquals(FeatureType.NP_BIND, feature3.getType());
+		assertEquals( feature3.getFeatureStatus(),FeatureStatus.BY_SIMILARITY );
+		assertEquals(((NpBindFeature)feature3).getFeatureDescription().getValue(), "NAD");
+		
+		validateLocation(feature4.getFeatureLocation(),
+				1, 17, FeatureLocationModifier.EXACT, FeatureLocationModifier.OUTSIDE_KNOWN_SEQUENCE);
+		assertEquals(FeatureType.NP_BIND, feature4.getType());
+		assertEquals( feature4.getFeatureStatus(),FeatureStatus.EXPERIMENTAL );
+		assertEquals(((NpBindFeature)feature4).getFeatureDescription().getValue(), "NAD");
+		
+		
+	}
+	
+	
 	private void validateAltSeq(HasAlternativeSequence as, String val, List<String> target ){
 		assertEquals(val, as.getOriginalSequence().getValue());
 		List<FeatureSequence>  altSeq =as.getAlternativeSequences();
