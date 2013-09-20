@@ -32,7 +32,7 @@ public class FtLineModelListener extends FtLineParserBaseListener implements Par
 
 	@Override
 	public void exitFt_key(@NotNull FtLineParser.Ft_keyContext ctx) {
-	   ft.type = FtLineObject.FTType.valueOf(ctx.FT_KEY().getText());
+	   ft.type = FtLineObject.FTType.valueOf(ctx.getText());
 	}
 
 	@Override

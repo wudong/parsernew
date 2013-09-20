@@ -143,6 +143,7 @@ class RlLineParserTest extends FunSuite {
       (book.title, book.volume, book.page_start, book.page_end, book.press, book.place, book.year)
     }
   }
+
   test("A valid RL book 2") {
     val line = """RL   (In) Rich D.H., Gross E. (eds.);
                  |RL   Proceedings of the 7th American peptide symposium, pp.69-72, Pierce

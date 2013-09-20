@@ -15,7 +15,7 @@ ft_line: FT_HEADER ft_key loc_start loc_end
         (NEW_LINE|ft_value)
          ;
 ft_value: SPACE7 ft_text evidence? DOT (FT_HEADER_2 ft_id DOT)?  ;
-ft_key: FT_KEY;
+ft_key: FT_KEY|FT_KEY_VAR_SEQ;
 ft_id: FTID ID_WORD ;
 
 ft_text: ALL_LETTER (CHANGE_OF_LINE ALL_LETTER)* ;

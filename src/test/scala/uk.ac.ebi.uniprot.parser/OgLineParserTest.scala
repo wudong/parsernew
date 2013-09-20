@@ -79,13 +79,13 @@ class OgLineParserTest extends FunSuite {
     val osOneLiner = """OG   Hydrogenosome{EI1}.
                        |OG   Mitochondrion{EI1}.
                        |OG   Nucleomorph{EI2}.
-                       |OG   Plasmid R6-5{EI1, EI2}.
+                       |OG   Plasmid R6-5{EI1,EI2}.
                        |OG   Plastid{EI1}.
                        |OG   Plastid; Apicoplast{EI1}.
                        |OG   Plastid; Chloroplast{EI1}.
                        |OG   Plastid; Organellar chromatophore{EI1}.
                        |OG   Plastid; Cyanelle{EI1}.
-                       |OG   Plastid; Non-photosynthetic plastid{EI2, EI3}.
+                       |OG   Plastid; Non-photosynthetic plastid{EI2,EI3}.
                        |""".stripMargin.replace("\r", "")
 
     val parser = (new DefaultUniprotLineParserFactory).createOgLineParser();

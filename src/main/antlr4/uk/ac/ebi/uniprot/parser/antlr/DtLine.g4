@@ -27,6 +27,6 @@ VERSION: [1-9][0-9]*;
 SWISSPROT: 'Swiss-Prot';
 TREMBL: 'Trembl';
 
-DATE : [1-9] [0-9]? '-' MONTH_ABR '-' DIGIT DIGIT DIGIT DIGIT;
+DATE : [0-9] [0-9] '-' MONTH_ABR '-' DIGIT DIGIT DIGIT DIGIT;
 fragment MONTH_ABR : 'JAN' |'FEB'|'MAR' |'MAY'|'JUN' | 'JUL' | 'APR'| 'AGU'| 'SEP'| 'NOV'| 'OCT' |'DEC';
 fragment DIGIT : [0-9];

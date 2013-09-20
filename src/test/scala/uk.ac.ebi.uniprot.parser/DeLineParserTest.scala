@@ -82,7 +82,7 @@ class DeLineParserTest extends FunSuite {
 
   test("A Good DE With Evidence") {
     val deLines = """DE   RecName: Full=Annexin A5{EI1};
-                    |DE            Short=Annexin-5{EI1, EI2};
+                    |DE            Short=Annexin-5{EI1,EI2};
                     |DE   AltName: Full=Annexin V{EI1};
                     |DE   AltName: Full=Lipocortin V{EI1};
                     |DE   AltName: Full=Placental anticoagulant protein I{EI1};
@@ -92,7 +92,7 @@ class DeLineParserTest extends FunSuite {
                     |DE   AltName: Full=Vascular anticoagulant-alpha{EI1};
                     |DE            Short=VAC-alpha{EI1};
                     |DE   AltName: Full=Anchorin CII{EI1};
-                    |DE   Flags: Precursor{EI1, EI2, EI3};
+                    |DE   Flags: Precursor{EI1,EI2,EI3};
                     |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createDeLineParser();

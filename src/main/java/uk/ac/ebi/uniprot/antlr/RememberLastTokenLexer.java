@@ -49,4 +49,24 @@ public abstract class RememberLastTokenLexer extends Lexer {
 			}
 		}
 	}
+
+	public void replaceChangeOfLine(boolean seq){
+		if (!seq){
+			replaceChangeOfLine();
+		}else{
+			if (isSequenceLetter(lastToken.getText())){
+				this.setText("");
+			}else{
+				this.setText(" ");
+			}
+		}
+	}
+
+	public boolean isSequenceLetter(String se){
+		for (int i=0;i<se.length();i++){
+			if (se.charAt(i)>'Z' || se.charAt(i) < 'A')
+				return false;
+		}
+		return true;
+	}
 }

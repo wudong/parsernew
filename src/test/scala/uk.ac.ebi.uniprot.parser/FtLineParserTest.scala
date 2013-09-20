@@ -68,6 +68,26 @@ class FtLineParserTest extends FunSuite {
     ft.ft_text should equal ("TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPLDGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)");
   }
 
+  //TODO This need some serious change or reconsideration
+  ignore("a ft VAR SEQ 's wrapping 1") {
+    val line = """FT   VAR_SEQ      33     83       TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL
+                 |FT                                -> SECLTYGKQPLTSFHPFTSQMPP (in
+                 |FT                                isoform 2).
+                 |FT                                /FTId=VSP_004370.
+                 |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser();
+    val obj = parser.parse(line)
+
+    obj.fts should have size (1)
+    val ft = obj.fts.get(0)
+    ft.`type` should equal (FTType.VAR_SEQ)
+    ft.ftId should equal ("VSP_004370")
+    ft.location_start should equal ("33")
+    ft.location_end should equal ("83")
+    ft.ft_text should equal ("TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL -> SECLTYGKQPLTSFHPFTSQMPP (in isoform 2)");
+  }
+
   test("three combined ft"){
     val line = """FT   VAR_SEQ      33     83       TPDINPAWYTGRGIRPVGRFGRRRATPRDVTGLGQLSCLPL
                  |FT                                DGRTKFSQRG -> SECLTYGKQPLTSFHPFTSQMPP (in

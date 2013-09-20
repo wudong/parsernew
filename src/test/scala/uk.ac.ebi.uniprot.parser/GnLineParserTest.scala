@@ -137,7 +137,7 @@ class GnLineParserTest extends FunSuite {
         """GN   Name=blaCTX-M-14{EI4}; Synonyms=beta-lactamase CTX-M-14{EI7},
           |GN   bla-CTX-M-14a{EI8}, blaCTX-M-14a{EI9}, blaCTX-M-14b{EI10},
           |GN   blatoho-3{EI12}, blaUOE-2{EI11}, CTX-M-14{EI6};
-          |GN   ORFNames=ETN48_p0088{EI5}, pCT_085{EI13}, pHK01_011{EI14, EI15};
+          |GN   ORFNames=ETN48_p0088{EI5}, pCT_085{EI13}, pHK01_011{EI14,EI15};
           |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();

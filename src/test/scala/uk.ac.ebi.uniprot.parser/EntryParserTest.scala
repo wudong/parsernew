@@ -85,7 +85,8 @@ class EntryParserTest extends FunSuite {
     refo.rn.number should be (1)
   }
 
-  test ("an entry with evidence"){
+
+  ignore ("an entry with evidence"){
     val line =
     """ID   C5W346_ECOBD            Unreviewed;       170 AA.
       |AC   C5W346; C6VHH0;
