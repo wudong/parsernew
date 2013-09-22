@@ -25,6 +25,7 @@ import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rx.RxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ss.SsLineObject;
 
 /**
  * <p/>
@@ -80,4 +81,6 @@ public interface UniprotLineParserFactory {
 	UniprotLineParser<CcLineObject> createCcLineParser();
 
 	UniprotLineParser<EntryObject> createEntryParser();
+
+	UniprotLineParser<SsLineObject> createSsLineParser();
 }
