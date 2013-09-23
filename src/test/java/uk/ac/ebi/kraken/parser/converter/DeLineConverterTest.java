@@ -1,25 +1,17 @@
 package uk.ac.ebi.kraken.parser.converter;
 
+import junit.framework.TestCase;
+import org.junit.Test;
+import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
+import uk.ac.ebi.kraken.interfaces.uniprot.description.*;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineConverter;
+import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import junit.framework.TestCase;
-
-import org.junit.Test;
-
-import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Flag;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.FlagType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.NameType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Section;
-import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
-import uk.ac.ebi.uniprot.parser.impl.de.DeLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.de.DeLineObject;
 
 public class DeLineConverterTest {
 	private DeLineConverter converter = new DeLineConverter();
@@ -51,7 +43,7 @@ public class DeLineConverterTest {
 		deObject.altName.add(createName("Thromboplastin inhibitor"));
 		deObject.altName.add(createName("Vascular anticoagulant-alpha", "VAC-alpha"));
 		deObject.altName.add(createName("Anchorin CII"));
-		deObject.flag =DeLineObject.FlagType.Precursor;
+		deObject.flags.add(DeLineObject.FlagType.Precursor);
 		ProteinDescription pDesc = converter.convert(deObject);
 		Name recName =pDesc.getRecommendedName();
 		List<Name> names = new ArrayList<Name>();
@@ -249,12 +241,12 @@ public class DeLineConverterTest {
 		deObject.getEvidenceInfo().evidences.put("Thromboplastin inhibitor", evs);
 		evidences.put("Thromboplastin inhibitor", evs);
 		
-		deObject.flag =DeLineObject.FlagType.Precursor;
+		deObject.flags.add(DeLineObject.FlagType.Precursor);
 		evs = new ArrayList<>();
 		evs.add("EI1");
 		evs.add("EI2");
 		evs.add("EI3");
-		deObject.getEvidenceInfo().evidences.put(deObject.flag, evs);
+		deObject.getEvidenceInfo().evidences.put(DeLineObject.FlagType.Precursor, evs);
 		ProteinDescription pDesc = converter.convert(deObject);
 		Name recName =pDesc.getRecommendedName();
 		

@@ -45,7 +45,7 @@ class DeLineParserTest extends FunSuite {
     obj.recName.shortNames should contain("Annexin-5")
     obj.recName.ecs should be('empty)
 
-    obj.flag should equal(FlagType.Precursor)
+    obj.flags should contain (FlagType.Precursor)
 
     obj.altName should have size (7)
 
@@ -118,7 +118,7 @@ class DeLineParserTest extends FunSuite {
 
     obj.recName.ecs should be('empty)
 
-    obj.flag should equal(FlagType.Precursor)
+    obj.flags should contain(FlagType.Precursor)
     obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should not be null
     obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should have size 3
     obj.getEvidenceInfo.evidences.get(FlagType.Precursor) should contain ("EI1")
@@ -285,4 +285,20 @@ class DeLineParserTest extends FunSuite {
     block4.subName should be('empty)
   }
 
+
+  test("flag precursor fragments"){
+    val deLines = """DE   RecName: Full=UI;
+                    |DE   Contains:
+                    |DE     RecName: Full=Urophysin;
+                    |DE   Contains:
+                    |DE     RecName: Full=Urotensin-1;
+                    |DE     AltName: Full=Urotensin I;
+                    |DE   Flags: Precursor; Fragments;
+                    |""".stripMargin.replace("\r", "");
+
+    val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
+    obj.flags should contain (FlagType.Precursor)
+    obj.flags should contain (FlagType.Fragments)
+
+  }
 }

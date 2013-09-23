@@ -22,8 +22,8 @@ alt_biotech:    'DE   ' ALTNAME_BIOTECH NAME_VALUE evidence?;
 alt_cdantigen:  'DE   'ALTNAME_CD_ANTIGEN NAME_VALUE evidence?;
 alt_inn:        'DE   ' ALTNAME_INN NAME_VALUE evidence?;
 
-flags: 'DE   Flags: ' flag_value evidence? END_OF_NAME;
-flag_value: PRECURSOR | FRAGMENT | PRECURSOR_FRAGMENT |FRAGMENTS;
+flags: 'DE   Flags: ' flag_value  ('; ' flag_value)?  END_OF_NAME;
+flag_value: (PRECURSOR | FRAGMENT | PRECURSOR_FRAGMENT |FRAGMENTS ) evidence?;
 
 contained_de: DE_CONTAIN  sub_rec_name? sub_alt_name*  sub_alt_allergen? sub_alt_biotech? sub_alt_cdantigen* sub_alt_inn* sub_sub_name?   ;
 included_de:  DE_INCLUDE sub_rec_name? sub_alt_name*  sub_alt_allergen? sub_alt_biotech? sub_alt_cdantigen* sub_alt_inn* sub_sub_name?  ;
