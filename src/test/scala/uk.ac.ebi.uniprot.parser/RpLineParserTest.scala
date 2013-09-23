@@ -26,9 +26,8 @@ class RpLineParserTest extends FunSuite {
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("NUCLEOTIDE SEQUENCE [MRNA]") {
-      obj.position
-    };
+    obj.scopes should have size (1)
+    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [MRNA]");
 
   }
 
@@ -41,9 +40,9 @@ class RpLineParserTest extends FunSuite {
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]") {
-      obj.position
-    };
+
+    obj.scopes should have size (1)
+    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]");
 
   }
 
@@ -73,17 +72,22 @@ class RpLineParserTest extends FunSuite {
     val rpLine = """RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C), FUNCTION, INTERACTION
                    |RP   WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL
                    |RP   STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221.
-                   | """.stripMargin.replace("\r", "");
+                   |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C), FUNCTION, INTERACTION " +
-      "WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL " +
-      "STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221") {
-      obj.position
-    };
+
+    obj.scopes should have size (7)
+    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C)")
+    obj.scopes should contain ("FUNCTION")
+    obj.scopes should contain ("INTERACTION WITH PKC-3")
+    obj.scopes should contain ("SUBCELLULAR LOCATION")
+    obj.scopes should contain ("TISSUE SPECIFICITY")
+    obj.scopes should contain ("DEVELOPMENTAL STAGE")
+    obj.scopes should contain ("MUTAGENESIS OF PHE-175 AND PHE-221")
+
   }
 
 
