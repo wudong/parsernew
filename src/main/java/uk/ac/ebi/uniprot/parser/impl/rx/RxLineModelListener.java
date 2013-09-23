@@ -31,10 +31,10 @@ public class RxLineModelListener extends RxLineBaseListener implements ParseTree
             String text = ctx.doi().doid().getText();
             rx.type = RxLineObject.DB.DOI;
             rx.value = text;
-        } else if (ctx.med() != null) {
-            String text = ctx.med().medid().getText();
-            rx.type = RxLineObject.DB.MEDLINE;
-            rx.value = text;
+//        } else if (ctx.med() != null) {
+//            String text = ctx.med().medid().getText();
+//            rx.type = RxLineObject.DB.MEDLINE;
+//            rx.value = text;
         }
         object.rxs.add(rx);
     }

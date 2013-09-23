@@ -11,10 +11,11 @@ grammar RxLine;
 
 rx_rx : RX_HEADER (rx ';' ) (' ' rx ';' )* '\n';
 
-rx : med|pubmed|doi|agri;
+rx : pubmed|doi|agri;
 
-med: MEDLINE medid ;
-medid: INTEGER;
+//MEDLINE has been removed from uniprot
+//med: MEDLINE medid ;
+//medid: INTEGER;
 
 pubmed: PubMed pubid;
 pubid: INTEGER;
@@ -34,7 +35,8 @@ DOITEXT_2: (LD | INT_NONZERO | ZERO | '.'|'-')+;
 
 RX_HEADER : 'RX   ';
 
-MEDLINE : 'MEDLINE=';
+//MEDLINE : 'MEDLINE=';
+
 PubMed: 'PubMed=';
 DOI: 'DOI=';
 AGRICOLA: 'AGRICOLA=';
