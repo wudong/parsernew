@@ -12,7 +12,7 @@ public class RgLineConverter implements Converter<RgLineObject, List<AuthoringGr
 	@Override
 	public List<AuthoringGroup> convert(RgLineObject f) {
 		List<AuthoringGroup> ags = new ArrayList<>();
-		if(!f.reference_group.isEmpty()){
+		if((f.reference_group != null) && (!f.reference_group.isEmpty())){
 			ags.add(DefaultCitationNewFactory.getInstance().buildAuthoringGroup(f.reference_group));
 		}
 		return ags;
