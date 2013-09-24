@@ -1,21 +1,15 @@
 package uk.ac.ebi.uniprot.parser.impl.de;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Flag;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.FlagType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.NameType;
-import uk.ac.ebi.kraken.interfaces.uniprot.description.Section;
+import uk.ac.ebi.kraken.interfaces.uniprot.description.*;
 import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.kraken.model.factories.DefaultUniProtFactory;
 import uk.ac.ebi.uniprot.parser.Converter;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class DeLineConverter implements Converter<DeLineObject, ProteinDescription> {
 	private final DefaultUniProtFactory factory = DefaultUniProtFactory.getInstance();
@@ -67,31 +61,31 @@ public class DeLineConverter implements Converter<DeLineObject, ProteinDescripti
 		}
 		pd.setIncludes(included);
 		List<Flag> flags =new ArrayList<>();
-		if(f.flag !=null){
-			switch(f.flag){
+
+		for (DeLineObject.FlagType deflag: f.flags)   {
+			switch(deflag){
 			case Precursor:
 				Flag flag =factory.buildFlag(FlagType.PRECURSOR);
-				EvidenceHelper.setEvidences( flag, evidenceMap, f.flag);
+				EvidenceHelper.setEvidences( flag, evidenceMap,deflag);
 				flags.add(flag);
 				break;
 			case Fragment:
 				Flag fflag =factory.buildFlag(FlagType.FRAGMENT);
-				EvidenceHelper.setEvidences( fflag, evidenceMap, f.flag);
+				EvidenceHelper.setEvidences( fflag, evidenceMap, deflag);
 				flags.add(fflag);
-			
 				break;
 			case Precursor_Fragment:
 				Flag pflag =factory.buildFlag(FlagType.PRECURSOR);
-				EvidenceHelper.setEvidences( pflag, evidenceMap, f.flag);
+				EvidenceHelper.setEvidences( pflag, evidenceMap,deflag);
 				flags.add(pflag);
 				Flag fflag1 =factory.buildFlag(FlagType.FRAGMENT);
-				EvidenceHelper.setEvidences( fflag1, evidenceMap, f.flag);
+				EvidenceHelper.setEvidences( fflag1, evidenceMap, deflag);
 				flags.add(fflag1);
 			
 				break;
 			case Fragments:
 				Flag fflag2 =factory.buildFlag(FlagType.FRAGMENTS);
-				EvidenceHelper.setEvidences( fflag2, evidenceMap, f.flag);
+				EvidenceHelper.setEvidences( fflag2, evidenceMap, deflag);
 				flags.add(fflag2);
 			break;
 			}		

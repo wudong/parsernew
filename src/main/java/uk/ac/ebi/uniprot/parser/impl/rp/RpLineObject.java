@@ -1,5 +1,8 @@
 package uk.ac.ebi.uniprot.parser.impl.rp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wudong
@@ -8,5 +11,5 @@ package uk.ac.ebi.uniprot.parser.impl.rp;
  * To change this template use File | Settings | File Templates.
  */
 public class RpLineObject {
-    public String position;
+    public List<String> scopes = new ArrayList<String>();
 }

@@ -1,6 +1,9 @@
 package uk.ac.ebi.uniprot.parser.impl.rg;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wudong
@@ -9,5 +12,5 @@ package uk.ac.ebi.uniprot.parser.impl.rg;
  * To change this template use File | Settings | File Templates.
  */
 public class RgLineObject {
-    public String reference_group;
+	public List<String> reference_groups = new ArrayList<String>();
 }

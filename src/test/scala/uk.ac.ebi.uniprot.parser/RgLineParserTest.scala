@@ -25,8 +25,24 @@ class RgLineParserTest extends FunSuite {
     val obj = parser.parse(rnLine)
 
     obj should not be null;
-    expectResult("The mouse genome sequencing consortium") {obj.reference_group};
+    obj.reference_groups should have size (1)
+    obj.reference_groups should contain ("The mouse genome sequencing consortium");
+  }
 
+  test("two valid Rg Line ") {
+
+    val rnLine =
+      """RG   The mouse genome sequencing consortium;
+        |RG   The something else consortium;
+        |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createRgLineParser();
+    val obj = parser.parse(rnLine)
+
+    obj should not be null;
+    obj.reference_groups should have size (2)
+    obj.reference_groups should contain ("The mouse genome sequencing consortium");
+    obj.reference_groups should contain ("The something else consortium");
   }
 
 }

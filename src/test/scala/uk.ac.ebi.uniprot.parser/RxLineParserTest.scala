@@ -17,26 +17,6 @@ import org.scalatest.matchers.ShouldMatchers._
 @RunWith(classOf[JUnitRunner])
 class RxLineParserTest extends FunSuite {
 
-  test("A valid Rx Line 1 ") {
-
-    val rnLine = "RX   MEDLINE=83283433; PubMed=6688356;\n";
-
-    val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
-    val obj = parser.parse(rnLine)
-    obj.rxs should have size (2);
-
-    expectResult(("MEDLINE", "83283433")) {
-      val v = obj.rxs.get(0);
-      (v.`type`.name(), v.value)
-    }
-
-    expectResult(("PubMed", "6688356")) {
-      val v = obj.rxs.get(1);
-      (v.`type`.name(), v.value)
-    }
-
-  }
-
   test("A valid Rx Line 2") {
 
     val rnLine = "RX   PubMed=15626370; DOI=10.1016/j.toxicon.2004.10.011;\n";
@@ -59,24 +39,19 @@ class RxLineParserTest extends FunSuite {
 
   test("A valid Rx Line 3") {
 
-    val rnLine = "RX   MEDLINE=22709107; PubMed=12788972; DOI=10.1073/pnas.1130426100;\n";
+    val rnLine = "RX   PubMed=12788972; DOI=10.1073/pnas.1130426100;\n";
 
     val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
     val obj = parser.parse(rnLine)
-    obj.rxs should have size (3);
+    obj.rxs should have size (2);
 
-    expectResult(("MEDLINE", "22709107")) {
+    expectResult(("PubMed", "12788972")) {
       val v = obj.rxs.get(0);
       (v.`type`.name(), v.value)
     }
 
-    expectResult(("PubMed", "12788972")) {
-      val v = obj.rxs.get(1);
-      (v.`type`.name(), v.value)
-    }
-
     expectResult(("DOI", "10.1073/pnas.1130426100")) {
-      val v = obj.rxs.get(2);
+      val v = obj.rxs.get(1);
       (v.`type`.name(), v.value)
     }
   }

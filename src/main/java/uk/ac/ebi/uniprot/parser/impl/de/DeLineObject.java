@@ -22,7 +22,7 @@ public class DeLineObject implements HasEvidence{
 	public List<NameBlock> containedNames = new ArrayList<NameBlock>();
 	public List<NameBlock> includedNames = new ArrayList<NameBlock>();
 
-	public FlagType flag;
+	public List<FlagType> flags = new ArrayList<FlagType>();
 
 	public EvidenceInfo evidenceInfo = new EvidenceInfo();
 

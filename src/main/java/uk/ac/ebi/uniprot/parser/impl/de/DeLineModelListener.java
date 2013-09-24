@@ -407,23 +407,28 @@ public class DeLineModelListener extends DeLineBaseListener implements ParseTree
 		block = null;
 	}
 
-
 	@Override
-	public void exitFlags(@NotNull DeLineParser.FlagsContext ctx) {
-		if (ctx.flag_value().FRAGMENT() != null) {
-			object.flag = DeLineObject.FlagType.Fragment;
-		} else if (ctx.flag_value().PRECURSOR() != null) {
-			object.flag = DeLineObject.FlagType.Precursor;
-		} else if (ctx.flag_value().PRECURSOR_FRAGMENT() != null) {
-			object.flag = DeLineObject.FlagType.Precursor_Fragment;
-		} else if (ctx.flag_value().FRAGMENTS() != null) {
-			object.flag = DeLineObject.FlagType.Fragments;
+	public void exitFlag_value(@NotNull DeLineParser.Flag_valueContext ctx) {
+
+		DeLineObject.FlagType flag = null;
+
+		if (ctx.FRAGMENT() != null) {
+			 flag = DeLineObject.FlagType.Fragment;
+		} else if (ctx.PRECURSOR() != null) {
+			 flag = DeLineObject.FlagType.Precursor;
+		} else if (ctx.PRECURSOR_FRAGMENT() != null) {
+			 flag = DeLineObject.FlagType.Precursor_Fragment;
+		} else if (ctx.FRAGMENTS() != null) {
+			 flag = DeLineObject.FlagType.Fragments;
 		}
+
+		object.flags.add(flag);
 
 		DeLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence!=null){
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			EvidenceInfo.processEvidence(object.getEvidenceInfo(), object.flag, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), flag, terminalNodes);
 		}
 	}
+
 }

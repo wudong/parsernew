@@ -54,6 +54,8 @@ import uk.ac.ebi.uniprot.parser.impl.rx.RxLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.rx.RxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineModelListener;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ss.SsLineModelListener;
+import uk.ac.ebi.uniprot.parser.impl.ss.SsLineObject;
 
 /**
  * <p/>
@@ -259,6 +261,14 @@ public class DefaultUniprotLineParserFactory implements UniprotLineParserFactory
 		return new DefaultUniprotLineParser<CcLineObject, CcLineLexer, CcLineParser>(
 				GrammarFactory.GrammarFactoryEnum.Cc.getFactory(),
 				new CcLineModelListener()
+		);
+	}
+
+	@Override
+	public UniprotLineParser<SsLineObject> createSsLineParser() {
+		return new DefaultUniprotLineParser<SsLineObject, SsLineLexer, SsLineParser>(
+				GrammarFactory.GrammarFactoryEnum.Ss.getFactory(),
+				new SsLineModelListener()
 		);
 	}
 
