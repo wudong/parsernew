@@ -199,4 +199,17 @@ class FtLineParserTest extends FunSuite {
     obj.getEvidenceInfo.evidences.get(ft5) should (contain ("EI1") and contain ("EI2"))
   }
 
+
+  test("ft with with dot in the values."){
+    val line ="""FT   CARBOHYD     61     61       N-linked (GlcNAc...); by host
+                |FT                                (Potential).
+                |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
+    val obj = parser.parse(line)
+    obj.fts should have size (1)
+    val ft: FT = obj.fts.get(0)
+    ft.ft_text should be ("N-linked (GlcNAc...); by host (Potential)")
+  }
+
 }

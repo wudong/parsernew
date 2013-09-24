@@ -23,9 +23,9 @@ public class RlLineConverterTest {
 		// "RL   J. Mol. Biol. 168:321-331(1983).
 		RlLineObject rlObject = new RlLineObject();
 		RlLineObject.JournalArticle ja = new RlLineObject.JournalArticle();
-		ja.first_page =321;
-		ja.last_page =331;
-		ja.volume =168;
+		ja.first_page ="321";
+		ja.last_page ="331";
+		ja.volume ="168";
 		ja.year =1983;
 		ja.journal = "J. Mol. Biol.";
 		rlObject.reference = ja;
@@ -100,11 +100,11 @@ public class RlLineConverterTest {
 		RlLineObject.Book th = new RlLineObject.Book();
 		th.editors.add("Boyer P.D.");
 		th.title = "The enzymes (3rd ed.)";
-		th.page_start =397;
-		th.page_end =547;
+		th.page_start ="397";
+		th.page_end ="547";
 		th.place ="New York";
 		th.press = "Academic Press";
-		th.volume =11;	
+		th.volume ="11";
 		th.year =1975;
 		rlObject.reference = th;
 		Citation citation = converter.convert(rlObject);

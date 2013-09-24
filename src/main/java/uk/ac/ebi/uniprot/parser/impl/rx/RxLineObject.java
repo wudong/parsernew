@@ -15,7 +15,7 @@ public class RxLineObject {
     public List<RX> rxs =new ArrayList<RX>();
 
     public static enum DB {
-        MEDLINE, PubMed, DOI, AGRICOLA
+        PubMed, DOI, AGRICOLA
     }
 
     public static class RX{

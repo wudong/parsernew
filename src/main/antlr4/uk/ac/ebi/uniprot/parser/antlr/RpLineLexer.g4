@@ -10,5 +10,5 @@ AND : 'AND'                              ;
 CHANGE_OF_LINE : '\nRP   '      {replaceChangeOfLine();} ;
 SPACE: ' ';
 COMA: ',';
-WORD: LD+;
-fragment LD : ~[ ,.\r\na-z];
+WORD: LD+   {!getText().endsWith(".")}?;
+fragment LD : ~[ ,\r\na-z];

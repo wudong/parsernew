@@ -28,7 +28,7 @@ class RlLineParserTest extends FunSuite {
 
     val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
 
-    expectResult(("J. Mol. Biol.", 1983, 168, 321, 331)) {
+    expectResult(("J. Mol. Biol.", 1983, "168", "321", "331")) {
       (journal.journal, journal.year, journal.volume, journal.first_page, journal.last_page);
     }
   }
@@ -44,7 +44,7 @@ class RlLineParserTest extends FunSuite {
 
     val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
 
-    expectResult(("Int. J. Parasitol.", 2005, 0, 0, 0)) {
+    expectResult(("Int. J. Parasitol.", 2005, "0", "0", "0")) {
       (journal.journal, journal.year, journal.volume, journal.first_page, journal.last_page);
     }
   }
@@ -139,7 +139,7 @@ class RlLineParserTest extends FunSuite {
     book.editors should have size (1)
     book.editors should contain("Boyer P.D.")
 
-    expectResult(("The enzymes (3rd ed.)", 11, 397, 547, "Academic Press", "New York", 1975)) {
+    expectResult(("The enzymes (3rd ed.)", "11", "397", "547", "Academic Press", "New York", 1975)) {
       (book.title, book.volume, book.page_start, book.page_end, book.press, book.place, book.year)
     }
   }
@@ -160,7 +160,7 @@ class RlLineParserTest extends FunSuite {
     book.editors should contain("Rich D.H.")
     book.editors should contain("Gross E.")
 
-    expectResult(("Proceedings of the 7th American peptide symposium", 0, 69, 72, "Pierce Chemical Co.", "Rockford Il.", 1981)) {
+    expectResult(("Proceedings of the 7th American peptide symposium", null, "69", "72", "Pierce Chemical Co.", "Rockford Il.", 1981)) {
       (book.title, book.volume, book.page_start, book.page_end, book.press, book.place, book.year)
     }
   }

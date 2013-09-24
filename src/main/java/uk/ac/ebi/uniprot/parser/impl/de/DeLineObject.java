@@ -34,6 +34,7 @@ public class DeLineObject implements HasEvidence{
 	public static class NameBlock {
 		public Name recName;
 		public List<Name> altName = new ArrayList<Name>();
+
 		public List<Name> subName = new ArrayList<Name>();
 		public String alt_Allergen;
 		public String alt_Biotech;

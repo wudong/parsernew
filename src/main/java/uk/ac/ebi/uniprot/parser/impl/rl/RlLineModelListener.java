@@ -1,12 +1,9 @@
 package uk.ac.ebi.uniprot.parser.impl.rl;
 
-import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.RlLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RlLineParser;
-import uk.ac.ebi.uniprot.parser.antlr.RpLineLexer;
+import uk.ac.ebi.uniprot.parser.antlr.RlLineParserBaseListener;
 
 import java.util.List;
 
@@ -17,119 +14,120 @@ import java.util.List;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class RlLineModelListener extends RlLineBaseListener implements ParseTreeObjectExtractor<RlLineObject> {
+public class RlLineModelListener extends RlLineParserBaseListener implements ParseTreeObjectExtractor<RlLineObject> {
 
-    private RlLineObject object = new RlLineObject();
+	private RlLineObject object = new RlLineObject();
 
-    @Override
-    public void exitRl_journal(@NotNull RlLineParser.Rl_journalContext ctx) {
-        RlLineObject.JournalArticle journalArticle = new RlLineObject.JournalArticle();
-        journalArticle.journal = ctx.journal_abbrev().getText();
-        journalArticle.volume = Integer.parseInt(ctx.volume().getText());
-        journalArticle.first_page = Integer.parseInt(ctx.first_page().getText());
-        journalArticle.last_page = Integer.parseInt(ctx.last_page().getText());
-        journalArticle.year = Integer.parseInt(ctx.date_year().getText());
-        object.reference = journalArticle;
-    }
+	@Override
+	public void exitRl_journal(@NotNull RlLineParser.Rl_journalContext ctx) {
+		RlLineObject.JournalArticle journalArticle = new RlLineObject.JournalArticle();
+		journalArticle.journal = ctx.journal_abbr().getText();
+		journalArticle.volume = ctx.journal_volume().J_WORD().getText();
+		journalArticle.first_page = ctx.journal_volume().journal_first_page().getText();
+		journalArticle.last_page = ctx.journal_volume().journal_last_page().getText();
+		String text = ctx.J_YEAR().getText();
+		journalArticle.year = Integer.parseInt(text.substring(1, text.length() - 1));
+		object.reference = journalArticle;
+	}
 
-    @Override
-    public void exitRl_epub(@NotNull RlLineParser.Rl_epubContext ctx) {
-        RlLineObject.EPub epub = new RlLineObject.EPub();
-        String text = ctx.epub_text().getText();
-        epub.title = text.substring(0, text.length() - 1);
-        object.reference = epub;
-    }
+	@Override
+	public void exitRl_epub(@NotNull RlLineParser.Rl_epubContext ctx) {
+		RlLineObject.EPub epub = new RlLineObject.EPub();
+		epub.title = ctx.EP_WORD().getText();
+		object.reference = epub;
+	}
 
-    @Override
-    public void exitRl_patent(@NotNull RlLineParser.Rl_patentContext ctx) {
-        RlLineObject.Patent patent = new RlLineObject.Patent();
-        patent.patentNumber = ctx.patent_number().getText();
-        RlLineParser.Date_day_month_yearContext date_day_month_yearContext = ctx.date_day_month_year();
+	@Override
+	public void exitRl_patent(@NotNull RlLineParser.Rl_patentContext ctx) {
+		RlLineObject.Patent patent = new RlLineObject.Patent();
+		patent.patentNumber = ctx.patent_number().getText();
 
-        patent.day = Integer.parseInt(date_day_month_yearContext.INTEGER(0).getText());
-        patent.month = date_day_month_yearContext.WORD().getText();
-        patent.year = Integer.parseInt(date_day_month_yearContext.INTEGER(1).getText());
+		String text = ctx.PATENT_DATE().getText();
+		String[] split = text.split("-");
 
-        object.reference = patent;
-    }
+		patent.day = Integer.parseInt(split[0]);
+		patent.month = split[1];
+		patent.year = Integer.parseInt(split[2]);
 
-    @Override
-    public void exitRl_book(@NotNull RlLineParser.Rl_bookContext ctx) {
-        RlLineObject.Book book = new RlLineObject.Book();
+		object.reference = patent;
+	}
 
-        book.title = ctx.rl_book_title().getText();
-        List<TerminalNode> name = ctx.editor_names().NAME();
+	@Override
+	public void exitRl_book(@NotNull RlLineParser.Rl_bookContext ctx) {
+		RlLineObject.Book book = new RlLineObject.Book();
 
-        for (TerminalNode terminalNode : name) {
-            String text = terminalNode.getText();
-            book.editors.add(text);
-        }
+		if (ctx.book_editors() != null) {
+			List<RlLineParser.Book_editorContext> editors = ctx.book_editors().book_editor();
+			for (RlLineParser.Book_editorContext editor : editors) {
+				String text = editor.getText();
+				book.editors.add(text);
+			}
+		}
 
-        book.year = Integer.parseInt(ctx.date_year().getText());
+		book.title = ctx.book_name().getText();
 
-        int size = ctx.rl_book_page().INTEGER().size();
-        if (size == 2) {
-            book.volume = 0;
-            book.page_start = Integer.parseInt(ctx.rl_book_page().INTEGER(0).getText());
-            book.page_end = Integer.parseInt(ctx.rl_book_page().INTEGER(1).getText());
-        } else if (size == 3) {
-            book.volume = Integer.parseInt(ctx.rl_book_page().INTEGER(0).getText());
-            book.page_start = Integer.parseInt(ctx.rl_book_page().INTEGER(1).getText());
-            book.page_end = Integer.parseInt(ctx.rl_book_page().INTEGER(2).getText());
-        }
+		String text = ctx.book_year().BOOK_YEAR().getText();
+		book.year = Integer.parseInt(text);
 
-        book.place = ctx.rl_book_place().getText();
-        book.press = ctx.rl_book_press().getText();
+		RlLineParser.Book_pageContext book_pageContext = ctx.book_page();
+		if (book_pageContext.book_page_volume() != null) {
+			book.volume = book_pageContext.book_page_volume().BOOK_V_WORD().getText();
+		}
+		book.page_start = book_pageContext.book_page_first().getText();
+		book.page_end = book_pageContext.book_page_last().getText();
 
-        object.reference = book;
-    }
+		if (ctx.book_city()!=null)
+			book.place = ctx.book_city().getText();
+		if (ctx.book_publisher()!=null)
+			book.press = ctx.book_publisher().getText();
+
+		object.reference = book;
+	}
 
 
-    @Override
-    public void exitRl_unpublished(@NotNull RlLineParser.Rl_unpublishedContext ctx) {
-        RlLineObject.Unpublished unp = new RlLineObject.Unpublished();
+	@Override
+	public void exitRl_unpublished(@NotNull RlLineParser.Rl_unpublishedContext ctx) {
+		RlLineObject.Unpublished unp = new RlLineObject.Unpublished();
+		String text = ctx.UP_YEAR_MONTH().getText();
+		String text1 = text.substring(1, text.length() - 1);
+		String[] split = text1.split("-");
+		unp.month = split[0];
+		unp.year = Integer.parseInt(split[1]);
+		object.reference = unp;
+	}
 
-        unp.month = ctx.date_month_year().WORD().getText();
-        unp.year = Integer.parseInt(ctx.date_month_year().INTEGER().getText());
-        object.reference = unp;
-    }
+	@Override
+	public void exitRl_submission(@NotNull RlLineParser.Rl_submissionContext ctx) {
+		RlLineObject.Submission sub = new RlLineObject.Submission();
+		String text = ctx.SUBMISSION_YEAR().getText();
+		String text1 = text.substring(1, text.length() - 1);
+		String[] split = text1.split("-");
+		sub.month = split[0];
+		sub.year = Integer.parseInt(split[1]);
+		if (ctx.submission_db().EMBL() != null) {
+			sub.db = RlLineObject.SubmissionDB.EMBL;
+		} else if (ctx.submission_db().PDB() != null) {
+			sub.db = RlLineObject.SubmissionDB.PDB;
+		} else if (ctx.submission_db().UNIPROT() != null) {
+			sub.db = RlLineObject.SubmissionDB.UNIPROTKB;
+		} else if (ctx.submission_db().PIR() != null) {
+			sub.db = RlLineObject.SubmissionDB.PIR;
+		}
+		object.reference = sub;
+	}
 
-    @Override
-    public void exitRl_submission(@NotNull RlLineParser.Rl_submissionContext ctx) {
-        RlLineObject.Submission sub = new RlLineObject.Submission();
-        sub.month = ctx.date_month_year().WORD().getText();
-        sub.year = Integer.parseInt(ctx.date_month_year().INTEGER().getText());
-        if (ctx.submission_db().EMBL() != null) {
-            sub.db = RlLineObject.SubmissionDB.EMBL;
-        } else if (ctx.submission_db().PDB() != null) {
-            sub.db = RlLineObject.SubmissionDB.PDB;
-        } else if (ctx.submission_db().UNIPROTKB() != null) {
-            sub.db = RlLineObject.SubmissionDB.UNIPROTKB;
-        } else if (ctx.submission_db().PIR() != null) {
-            sub.db = RlLineObject.SubmissionDB.PIR;
-        }
-        object.reference = sub;
-    }
+	@Override
+	public void exitRl_thesis(@NotNull RlLineParser.Rl_thesisContext ctx) {
+		RlLineObject.Thesis thesis = new RlLineObject.Thesis();
+		thesis.country = ctx.thesis_country().getText();
+		thesis.institute = ctx.thesis_institution().getText();
+		String text = ctx.THESIS_YEAR().getText();
+		String text1 = text.substring(1, text.length() - 1);
+		thesis.year = Integer.parseInt(text1);
+		object.reference = thesis;
+	}
 
-    @Override
-    public void exitRl_thesis(@NotNull RlLineParser.Rl_thesisContext ctx) {
-        RlLineObject.Thesis thesis = new RlLineObject.Thesis();
-        thesis.country = ctx.country().getText();
-        thesis.institute = ctx.institute_name().getText();
-        thesis.year = Integer.parseInt(ctx.date_year().getText());
-        object.reference = thesis;
-    }
-
-    @Override
-    public void exitRl_book_separator(@NotNull RlLineParser.Rl_book_separatorContext ctx) {
-        if (ctx.CHANGE_OF_LINE() != null) {
-            WritableToken symbol = (WritableToken) ctx.CHANGE_OF_LINE().getSymbol();
-            symbol.setText(" ");
-            symbol.setType(RpLineLexer.SPACE);
-        }
-    }
-
-    public RlLineObject getObject() {
-        return object;
-    }
+	public RlLineObject getObject() {
+		return object;
+	}
 }

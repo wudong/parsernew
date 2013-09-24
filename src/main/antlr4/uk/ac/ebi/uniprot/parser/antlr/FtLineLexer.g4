@@ -19,9 +19,11 @@ tokens{FT_HEADER, NEW_LINE, CHANGE_OF_LINE}
 }
 
 FT_HEADER: 'FT   '                     {loc=0;ft=false;inVarSeq=false;};
-FT_LOCATION: SPACE+[1-9][0-9]*         {loc<2}? {loc++;};
+FT_LOCATION: SPACE+ ('<'|'>')? [1-9][0-9]*               {loc<2}? {loc++;};
 fragment SPACE: ' ';
 FT_HEADER_2: 'FT                                ';
+
+
 
 FT_KEY:
       'INIT_MET'|'SIGNAL'|'PROPEP'|'TRANSIT'|'CHAIN'|'PEPTIDE'|'TOPO_DOM'|'TRANSMEM'|
@@ -42,7 +44,7 @@ RIGHT_B : '}';
 DOT: '.\n'           {ft=false;};
 ID_WORD: ('VSP_'| 'CAR_'|'PRO_'|'VSP_') [0-9]+;
 FTID: '/FTId=';
-ALL_LETTER :  LT+ {ft}?;
+ALL_LETTER :  LT+ {ft&&!getText().endsWith(".")}?;
 CHANGE_OF_LINE: '\nFT                                ' {ft}?   {replaceChangeOfLine(inVarSeq);};
 NEW_LINE:'\n';
-fragment LT:~[.\n\r{}];
+fragment LT:~[\n\r{}];

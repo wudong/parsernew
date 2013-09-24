@@ -27,7 +27,7 @@ class RpLineParserTest extends FunSuite {
 
     obj should not be null;
     obj.scopes should have size (1)
-    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [MRNA]");
+    obj.scopes should contain("NUCLEOTIDE SEQUENCE [MRNA]");
 
   }
 
@@ -42,7 +42,7 @@ class RpLineParserTest extends FunSuite {
     obj should not be null;
 
     obj.scopes should have size (1)
-    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]");
+    obj.scopes should contain("NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]");
 
   }
 
@@ -80,14 +80,29 @@ class RpLineParserTest extends FunSuite {
     obj should not be null;
 
     obj.scopes should have size (7)
-    obj.scopes should contain ("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C)")
-    obj.scopes should contain ("FUNCTION")
-    obj.scopes should contain ("INTERACTION WITH PKC-3")
-    obj.scopes should contain ("SUBCELLULAR LOCATION")
-    obj.scopes should contain ("TISSUE SPECIFICITY")
-    obj.scopes should contain ("DEVELOPMENTAL STAGE")
-    obj.scopes should contain ("MUTAGENESIS OF PHE-175 AND PHE-221")
+    obj.scopes should contain("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C)")
+    obj.scopes should contain("FUNCTION")
+    obj.scopes should contain("INTERACTION WITH PKC-3")
+    obj.scopes should contain("SUBCELLULAR LOCATION")
+    obj.scopes should contain("TISSUE SPECIFICITY")
+    obj.scopes should contain("DEVELOPMENTAL STAGE")
+    obj.scopes should contain("MUTAGENESIS OF PHE-175 AND PHE-221")
 
+  }
+
+  test("A valid RP with dot inside it.") {
+
+    val rpLine = """RP   X-RAY CRYSTALLOGRAPHY (2.6 ANGSTROMS) OF 22-480, AND DISULFIDE BONDS.
+                   |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
+    val obj = parser.parse(rpLine)
+
+    obj should not be null;
+
+    obj.scopes should have size (2)
+    obj.scopes should contain("X-RAY CRYSTALLOGRAPHY (2.6 ANGSTROMS) OF 22-480")
+    obj.scopes should contain("DISULFIDE BONDS")
   }
 
 

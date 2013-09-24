@@ -18,11 +18,11 @@ public class RlLineObject {
         public List<String> editors = new ArrayList<String>();
         public String title;
         public int year;
-        public int page_start;
-        public int page_end;
+        public String page_start;
+        public String page_end;
         public String press;
         public String place;
-        public int volume;
+        public String volume;
     }
 
     public static class Thesis implements Ref {
@@ -35,9 +35,9 @@ public class RlLineObject {
     public static class JournalArticle implements Ref {
         public String journal;
         public int year;
-        public int volume;
-        public int first_page;
-        public int last_page;
+        public String volume;
+        public String first_page;
+        public String last_page;
     }
 
     public static class EPub implements Ref {

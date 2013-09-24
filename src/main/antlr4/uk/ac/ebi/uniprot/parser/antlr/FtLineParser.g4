@@ -19,8 +19,8 @@ ft_key: FT_KEY|FT_KEY_VAR_SEQ;
 ft_id: FTID ID_WORD ;
 
 ft_text: ALL_LETTER (CHANGE_OF_LINE ALL_LETTER)* ;
-loc_start: FT_LOCATION;
-loc_end: FT_LOCATION;
+loc_start:   FT_LOCATION;
+loc_end:    FT_LOCATION;
 
 evidence: LEFT_B  EV_TAG (COMA EV_TAG)* RIGHT_B;
 
