@@ -24,14 +24,14 @@ class RtLineParserTest extends FunSuite {
     val obj = parser.parse(rpLine)
 
     obj should not be null;
-    expectResult("A novel adapter protein employs a phosphotyrosine binding domain") {obj.title};
+    expectResult("A novel adapter protein employs a phosphotyrosine binding domain.") {obj.title};
   }
 
   test("A valid RT multi Line") {
     val rpLine = """RT   "New insulin-like proteins with atypical disulfide bond pattern
                    |RT   characterized in Caenorhabditis elegans by comparative sequence
-                   |RT   analysis and homology modeling.";
-                   | """.stripMargin.replace("\r", "");
+                   |RT   analysis and homology modeling?";
+                   |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createRtLineParser();
     val obj = parser.parse(rpLine)
@@ -39,7 +39,7 @@ class RtLineParserTest extends FunSuite {
     obj should not be null;
     expectResult("New insulin-like proteins with atypical disulfide bond pattern " +
       "characterized in Caenorhabditis elegans by comparative sequence " +
-      "analysis and homology modeling") {obj.title};
+      "analysis and homology modeling?") {obj.title};
   }
 
 }

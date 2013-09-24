@@ -18,6 +18,24 @@ import uk.ac.ebi.uniprot.parser.impl.ft.FtLineObject.{FT, FTType}
 @RunWith(classOf[JUnitRunner])
 class FtLineParserTest extends FunSuite {
 
+  test ("a ft value start with digit"){
+    val line =
+      """FT   CHAIN        20    873       104 kDa microneme/rhoptry antigen.
+        |FT                                /FTId=PRO_0000232680.
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser();
+    val obj = parser.parse(line)
+
+    obj.fts should have size (1)
+    val ft = obj.fts.get(0)
+    ft.`type` should equal (FTType.CHAIN)
+    ft.ftId should be ("PRO_0000232680")
+    ft.location_start should equal ("20")
+    ft.location_end should equal ("873")
+    ft.ft_text should equal ("104 kDa microneme/rhoptry antigen");
+  }
+
   test("a ft line without text ") {
     val line = "FT   HELIX      33     83\n";
     val parser = (new DefaultUniprotLineParserFactory).createFtLineParser();

@@ -56,4 +56,17 @@ class OsLineParserTest extends FunSuite  {
     };
   }
 
+  test("A os line with / in it"){
+      val osOneLiner =
+        """OS   African swine fever virus (isolate Pig/Kenya/KEN-50/1950) (ASFV).
+          |""".stripMargin.replace("\r", "");
+      val parser = (new DefaultUniprotLineParserFactory).createOsLineParser();
+      val obj = parser.parse(osOneLiner)
+
+      obj should not be null;
+      expectResult("African swine fever virus (isolate Pig/Kenya/KEN-50/1950) (ASFV)"){
+        obj.organism_species;
+      };
+  }
+
 }

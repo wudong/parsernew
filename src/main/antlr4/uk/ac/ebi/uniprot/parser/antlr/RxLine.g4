@@ -30,7 +30,7 @@ AGRITEXT: 'IND' INTEGER;
 INTEGER: INT_NONZERO (INT_NONZERO|ZERO)*;
 
 DOITEXT_1: INTEGER ('.' INTEGER)+;
-DOITEXT_2: (LD | INT_NONZERO | ZERO | '.'|'-')+;
+DOITEXT_2: [A-Za-z]+;
 
 RX_HEADER : 'RX   ';
 
@@ -41,5 +41,5 @@ AGRICOLA: 'AGRICOLA=';
 
 fragment LD: [A-Za-z];
 fragment INT_NONZERO: [1-9];
-fragment  ZERO: '0';
+fragment ZERO: '0';
 
