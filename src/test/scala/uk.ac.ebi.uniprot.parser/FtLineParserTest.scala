@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.uniprot.parser
 
 import org.scalatest.FunSuite
@@ -212,4 +213,19 @@ class FtLineParserTest extends FunSuite {
     ft.ft_text should be ("N-linked (GlcNAc...); by host (Potential)")
   }
 
+  test("ft with ? as it is location"){
+    val line="""FT   CHAIN         1    194       13S globulin basic chain.
+               |FT                                /FTId=PRO_0000152877.
+               |FT   DISULFID      7      ?       Interchain (between basic and acidic
+               |FT                                chains) (Potential).
+               |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
+    val obj = parser.parse(line)
+    obj.fts should have size (2)
+    val ft: FT = obj.fts.get(1)
+    ft.ft_text should be ("Interchain (between basic and acidic chains) (Potential)")
+    ft.location_start should be ("7")
+    ft.location_end should be ("?")
+  }
 }

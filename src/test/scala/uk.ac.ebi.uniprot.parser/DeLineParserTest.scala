@@ -299,6 +299,15 @@ class DeLineParserTest extends FunSuite {
     val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
     obj.flags should contain (FlagType.Precursor)
     obj.flags should contain (FlagType.Fragments)
+  }
 
+  test ("altname Allergen"){
+    val deLines = """DE   RecName: Full=13S globulin seed storage protein 3;
+                    |DE   AltName: Full=Legumin-like protein 3;
+                    |DE   AltName: Allergen=Fag e 1;
+                    |""".stripMargin.replace("\r", "");
+
+    val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
+    obj.alt_Allergen should be ("Fag e 1")
   }
 }

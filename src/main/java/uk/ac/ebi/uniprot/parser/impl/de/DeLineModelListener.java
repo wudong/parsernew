@@ -416,8 +416,6 @@ public class DeLineModelListener extends DeLineBaseListener implements ParseTree
 			 flag = DeLineObject.FlagType.Fragment;
 		} else if (ctx.PRECURSOR() != null) {
 			 flag = DeLineObject.FlagType.Precursor;
-		} else if (ctx.PRECURSOR_FRAGMENT() != null) {
-			 flag = DeLineObject.FlagType.Precursor_Fragment;
 		} else if (ctx.FRAGMENTS() != null) {
 			 flag = DeLineObject.FlagType.Fragments;
 		}

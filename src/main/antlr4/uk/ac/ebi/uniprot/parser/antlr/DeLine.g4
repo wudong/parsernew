@@ -17,13 +17,13 @@ alt_name_1 : full_name (CONTINUE_OF_NAME short_name)* (CONTINUE_OF_NAME ec)*    
 alt_name_2 : short_name (CONTINUE_OF_NAME short_name)* (CONTINUE_OF_NAME ec)*           ;
 alt_name_3 : ec (CONTINUE_OF_NAME ec)*           ;
 
-alt_allergen:   'DE   ' ALTNAME_ALLERGEN NAME_VALUE evidence?;
-alt_biotech:    'DE   ' ALTNAME_BIOTECH NAME_VALUE evidence?;
-alt_cdantigen:  'DE   'ALTNAME_CD_ANTIGEN NAME_VALUE evidence?;
-alt_inn:        'DE   ' ALTNAME_INN NAME_VALUE evidence?;
+alt_allergen:    ALTNAME_ALLERGEN NAME_VALUE evidence? END_OF_NAME;
+alt_biotech:     ALTNAME_BIOTECH NAME_VALUE evidence? END_OF_NAME;
+alt_cdantigen:   ALTNAME_CD_ANTIGEN NAME_VALUE evidence? END_OF_NAME;
+alt_inn:         ALTNAME_INN NAME_VALUE evidence? END_OF_NAME;
 
 flags: 'DE   Flags: ' flag_value  ('; ' flag_value)?  END_OF_NAME;
-flag_value: (PRECURSOR | FRAGMENT | PRECURSOR_FRAGMENT |FRAGMENTS ) evidence?;
+flag_value: (PRECURSOR | FRAGMENT |FRAGMENTS ) evidence?;
 
 contained_de: DE_CONTAIN  sub_rec_name? sub_alt_name*  sub_alt_allergen? sub_alt_biotech? sub_alt_cdantigen* sub_alt_inn* sub_sub_name?   ;
 included_de:  DE_INCLUDE sub_rec_name? sub_alt_name*  sub_alt_allergen? sub_alt_biotech? sub_alt_cdantigen* sub_alt_inn* sub_sub_name?  ;
@@ -38,10 +38,10 @@ sub_alt_name_1 : full_name (SUB_CONTINUE_OF_NAME short_name)* (SUB_CONTINUE_OF_N
 sub_alt_name_2 : short_name (SUB_CONTINUE_OF_NAME short_name)* (SUB_CONTINUE_OF_NAME ec)*           ;
 sub_alt_name_3 : ec (SUB_CONTINUE_OF_NAME ec)*   ;
 
-sub_alt_allergen:   'DE     ' ALTNAME_ALLERGEN NAME_VALUE evidence? END_OF_NAME;
-sub_alt_biotech:    'DE     ' ALTNAME_BIOTECH NAME_VALUE evidence? END_OF_NAME;
-sub_alt_cdantigen:  'DE     'ALTNAME_CD_ANTIGEN NAME_VALUE evidence? END_OF_NAME;
-sub_alt_inn:        'DE     ' ALTNAME_INN NAME_VALUE evidence?;
+sub_alt_allergen:   SUB_ALTNAME_ALLERGEN NAME_VALUE evidence? END_OF_NAME;
+sub_alt_biotech:    SUB_ALTNAME_BIOTECH NAME_VALUE evidence? END_OF_NAME;
+sub_alt_cdantigen:  SUB_ALTNAME_CD_ANTIGEN NAME_VALUE evidence? END_OF_NAME;
+sub_alt_inn:        SUB_ALTNAME_INN NAME_VALUE evidence? END_OF_NAME;
 
 full_name: FULL NAME_VALUE evidence? END_OF_NAME;
 short_name: SHORT NAME_VALUE evidence? END_OF_NAME;
@@ -50,10 +50,16 @@ ec: EC EC_NAME_VALUE evidence? END_OF_NAME;
 DE_CONTAIN: 'DE   Contains:\n';
 DE_INCLUDE: 'DE   Includes:\n';
 
-ALTNAME_INN: 'AltName: INN=' {name=true;};
-ALTNAME_CD_ANTIGEN: 'AltName: CD_antigen=' {name=true;};
-ALTNAME_BIOTECH: 'AltName: Biotech=' {name=true;};
-ALTNAME_ALLERGEN: 'AltName: Allergen=' {name=true;};
+ALTNAME_INN:           'DE   AltName: INN=' {name=true;};
+ALTNAME_CD_ANTIGEN:    'DE   AltName: CD_antigen=' {name=true;};
+ALTNAME_BIOTECH:       'DE   AltName: Biotech=' {name=true;};
+ALTNAME_ALLERGEN:      'DE   AltName: Allergen=' {name=true;};
+
+SUB_ALTNAME_INN:        'DE     AltName: INN=' {name=true;};
+SUB_ALTNAME_CD_ANTIGEN: 'DE     AltName: CD_antigen=' {name=true;};
+SUB_ALTNAME_BIOTECH:    'DE     AltName: Biotech=' {name=true;};
+SUB_ALTNAME_ALLERGEN:   'DE     AltName: Allergen=' {name=true;};
+
 FULL: 'Full=' {name=true;};
 SHORT: 'Short=' {name=true;};
 EC: 'EC=';
@@ -63,7 +69,6 @@ END_OF_NAME: ';\n'{name=false;};
 
 PRECURSOR: 'Precursor';
 FRAGMENT: 'Fragment';
-PRECURSOR_FRAGMENT: 'Precursor, Fragment';
 FRAGMENTS: 'Fragments';
 
 CONTINUE_OF_NAME: 'DE            ';

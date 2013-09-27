@@ -137,6 +137,7 @@ public class CcLineObject {
 		public String sequence;
 		public SequenceCautionType type;
 		public List<Integer> positions = new ArrayList<Integer>();
+		public String positionValue;
 		public String note;
 	}
 

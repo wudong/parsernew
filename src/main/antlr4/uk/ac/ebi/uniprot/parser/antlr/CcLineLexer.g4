@@ -4,7 +4,7 @@ options { superClass=uk.ac.ebi.uniprot.antlr.RememberLastTokenLexer; }
 
 //define the tokens that is common in all the modes.
 tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
- COLON, DOT, NEW_LINE,
+ COLON, DOT, NEW_LINE,CHANGE_OF_LINE, DOT_NEW_LINE,
  CC_HEADER_1, CC_HEADER_2, INTEGER, DASH}
 
 CC_TOPIC_START  : 'CC   -!- ';
@@ -30,9 +30,9 @@ CC_TOPIC_MASS_SPECTROMETRY:
 CC_TOPIC_SEQUENCE_CAUTION:
                  'SEQUENCE CAUTION'                  -> pushMode ( CC_SEQUENCE_CAUTION );
 CC_TOPIC_RNA_EDITING:
-                'RNA EDITING'                          -> pushMode ( CC_RNA_EDITING );
+                'RNA EDITING'                        -> pushMode ( CC_RNA_EDITING );
 CC_TOPIC_DISEASE:
-                 'DISEASE'                            -> pushMode ( CC_DISEASE );
+                 'DISEASE'                           -> pushMode ( CC_DISEASE );
 
 
 //the common mode for most of the CC lines;
@@ -42,9 +42,10 @@ CC_COMMON_CHANGE_OF_LINE: '\nCC       '          {replaceChangeOfLine();};
 CC_COMMON_SPACE : ' '                                -> type (SPACE);
 CC_COMMON_SEMICOLON : ';'                            -> type (SEMICOLON);
 CC_COMMON_COLON: ':'                                 -> type (COLON);
-CC_COMMON_DOT : '.'                                  -> type (DOT);
-CC_COMMON_NEW_LINE: '\n'                             -> type (NEW_LINE);
-CC_COMMON_TEXT_WORD: TL+;
+CC_COMMON_DOT_NEWLINE : '.\n'        ;
+CC_COMMON_DOT_SPACE : '. '                             ;
+CC_COMMON_DOT_CHANGE_OF_LINE : '.\nCC       '          ;
+CC_COMMON_TEXT_WORD: TL+                     {!getText().endsWith(".")}?;
 fragment TL: ~[\n\r\t ];
 
 mode CC_PROPERTIES_TEXT_MODE;
@@ -99,7 +100,7 @@ CC_IR_SEMICOLON : ';'                               -> type (SEMICOLON);
 CC_IR_COLON : ':'                               -> type (COLON);
 CC_IR_COMA : ','                               -> type (COMA);
 CC_IR_XENO: '(xeno)';
-CC_IR_AC: [A-Za-z0-9][-A-Za-z0-9]*;
+CC_IR_AC: [A-Za-z0-9][\-\.A-Za-z0-9]*;
 CC_IR_DASH: '-'                                -> type (DASH);
 
 mode CC_SUBCELLULAR_LOCATION;
@@ -107,11 +108,11 @@ CC_SL_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) 
 CC_SL_COLON : ':'                               -> type (COLON);
 CC_SL_COMA : ','                               -> type (COMA);
 CC_SL_SPACE : ' '                            -> type (SPACE);
-CC_SL_DOT : '.'                            -> type (DOT);
-CC_SL_NEW_LINE: '\n'                             -> type (NEW_LINE);
-CC_SL_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_SL_NOTE: 'Note='                          ;
-CC_SL_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();}   ;
+CC_SL_DOT : '.'                              -> type (DOT);
+CC_SL_NEW_LINE: '\n'                         -> type (NEW_LINE);
+CC_SL_SEMICOLON : ';'                        -> type (SEMICOLON);
+CC_SL_NOTE: 'Note='                            ;
+CC_SL_CHANGE_OF_LINE: '\nCC       '           {replaceChangeOfLine(); setType(CHANGE_OF_LINE);};
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
 CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
@@ -122,7 +123,7 @@ fragment CC_SL_WORD_LETTER: ~[ :,.;=\n\r\t];
 /*
 mode CC_SUBCELLULAR_LOCATION_NOTE;
 CC_SL_N_NEW_LINE: '\n'                         -> type (NEW_LINE), popMode;
-CC_SL_N_CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine();};
+CHANGE_OF_LINE: '\nCC       '         {replaceChangeOfLine(); setType(CHANGE_OF_LINE);};
 CC_SL_N_NOTE:  CC_SL_N_WORD_LETTER+;
 fragment CC_SL_N_WORD_LETTER: ~[\n\r\t];
 */
@@ -179,6 +180,7 @@ CC_SC_P_SEMICOLON : ';'                               -> popMode, type (SEMICOLO
 CC_SC_P_SPACE : ' '                                   -> type (SPACE);
 CC_SC_P_COMA : ','                                    -> type (COMA);
 CC_SC_P_INT : [1-9][0-9]*                             -> type (INTEGER);
+CC_SC_P_VALUE: 'Several';
 
 //the cc web resource model;
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
@@ -258,9 +260,36 @@ CC_RE_N_NEW_LINE: '\n'                          -> type (NEW_LINE), popMode;
 CC_RE_N_DOT: '.'                                -> type (DOT);
 fragment CS_RE_LETTER: ~[ .\n\r\t];
 
-
 mode CC_DISEASE;
-CC_D_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
+CC_D_TOPIC_START  : 'CC   -!- '           ->  popMode, type(CC_TOPIC_START) ;
+CC_D_NOTE: 'Note='                        -> pushMode (CC_D_EDITING_NOTE);
+CC_D_SPACE: ' '                           -> type (SPACE);
+CC_D_DOT: '.'                             -> type (DOT);
+CC_D_DOT_SPACE: '. '                      -> type (SPACE);
+CC_D_COMA: ','                            -> type (COMA);
+CC_D_COLON: ':'                           -> type (COLON);
+CC_D_CHANGE_OF_LINE : '\nCC       '      {setType(CHANGE_OF_LINE); replaceChangeOfLine();};
+CC_D_DOT_CHANGE_OF_LINE : '.\nCC  '      {setType(CHANGE_OF_LINE); replaceChangeOfLine();};
+CC_D_LEFT_BRACKET: '[';
+CC_D_RIGHT_BRACKET: ']';
+CC_D_INTEGER: [1-9][0-9]*              -> type (INTEGER);
+CC_D_PUBMED: 'PubMed:'             ;
+CC_D_MIM: 'MIM:'                   ;
+CC_D_LEFT_P: '(';
+CC_D_RIGHT_P: ')';
+CC_D_WORD: CC_D_L+                      {!getText().endsWith(".")}?;
+fragment CC_D_L: ~[ ()\[\]:\n\r\t=];
+
+
+mode CC_D_EDITING_NOTE;
+CC_D_N_SPACE: ' '                          -> type (SPACE);
+CC_D_N_DOT_NEW_LINE: '.\n'                 -> type (DOT_NEW_LINE);
+CC_D_N_CHANGE_OF_LINE : '\nCC       '      {setType(CHANGE_OF_LINE); replaceChangeOfLine();};
+CC_D_N_WORD: CC_D_N_L+          {!getText().endsWith(".")}?  ;
+CC_D_N_L: ~[ ():\n\r\t];
+
+
+
 
 
 

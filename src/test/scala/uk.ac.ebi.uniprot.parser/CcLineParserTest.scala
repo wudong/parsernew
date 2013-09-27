@@ -10,6 +10,7 @@ import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
+import scala.collection.mutable
 
 
 /**
@@ -41,13 +42,13 @@ class CcLineParserTest extends FunSuite {
 
     cc.topic should be(CcLineObject.CCTopicEnum.FUNCTION)
     cc.`object` should be("This enzyme is necessary for target cell lysis in cell-mediated immune responses. " +
-      "It cleaves after Lys or Arg. May be involved in apoptosis.")
+      "It cleaves after Lys or Arg. May be involved in apoptosis")
 
     val cc2 = obj.ccs.get(1)
     cc2.topic should be(CcLineObject.CCTopicEnum.CAUTION)
     cc2.`object` should be("Exons 1a and 1b of the sequence reported in " +
       "PubMed:17180578 are of human origin, however exon 2 shows strong " +
-      "similarity to the rat sequence.")
+      "similarity to the rat sequence")
   }
 
   test ("alternative products"){
@@ -694,12 +695,66 @@ class CcLineParserTest extends FunSuite {
     val obj = parser.parse(lines)
     val cc2 = obj.ccs.get(0)
 
-    cc2.`object`.isInstanceOf[RnaEditing]
     val re = cc2.`object`.asInstanceOf[RnaEditing]
     re.locations should have size (20)
     re.locations.get(0) should be (1)
     re.locations.get(19) should be (313)
     re.note should be ("The initiator methionine is created by RNA editing.")
+  }
+
+  test("sequence caution has position value as 'several'"){
+    val lines = """CC   -!- SEQUENCE CAUTION:
+                  |CC       Sequence=AAA25676.1; Type=Frameshift; Positions=Several;
+                  |CC       Sequence=CAD59919.1; Type=Frameshift; Positions=519;
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    val sc = cc2.`object`.asInstanceOf[SequenceCaution]
+    sc.sequenceCautionObjects should have size (2)
+    val sco: SequenceCautionObject = sc.sequenceCautionObjects.get(0)
+    sco.`type` should be (SequenceCautionType.Frameshift)
+    sco.sequence should be ("AAA25676.1")
+    sco.positionValue should be ("Several")
+  }
+
+  test("CC content has dot inside") {
+    val lines = """CC   -!- SUBUNIT: Interacts with daf-16 and sir-2.1.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.topic should be (CCTopicEnum.SUBUNIT)
+    val sc = cc2.`object`.asInstanceOf[String]
+    sc should be ("Interacts with daf-16 and sir-2.1")
+  }
+
+  test("CC interaction with dot in acc"){
+    val lines =
+      """CC   -!- INTERACTION:
+      |CC       G5EC23:hcf-1; NbExp=2; IntAct=EBI-318108, EBI-4480523;
+      |CC       Q11184:let-756; NbExp=3; IntAct=EBI-318108, EBI-3843983;
+      |CC       Q10666:pop-1; NbExp=2; IntAct=EBI-318108, EBI-317870;
+      |CC       Q21921:sir-2.1; NbExp=3; IntAct=EBI-318108, EBI-966082;
+      |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.topic should be (CCTopicEnum.INTERACTION)
+    val ic = cc2.`object`.asInstanceOf[Interaction]
+    ic.interactions should have size (4)
+
+    val genes = ic.interactions.asScala.map( x=> x.gene )
+
+    genes should contain ("hcf-1")
+    genes should contain ("let-756")
+    genes should contain ("pop-1")
+    genes should contain ("sir-2.1")
   }
 
 }

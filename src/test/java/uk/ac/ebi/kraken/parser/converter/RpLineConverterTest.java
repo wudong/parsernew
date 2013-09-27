@@ -15,7 +15,7 @@ public class RpLineConverterTest {
 	public void test1(){
 		// "RP   NUCLEOTIDE SEQUENCE [MRNA].\n";
 		RpLineObject rp =new RpLineObject();
-		rp.position ="NUCLEOTIDE SEQUENCE [MRNA]";
+		rp.scopes.add("NUCLEOTIDE SEQUENCE [MRNA]");
 		 List<CitationSummary> css =converter.convert(rp);
 		 assertEquals(1, css.size());
 		 CitationSummary cs = css.get(0);
@@ -28,9 +28,14 @@ public class RpLineConverterTest {
         //RP   WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL
         //RP   STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221.
 		RpLineObject rp =new RpLineObject();
-		rp.position ="NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C), FUNCTION, INTERACTION " +
-			      "WITH PKC-3, SUBCELLULAR LOCATION, TISSUE SPECIFICITY, DEVELOPMENTAL " +
-			      "STAGE, AND MUTAGENESIS OF PHE-175 AND PHE-221";
+		rp.scopes.add("NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS A AND C)");
+		rp.scopes.add("FUNCTION");
+		rp.scopes.add("INTERACTION WITH PKC-3");
+		rp.scopes.add("SUBCELLULAR LOCATION");
+		rp.scopes.add("TISSUE SPECIFICITY");
+		rp.scopes.add("DEVELOPMENTAL STAGE");
+		rp.scopes.add("MUTAGENESIS OF PHE-175 AND PHE-221");
+
 		 List<CitationSummary> css =converter.convert(rp);
 		 assertEquals(7, css.size());
 

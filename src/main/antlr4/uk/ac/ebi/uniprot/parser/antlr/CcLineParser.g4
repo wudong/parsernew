@@ -7,16 +7,17 @@ cc_cc: cc_lines+;
 cc_lines: cc_common | cc_web_resource|cc_biophyiochemical
           |cc_interaction |cc_subcellular_location
           |cc_alternative_products|cc_sequence_caution
-          |cc_mass_spectrometry |cc_rna_editing;
+          |cc_mass_spectrometry |cc_rna_editing
+          |cc_disease;
 
 cc_properties_text : CC_PROPERTIES_TEXT_CHANGE_LINE ?
            CC_PROPERTIES_TEXT (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT)*;
 
 cc_common: CC_TOPIC_START CC_TOPIC_COMMON COLON SPACE
            cc_common_text
-           NEW_LINE;
+           CC_COMMON_DOT_NEWLINE;
 cc_common_text: CC_COMMON_TEXT_WORD (cc_common_text_separator CC_COMMON_TEXT_WORD)* ;
-cc_common_text_separator: SPACE | CC_COMMON_CHANGE_OF_LINE;
+cc_common_text_separator: SPACE | CC_COMMON_CHANGE_OF_LINE|CC_COMMON_DOT_SPACE|CC_COMMON_DOT_CHANGE_OF_LINE;
 
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
 cc_web_resource:  CC_TOPIC_START CC_TOPIC_WEB_RESOURCE COLON SPACE
@@ -67,7 +68,7 @@ cc_interaction_intact: CC_IR_INTACT CC_IR_AC COMA SPACE CC_IR_AC SEMICOLON NEW_L
 
 cc_subcellular_location: CC_TOPIC_START CC_TOPIC_SUBCELLUR_LOCATION COLON SPACE
                          (
-                             (((cc_subcellular_location_molecule COLON SPACE)?
+                             (((cc_subcellular_location_molecule COLON (SPACE|CHANGE_OF_LINE) )?
                               cc_subcellular_location_section )?
                               (cc_subcellular_text_separator cc_subcellular_note)? )
                              | cc_subcellular_note
@@ -96,7 +97,7 @@ cc_subcellular_note_value:
 
 cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
 cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;
-cc_subcellular_text_separator: SPACE | CC_SL_CHANGE_OF_LINE;
+cc_subcellular_text_separator: SPACE | CHANGE_OF_LINE;
 
 cc_alternative_products:
                CC_TOPIC_START CC_TOPIC_ALTERNATIVE_PRODUCTS COLON NEW_LINE
@@ -145,7 +146,7 @@ cc_sequence_caution_line:
 cc_sequence_caution_sequence: CC_SC_SEQUENCE cc_sequence_caution_value SEMICOLON;
 cc_sequence_caution_type: CC_SC_TYPE CC_SC_TYPE_VALUE SEMICOLON;
 cc_sequence_caution_position: CC_SC_POSITIONS cc_sequence_caution_position_value SEMICOLON;
-cc_sequence_caution_position_value:   INTEGER (COMA SPACE INTEGER)*;
+cc_sequence_caution_position_value:  CC_SC_P_VALUE | (INTEGER (COMA SPACE INTEGER)*);
 cc_sequence_caution_note: CC_SC_NOTE cc_sequence_caution_value SEMICOLON;
 cc_sequence_caution_value: CC_SC_WORD (SPACE CC_SC_WORD)*;
 
@@ -194,3 +195,22 @@ cc_re_note_value_detail : CC_RE_N_WORD (cc_re_separator_2 CC_RE_N_WORD)* DOT;
 cc_re_separator_1: (SPACE | CC_RE_CHANGE_OF_LINE);
 cc_re_separator_2: (SPACE | CC_RE_N_CHANGE_OF_LINE);
 
+cc_disease:
+    CC_TOPIC_START CC_TOPIC_DISEASE COLON SPACE
+     cc_disease_name  cc_disease_separator
+     cc_disease_abbr  cc_disease_separator
+     cc_disease_mim  COLON cc_disease_separator
+     cc_disease_description DOT cc_disease_separator
+    NEW_LINE;
+
+cc_disease_name: CC_D_WORD ( cc_disease_separator CC_D_WORD)*;
+cc_disease_abbr: CC_D_LEFT_P CC_D_WORD CC_D_RIGHT_P;
+cc_disease_mim: CC_D_LEFT_BRACKET CC_D_MIM INTEGER CC_D_RIGHT_BRACKET ;
+cc_disease_description:  cc_disease_value (cc_disease_separator cc_disease_value)*;
+cc_disease_pubmed: CC_D_LEFT_P CC_D_PUBMED INTEGER (COMA cc_disease_separator CC_D_PUBMED INTEGER)* CC_D_RIGHT_P ;
+cc_disease_note: CC_D_NOTE cc_disease_note_text;
+cc_disease_note_text: cc_disease_value (cc_disease_separator cc_disease_value)*;
+cc_disease_separator: (SPACE|CHANGE_OF_LINE);
+
+cc_disease_value: (CC_D_WORD ( cc_disease_separator CC_D_WORD)* )
+                | CC_D_LEFT_P cc_disease_value  CC_D_LEFT_P;

@@ -12,7 +12,14 @@ public class RpLineConverter implements Converter<RpLineObject, List<CitationSum
 	@Override
 	public List<CitationSummary> convert(RpLineObject f) {
 		List<CitationSummary> citationSummaries =new ArrayList<>();
-		String line = f.position;
+
+		List<String> scopes = f.scopes;
+		for (String s: scopes){
+			citationSummaries.add(DefaultCitationNewFactory.getInstance().buildCitationSummary(s));
+		}
+
+		/*
+		String line = f.;
 		if((line ==null)|| line.isEmpty())
 			return citationSummaries;
 		
@@ -28,7 +35,7 @@ public class RpLineConverter implements Converter<RpLineObject, List<CitationSum
 	            }
 	            citationSummaries.add(0, DefaultCitationNewFactory.getInstance().buildCitationSummary(line));
 	        }
+		*/
 		return citationSummaries;
 	}
-	
 }

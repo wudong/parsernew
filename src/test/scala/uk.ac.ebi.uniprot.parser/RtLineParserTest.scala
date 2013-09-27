@@ -42,4 +42,33 @@ class RtLineParserTest extends FunSuite {
       "analysis and homology modeling?") {obj.title};
   }
 
+  test ("rt line with dot"){
+    val rpLine =
+      """RT   "14-3-3 is phosphorylated by casein kinase I on residue 233.
+      |RT   Phosphorylation at this site in vivo regulates Raf/14-3-3
+      |RT   interaction.";
+      |""" .stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRtLineParser();
+    val obj = parser.parse(rpLine)
+
+    obj should not be null;
+    expectResult("14-3-3 is phosphorylated by casein kinase I on residue 233. " +
+      "Phosphorylation at this site in vivo regulates Raf/14-3-3 " +
+      "interaction.") {obj.title};
+  }
+
+  test ("rt line with dash"){
+    val rpLine =
+      """RT   "Nuclear localization of protein kinase U-alpha is regulated by 14-3-
+        |RT   3.";
+        |""" .stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRtLineParser();
+    val obj = parser.parse(rpLine)
+
+    obj should not be null;
+    expectResult("Nuclear localization of protein kinase U-alpha is regulated by 14-3-3.") {obj.title};
+  }
+
 }
