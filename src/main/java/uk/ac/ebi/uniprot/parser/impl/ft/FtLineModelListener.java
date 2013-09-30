@@ -57,7 +57,8 @@ public class FtLineModelListener extends FtLineParserBaseListener implements Par
 
 	@Override
 	public void exitFt_id(@NotNull FtLineParser.Ft_idContext ctx) {
-		ft.ftId = ctx.ID_WORD().getText();
+		ft.ftId = ctx.FTID_VALUE().getText();
+
 	}
 
 	public FtLineObject getObject() {

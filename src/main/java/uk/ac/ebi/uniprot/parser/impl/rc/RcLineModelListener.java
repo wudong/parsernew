@@ -1,9 +1,10 @@
 package uk.ac.ebi.uniprot.parser.impl.rc;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.RcLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.RcLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.RcLineParserBaseListener;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 import java.util.List;
@@ -16,12 +17,11 @@ import java.util.List;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class RcLineModelListener extends RcLineBaseListener implements ParseTreeObjectExtractor<RcLineObject> {
+public class RcLineModelListener extends RcLineParserBaseListener implements ParseTreeObjectExtractor<RcLineObject> {
 
     private RcLineObject object = new RcLineObject();
 
-
-    @Override
+	@Override
     public void exitRc(@NotNull RcLineParser.RcContext ctx) {
         RcLineParser.Rc_tokenContext rc_tokenContext = ctx.rc_token();
         RcLineObject.RcTokenEnum type = null;

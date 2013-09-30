@@ -57,4 +57,20 @@ class OcLineParserTest extends FunSuite  {
     obj.nodes should contain ("Ranavirus")
   }
 
+  test ("oc line can contain dot at the end of a word") {
+    val ocLine = """OC   Bacteria; Bacteroidetes; Bacteroidetes Order II. Incertae sedis;
+                   |OC   Rhodothermaceae; Salinibacter.
+                   |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createOcLineParser();
+    val obj = parser.parse(ocLine)
+
+    obj.nodes should have size (5)
+    obj.nodes should contain ("Bacteria")
+    obj.nodes should contain ("Bacteroidetes")
+    obj.nodes should contain ("Bacteroidetes Order II. Incertae sedis")
+    obj.nodes should contain ("Rhodothermaceae")
+    obj.nodes should contain ("Salinibacter")
+  }
+
 }

@@ -45,7 +45,7 @@ public class CcLineObject {
 	}
 
 	public static enum AlternativeNameSequenceEnum {
-		Displayed, External, Not_described
+		Displayed, External, Not_described, Unsure
 	}
 
 
@@ -88,8 +88,12 @@ public class CcLineObject {
 	public static class SubcullarLocation {
 		 public String molecule;
 		 public List<LocationObject> locations = new ArrayList<LocationObject>();
-		 public String note;
-		 public LocationFlagEnum noteFlag;
+		 public List<SubcullarLocationNote> notes = new ArrayList<SubcullarLocationNote>();
+	}
+
+	public static class SubcullarLocationNote{
+		public String note;
+		public LocationFlagEnum noteFlag;
 	}
 
 	public static class LocationObject {
@@ -154,7 +158,9 @@ public class CcLineObject {
 
 	public static class MassSpectrometryRange {
 		public int start;
+		public boolean start_unknown;
 		public int end;
+		public boolean end_unknown;
 	}
 
 }

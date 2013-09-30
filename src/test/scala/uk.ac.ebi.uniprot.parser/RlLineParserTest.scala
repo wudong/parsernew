@@ -128,7 +128,7 @@ class RlLineParserTest extends FunSuite {
   test("A valid RL book 1") {
     val line = """RL   (In) Boyer P.D. (eds.);
                  |RL   The enzymes (3rd ed.), pp.11:397-547, Academic Press, New York (1975).
-                 | """.stripMargin.replace("\r", "");
+                 |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
     val obj = parser.parse(line)
@@ -148,7 +148,7 @@ class RlLineParserTest extends FunSuite {
     val line = """RL   (In) Rich D.H., Gross E. (eds.);
                  |RL   Proceedings of the 7th American peptide symposium, pp.69-72, Pierce
                  |RL   Chemical Co., Rockford Il. (1981).
-                 | """.stripMargin.replace("\r", "");
+                 |""".stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
     val obj = parser.parse(line)
@@ -165,5 +165,17 @@ class RlLineParserTest extends FunSuite {
     }
   }
 
+  test ("journal name can contain dash"){
+    val line =
+      """RL   Hoppe-Seyler's Z. Physiol. Chem. 362:1665-1669(1981).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.JournalArticle])
+    val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
+
+    journal.journal should be ("Hoppe-Seyler's Z. Physiol. Chem.")
+  }
 
 }

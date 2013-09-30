@@ -307,6 +307,10 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 		 molecule.setValue(cObj.molecule);
 		 comment.setSubcellularMolecule(molecule);
 		 SubcellularLocationValue note = factory.buildSubcellularLocationNote();
+
+		 /*
+		 TODO, the structure changed. WUDONG.
+
 		 note.setValue(cObj.note);
 		 if(cObj.noteFlag !=null){
 			 switch(cObj.noteFlag){
@@ -320,7 +324,8 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 				 note.setCommentStatus(CommentStatus.PROBABLE);
 				 break;
 			 }
-		 }
+		 } */
+
 		 List<SubcellularLocation> locations = new ArrayList<SubcellularLocation>();
 		 for(CcLineObject.LocationObject lo: cObj.locations){
 			 SubcellularLocation location = factory.buildSubcellularLocation();

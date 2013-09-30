@@ -310,4 +310,13 @@ class DeLineParserTest extends FunSuite {
     val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
     obj.alt_Allergen should be ("Fag e 1")
   }
+
+  test ("EC number has 'n2' inside"){
+    val deLines = """DE   RecName: Full=Amino acid--[acyl-carrier-protein] ligase 1;
+                    |DE            EC=6.2.1.n2;
+                    |""".stripMargin.replace("\r", "");
+
+    val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
+    obj.recName.ecs should contain ("6.2.1.n2")
+  }
 }

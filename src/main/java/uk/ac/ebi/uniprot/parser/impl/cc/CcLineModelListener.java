@@ -67,7 +67,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 			CcLineParser.Cc_sequence_caution_noteContext cc_sequence_caution_noteContext = lineContext.cc_sequence_caution_note();
 			if (cc_sequence_caution_noteContext != null) {
-				object1.note = cc_sequence_caution_noteContext.cc_sequence_caution_value().getText();
+				object1.note = cc_sequence_caution_noteContext.CC_SC_NOTE_TEXT().getText();
 			}
 		}
 
@@ -100,13 +100,25 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		List<CcLineParser.Cc_mass_spectrometry_mass_range_valueContext> range_valueContexts = rangeContext.cc_mass_spectrometry_mass_range_value();
 		for (CcLineParser.Cc_mass_spectrometry_mass_range_valueContext range_valueContext : range_valueContexts) {
+			CcLineParser.Cc_mass_spectrometry_mass_range_value_valueContext vv1 =
+					range_valueContext.cc_mass_spectrometry_mass_range_value_value(0);
+
+			CcLineParser.Cc_mass_spectrometry_mass_range_value_valueContext vv2 =
+					range_valueContext.cc_mass_spectrometry_mass_range_value_value(1);
+
 			CcLineObject.MassSpectrometryRange range = new CcLineObject.MassSpectrometryRange();
-			TerminalNode terminalNode = range_valueContext.INTEGER(0);
-			range.start = Integer.parseInt(terminalNode.getText());
 
-			TerminalNode terminalNode2 = range_valueContext.INTEGER(1);
-			range.end = Integer.parseInt(terminalNode2.getText());
+			if (vv1.INTEGER()!=null){
+				range.start = Integer.parseInt(vv1.INTEGER().getText());
+			}else{
+				range.start_unknown = true;
+			}
 
+			if (vv2.INTEGER()!=null){
+				range.end = Integer.parseInt(vv2.INTEGER().getText());
+			}else{
+				range.end_unknown = true;
+			}
 			ms.ranges.add(range);
 		}
 
@@ -284,11 +296,15 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		CcLineParser.Cc_subcellular_noteContext cc_subcellular_noteContext = ctx.cc_subcellular_note();
 		if (cc_subcellular_noteContext!=null){
-			sl.note = cc_subcellular_noteContext.cc_subcellular_note_value().getText();
-			CcLineParser.Cc_subcellular_location_flagContext flagContext = cc_subcellular_noteContext.cc_subcellular_location_flag();
-			if (flagContext!=null){
-				String text = flagContext.CC_SL_FLAG().getText();
-				sl.noteFlag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
+			List<CcLineParser.Cc_subcellular_note_valueContext> cc_subcellular_note_valueContexts = cc_subcellular_noteContext.cc_subcellular_note_value();
+			for (CcLineParser.Cc_subcellular_note_valueContext nnContext : cc_subcellular_note_valueContexts) {
+				CcLineObject.SubcullarLocationNote note = new CcLineObject.SubcullarLocationNote();
+				note.note = nnContext.cc_subcellular_words().getText();
+				if (nnContext.cc_subcellular_location_flag()!=null){
+					String text = nnContext.cc_subcellular_location_flag().CC_SL_FLAG().getText();
+					note.noteFlag = CcLineObject.LocationFlagEnum.fromSting(text.substring(1, text.length()-1));
+				}
+				sl.notes.add(note);
 			}
 		}
 
@@ -372,7 +388,9 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 				name.sequence_enum = CcLineObject.AlternativeNameSequenceEnum.External;
 			} else if (seqvalueContext.CC_AP_NOT_DESCRIBED() != null) {
 				name.sequence_enum = CcLineObject.AlternativeNameSequenceEnum.Not_described;
-			} else if (seqvalueContext.cc_alternative_products_sequence_value_identifiers() != null) {
+			}else if (seqvalueContext.CC_AP_VALUE_UNSURE() != null) {
+				name.sequence_enum = CcLineObject.AlternativeNameSequenceEnum.Unsure;
+			}else if (seqvalueContext.cc_alternative_products_sequence_value_identifiers() != null) {
 				List<TerminalNode> terminalNodes = seqvalueContext.cc_alternative_products_sequence_value_identifiers().CC_AP_FEATURE_IDENTIFIER();
 				for (TerminalNode terminalNode : terminalNodes) {
 					String text = terminalNode.getText();

@@ -16,13 +16,22 @@ import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 @RunWith(classOf[JUnitRunner])
 class OhLineParserTest extends FunSuite  {
 
-  test("A valid one line oc") {
+  test("A valid one line oh") {
     val osOneLiner = "OH   NCBI_TaxID=9598; Pan troglodytes (Chimpanzee).\n";
     val parser = (new DefaultUniprotLineParserFactory).createOhLineParser();
     val obj = parser.parse(osOneLiner)
 
     obj.tax_id should equal (9598)
     obj.hostname should equal ("Pan troglodytes (Chimpanzee)")
+  }
+
+  test("oh line contains dot in size") {
+    val osOneLiner = "OH   NCBI_TaxID=3662; Cucurbita moschata (Winter crookneck squash) (Cucurbita pepo var. moschata).\n";
+    val parser = (new DefaultUniprotLineParserFactory).createOhLineParser();
+    val obj = parser.parse(osOneLiner)
+
+    obj.tax_id should equal (3662)
+    obj.hostname should equal ("Cucurbita moschata (Winter crookneck squash) (Cucurbita pepo var. moschata)")
   }
 
 }

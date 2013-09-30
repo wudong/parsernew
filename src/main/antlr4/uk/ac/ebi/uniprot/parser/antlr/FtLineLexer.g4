@@ -18,7 +18,7 @@ tokens{FT_HEADER, NEW_LINE, CHANGE_OF_LINE}
 }
 
 FT_HEADER: 'FT   '                     {loc=0;inVarSeq=false;};
-FT_LOCATION: SPACE+ ((('<'|'>')? [1-9][0-9]*)|'?')               {loc<2}? {loc++;};
+FT_LOCATION: SPACE+ ((('<'|'>')? [1-9][0-9]*)|'?')    {loc<2}? {loc++;};
 fragment SPACE: ' ';
 FT_HEADER_2: 'FT                                ';
 
@@ -31,21 +31,27 @@ FT_KEY:
       'NON_TER'|'HELIX'|'STRAND'|'TURN';
 FT_KEY_VAR_SEQ:  'VAR_SEQ' {inVarSeq=true;};
 
-SPACE7: '       ' {loc==2}?     -> pushMode(FT_CONTENT);
 NEW_LINE: '\n';
+SPACE7: '       ' {loc==2}?                         -> pushMode(FT_CONTENT);
+FTID: '\nFT                                /FTId='  -> pushMode(FTID_MODE);
 
 mode FT_CONTENT;
-
 ID_WORD: ('VSP_'| 'VAR_'|'PRO_'|'VSP_') [0-9]+;
-FTID: '/FTId=';
+FTID_2: '\nFT                                /FTId='      ->type(FTID), pushMode(FTID_MODE);
 
 DOT : '.';
 NEW_LINE_: '\n'                                      -> type (NEW_LINE), popMode;
 CHANGE_OF_LINE : '\nFT                                ' {replaceChangeOfLine(inVarSeq);};
-FT_LINE: LD ((DOT|LD|'/')* LD)?;
-fragment LD : ~[\.\r\n\t{}/];
+FT_LINE: LD ((DOT|LD|'/')* LD)?                       {!getText().startsWith("/FTId=")}?;
+fragment LD : ~[\.\r\n\t{}];
 
 LEFT_B : '{'                    -> pushMode(FT_EVIDENCE);
+
+mode FTID_MODE;
+fragment INTEGER: [0-9]+;
+fragment ID_STARTER:  'VSP_'|'PRO_'|'VAR_'|'VSP_'|'CAR_';
+FTID_VALUE: ID_STARTER  INTEGER;
+FTID_DOT: '.'                   ->type(DOT), popMode;
 
 mode FT_EVIDENCE;
 COMA: ',';

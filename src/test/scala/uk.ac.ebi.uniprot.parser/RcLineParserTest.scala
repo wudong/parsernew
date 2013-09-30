@@ -107,27 +107,26 @@ class RcLineParserTest extends FunSuite {
     }
   }
 
-  test("RC with evidence") {
+  test("RC with with evidence") {
     val rcLines = """RC   STRAIN=XM1OR{EI7}, XMO3R{EI2}, XMO4R{EI3}, XMO5F{EI1}, XMO5R{EI4},
                     |RC   XMO8F{EI5}, and XMO8R{EI6};
                     |""".stripMargin.replace("\r", "")
 
     val parser = (new DefaultUniprotLineParserFactory).createRcLineParser();
     val obj = parser.parse(rcLines)
+  }
 
-    obj should not be null
-    obj.rcs should have size (1);
-    val rc: RC = obj.rcs.get(0)
-    rc.tokenType should be(RcTokenEnum.STRAIN)
-    rc.values should have size (7)
-    rc.evidenceInfo.evidences should have size (7)
-    rc.evidenceInfo.evidences.get("XM1OR") should contain("EI7")
-    rc.evidenceInfo.evidences.get("XMO3R") should contain("EI2")
-    rc.evidenceInfo.evidences.get("XMO4R") should contain("EI3")
-    rc.evidenceInfo.evidences.get("XMO5F") should contain("EI1")
-    rc.evidenceInfo.evidences.get("XMO5R") should contain("EI4")
-    rc.evidenceInfo.evidences.get("XMO8F") should contain("EI5")
-    rc.evidenceInfo.evidences.get("XMO8R") should contain("EI6")
+  test("RC with value contains / and changing line") {
+    val rcLines = """RC   STRAIN=ATCC 6260 / CBS 566 / DSM 6381 / JCM 1539 / NBRC 10279 / NRRL
+                    |RC   Y-324;
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createRcLineParser();
+    val obj = parser.parse(rcLines)
+    obj.rcs should have size (1)
+    obj.rcs.get(0).tokenType should be (RcTokenEnum.STRAIN);
+    obj.rcs.get(0).values should have size (1)
+    obj.rcs.get(0).values.get(0) should be ("ATCC 6260 / CBS 566 / DSM 6381 / JCM 1539 / NBRC 10279 / NRRL Y-324")
   }
 
 

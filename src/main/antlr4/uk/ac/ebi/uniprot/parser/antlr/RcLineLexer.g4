@@ -19,7 +19,7 @@ LEFT_B : '{'              ->pushMode(EVIDENCE_MODE);
 AND : 'and';
 WORD: (LD)+ ;
 SPACE_: ' '                -> type(SPACE);
-CHANGE_OF_LINE_: '\nRC   ' -> type(CHANGE_OF_LINE);
+CHANGE_OF_LINE_: '\nRC   '  {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
 fragment LD : ~[;, \r\n\t{];
 
 mode EVIDENCE_MODE ;

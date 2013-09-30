@@ -12,11 +12,12 @@ options { tokenVocab=FtLineLexer;}
 ft_ft: ft_line+;
 
 ft_line: FT_HEADER ft_key loc_start loc_end
-        (NEW_LINE|ft_value)
+        ft_value?  ft_id?
+        NEW_LINE
          ;
-ft_value: SPACE7 ft_text evidence? DOT (CHANGE_OF_LINE ft_id DOT)? NEW_LINE  ;
+ft_value: SPACE7 ft_text evidence? DOT  ;
 ft_key: FT_KEY|FT_KEY_VAR_SEQ;
-ft_id: FTID ID_WORD ;
+ft_id: FTID FTID_VALUE DOT;
 
 ft_text: FT_LINE DOT? (CHANGE_OF_LINE FT_LINE DOT?)*;
 loc_start:   FT_LOCATION;

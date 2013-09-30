@@ -2,8 +2,8 @@ package uk.ac.ebi.uniprot.parser.impl.oh;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.OhLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OhLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.OhLineParserBaseListener;
 
 
 /**
@@ -13,7 +13,7 @@ import uk.ac.ebi.uniprot.parser.antlr.OhLineParser;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class OhLineModelListener extends OhLineBaseListener implements ParseTreeObjectExtractor<OhLineObject> {
+public class OhLineModelListener extends OhLineParserBaseListener implements ParseTreeObjectExtractor<OhLineObject> {
 
 	private OhLineObject object = new OhLineObject();
 

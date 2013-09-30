@@ -85,4 +85,15 @@ class SqLineParserTest extends FunSuite {
     assert (obj.sequence.endsWith("HHGSRGALALD"))
   }
 
+  test("SQ line CRC contains only integer"){
+    val sqLine = """SQ   SEQUENCE   162 AA;  18749 MW;  1883589730544714 CRC64;
+                   |     MDEGYYSGNL ESVLGYVSDM HTKLASITQL VIAKIETIDN DILNNDIVNF IMCRSNLNNP
+                   |     FISFLDTVYT IIDQEIYQNE LINSLDDNKI IDCIVNKFMS FYKDNLENIV DAIITLKYIM
+                   |     NNPDFKTTYA EVLGSRIADI DIKQVIRENI LQLSNDIRER YL
+                   |     """.stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createSqLineParser();
+    val obj = parser.parse(sqLine)
+    obj.crc64 should be ("1883589730544714")
+  }
 }

@@ -228,4 +228,34 @@ class FtLineParserTest extends FunSuite {
     ft.location_start should be ("7")
     ft.location_end should be ("?")
   }
+
+  test ("ft with dot at an end of a word like Ref. "){
+    val line="""FT   CONFLICT     32     32       D -> N (in Ref. 4; AAB70857).
+               |FT   CONFLICT     72     72       A -> S (in Ref. 3 and 4).
+               |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
+    val obj = parser.parse(line)
+    obj.fts should have size (2)
+    val ft: FT = obj.fts.get(0)
+    ft.ft_text should be ("D -> N (in Ref. 4; AAB70857)")
+
+    val ft1: FT = obj.fts.get(1)
+    ft1.ft_text should be ("A -> S (in Ref. 3 and 4)")
+  }
+
+  test ("ft can without text but with ftid"){
+    val line="""FT   PROPEP      163    164
+               |FT                                /FTId=PRO_0000032092.
+               |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createFtLineParser()
+    val obj = parser.parse(line)
+    obj.fts should have size (1)
+    val ft: FT = obj.fts.get(0)
+    ft.location_start should be ("163")
+    ft.location_end should be ("164")
+    ft.ftId should be ("PRO_0000032092")
+  }
+
 }

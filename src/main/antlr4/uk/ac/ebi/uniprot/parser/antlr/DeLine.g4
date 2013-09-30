@@ -64,7 +64,7 @@ FULL: 'Full=' {name=true;};
 SHORT: 'Short=' {name=true;};
 EC: 'EC=';
 EC_NAME_VALUE: EC_NAME_VALUE_V '.' EC_NAME_VALUE_V '.' EC_NAME_VALUE_V '.' EC_NAME_VALUE_V;
-fragment EC_NAME_VALUE_V: '-'|DIGIT+;
+fragment EC_NAME_VALUE_V: '-'|('n'? DIGIT+);
 END_OF_NAME: ';\n'{name=false;};
 
 PRECURSOR: 'Precursor';

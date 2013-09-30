@@ -54,7 +54,7 @@ cc_biophyiochemical_redox:   CC_HEADER_1  CC_BP_REDOX_POTENTIAL
 cc_biophyiochemical_kinetic: CC_HEADER_1 CC_BP_KINETIC_PARAMETERS COLON NEW_LINE
                   (CC_HEADER_2 cc_biophyiochemical_kinetic_km NEW_LINE)*
                   (CC_HEADER_2 cc_biophyiochemical_kinetic_bpmax NEW_LINE)*
-                  (CC_HEADER_2 cc_biophyiochemical_kinetic_note SEMICOLON NEW_LINE)?;
+                  (CC_HEADER_2 cc_biophyiochemical_kinetic_note NEW_LINE)?;
 cc_biophyiochemical_kinetic_km: CC_BP_KM cc_properties_text  SEMICOLON;
 cc_biophyiochemical_kinetic_bpmax: CC_BP_VMAX cc_properties_text  SEMICOLON;
 cc_biophyiochemical_kinetic_note: CC_BP_NOTE cc_properties_text  SEMICOLON;
@@ -91,9 +91,9 @@ cc_subcellular_location_value:
                 cc_subcellular_words (cc_subcellular_location_flag)?;
 
 cc_subcellular_note:
-                CC_SL_NOTE cc_subcellular_note_value (cc_subcellular_location_flag)? DOT;
+                CC_SL_NOTE cc_subcellular_note_value (cc_subcellular_text_separator cc_subcellular_note_value)*;
 cc_subcellular_note_value:
-                cc_subcellular_words (DOT cc_subcellular_text_separator cc_subcellular_words)*;
+                cc_subcellular_words (cc_subcellular_location_flag)? DOT;
 
 cc_subcellular_location_flag: cc_subcellular_text_separator CC_SL_FLAG;
 cc_subcellular_words: CC_SL_WORD (cc_subcellular_text_separator CC_SL_WORD)*;
@@ -125,9 +125,13 @@ cc_alternative_products_synonyms:  CC_AP_SYNONYMS cc_alternative_value (COMA SPA
 cc_alternative_products_isoid: CC_AP_ISOID cc_alternative_value (COMA SPACE cc_alternative_value)* SEMICOLON;
 cc_alternative_products_sequence: CC_AP_SEQUENCE cc_alternative_products_sequence_value SEMICOLON;
 cc_alternative_products_sequence_value:
-                (CC_AP_DISPLAYED|CC_AP_EXTERNAL|CC_AP_NOT_DESCRIBED|cc_alternative_products_sequence_value_identifiers);
+                (
+                CC_AP_DISPLAYED|CC_AP_EXTERNAL|CC_AP_NOT_DESCRIBED
+                |CC_AP_VALUE_UNSURE
+                |cc_alternative_products_sequence_value_identifiers
+                );
 cc_alternative_products_sequence_value_identifiers:
-                CC_AP_FEATURE_IDENTIFIER (COMA SPACE CC_AP_FEATURE_IDENTIFIER)*;
+                CC_AP_FEATURE_IDENTIFIER (COMA (SPACE|CHANGE_OF_LINE) CC_AP_FEATURE_IDENTIFIER)*;
 cc_alternative_products_note: CC_AP_NOTE cc_properties_text SEMICOLON;
 
 /*
@@ -147,18 +151,18 @@ cc_sequence_caution_sequence: CC_SC_SEQUENCE cc_sequence_caution_value SEMICOLON
 cc_sequence_caution_type: CC_SC_TYPE CC_SC_TYPE_VALUE SEMICOLON;
 cc_sequence_caution_position: CC_SC_POSITIONS cc_sequence_caution_position_value SEMICOLON;
 cc_sequence_caution_position_value:  CC_SC_P_VALUE | (INTEGER (COMA SPACE INTEGER)*);
-cc_sequence_caution_note: CC_SC_NOTE cc_sequence_caution_value SEMICOLON;
+cc_sequence_caution_note: CC_SC_NOTE CC_SC_NOTE_TEXT SEMICOLON;
 cc_sequence_caution_value: CC_SC_WORD (SPACE CC_SC_WORD)*;
 
 //CC   -!- MASS SPECTROMETRY: Mass=mass(; Mass_error=error)?; Method=method; Range=ranges( (IsoformID))?(; Note=free_text)?; Source=references;
 cc_mass_spectrometry:
         CC_TOPIC_START CC_TOPIC_MASS_SPECTROMETRY COLON SPACE
-        cc_mass_spectrometry_mass (SPACE cc_mass_spectrometry_mass_error)?
-        SPACE cc_mass_spectrometry_mass_method
-        (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range
-        //((SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range)*
-        ((SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_note)?
-        (SPACE|CC_MS_CHANGE_OF_LINE) cc_mass_spectrometry_mass_source
+        cc_mass_spectrometry_mass ((SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_error)?
+        (SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_method
+        (SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_range
+        //((SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_range)*
+        ((SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_note)?
+        (SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_source
         NEW_LINE;
 
 cc_mass_spectrometry_mass:
@@ -168,16 +172,16 @@ cc_mass_spectrometry_mass_error:
 cc_mass_spectrometry_mass_method:
         CC_MS_METHOD cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_range:
-        CC_MS_RANGE cc_mass_spectrometry_mass_range_value (COMA (SPACE|CC_MS_R_V_CHANGE_OF_LINE) cc_mass_spectrometry_mass_range_value)*
+        CC_MS_RANGE cc_mass_spectrometry_mass_range_value (COMA (SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_range_value)*
         ( SPACE CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_ISO CC_MS_R_V_RIGHT_BRACKET)? SEMICOLON;
 cc_mass_spectrometry_mass_range_value:
-        INTEGER DASH CC_MS_R_V_CHANGE_OF_LINE ? INTEGER;
+        cc_mass_spectrometry_mass_range_value_value DASH CHANGE_OF_LINE ? cc_mass_spectrometry_mass_range_value_value;
+cc_mass_spectrometry_mass_range_value_value: INTEGER|CC_MS_R_V_UNKNOWN;
 cc_mass_spectrometry_mass_note:
         CC_MS_NOTE cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_source:
          CC_MS_SOURCE  cc_mass_spectrometry_value SEMICOLON ;
-cc_mass_spectrometry_value: CC_MS_V_WORD ((SPACE|CC_MS_V_CHANGE_OF_LINE) CC_MS_V_WORD)*;
-
+cc_mass_spectrometry_value: CC_MS_V_WORD ((SPACE|CHANGE_OF_LINE) CC_MS_V_WORD)*;
 
 cc_rna_editing:
       CC_TOPIC_START CC_TOPIC_RNA_EDITING COLON SPACE
@@ -196,21 +200,21 @@ cc_re_separator_1: (SPACE | CC_RE_CHANGE_OF_LINE);
 cc_re_separator_2: (SPACE | CC_RE_N_CHANGE_OF_LINE);
 
 cc_disease:
-    CC_TOPIC_START CC_TOPIC_DISEASE COLON SPACE
-     cc_disease_name  cc_disease_separator
+    CC_TOPIC_START CC_TOPIC_DISEASE SPACE
+     (cc_disease_name  cc_disease_separator
      cc_disease_abbr  cc_disease_separator
-     cc_disease_mim  COLON cc_disease_separator
-     cc_disease_description DOT cc_disease_separator
-    NEW_LINE;
+     cc_disease_mim  cc_disease_separator)?
+     ((cc_disease_description cc_disease_separator cc_disease_note)
+       |cc_disease_description
+       |cc_disease_note)
+     NEW_LINE;
 
 cc_disease_name: CC_D_WORD ( cc_disease_separator CC_D_WORD)*;
-cc_disease_abbr: CC_D_LEFT_P CC_D_WORD CC_D_RIGHT_P;
-cc_disease_mim: CC_D_LEFT_BRACKET CC_D_MIM INTEGER CC_D_RIGHT_BRACKET ;
-cc_disease_description:  cc_disease_value (cc_disease_separator cc_disease_value)*;
-cc_disease_pubmed: CC_D_LEFT_P CC_D_PUBMED INTEGER (COMA cc_disease_separator CC_D_PUBMED INTEGER)* CC_D_RIGHT_P ;
-cc_disease_note: CC_D_NOTE cc_disease_note_text;
-cc_disease_note_text: cc_disease_value (cc_disease_separator cc_disease_value)*;
-cc_disease_separator: (SPACE|CHANGE_OF_LINE);
+cc_disease_abbr: CC_D_ABBR;
+cc_disease_mim: CC_D_MIM ;
+cc_disease_description: cc_disease_text (cc_disease_separator cc_disease_text)*;
+cc_disease_note: CC_D_NOTE  cc_disease_text (cc_disease_separator cc_disease_text)*;
+cc_disease_text:  (CC_D_WORD|CC_D_ABBR)
+          (cc_disease_separator (CC_D_WORD|CC_D_ABBR))* (CC_D_PUBMED)? DOT;
 
-cc_disease_value: (CC_D_WORD ( cc_disease_separator CC_D_WORD)* )
-                | CC_D_LEFT_P cc_disease_value  CC_D_LEFT_P;
+cc_disease_separator: (SPACE|CHANGE_OF_LINE);
