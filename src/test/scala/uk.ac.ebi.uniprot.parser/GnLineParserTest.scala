@@ -177,4 +177,19 @@ class GnLineParserTest extends FunSuite {
     gnObject.names.get(0).names should contain ("ACO2")
     gnObject.names.get(3).names should contain ("F24O1.10")
   }
+
+  test ("Gn Name has ',' inside"){
+    val gnwithEv =
+      """GN   Name=ARG5,6;
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
+    val obj = parser.parse(gnwithEv)
+
+    obj.gnObjects should have size (1)
+    val gnObject: GnObject = obj.gnObjects.get(0)
+    gnObject.names should have size (1)
+    gnObject.names.get(0).names should contain ("ARG5,6")
+  }
+
 }
