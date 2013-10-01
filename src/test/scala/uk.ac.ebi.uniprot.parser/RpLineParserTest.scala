@@ -105,5 +105,17 @@ class RpLineParserTest extends FunSuite {
     obj.scopes should contain("DISULFIDE BONDS")
   }
 
+  test ("rp"){
+    val rpline = """RP   NUCLEOTIDE SEQUENCE [MRNA], INTERACTION WITH PTDINS(4,5)P2;
+                   |RP   PTDINS(3,4,5)P3 AND INS(1,3,4,5)P4, TISSUE SPECIFICITY, AND
+                   |RP   MUTAGENESIS OF ARG-151 AND ARG-275.
+                   |""" .stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRpLineParser();
+    val obj = parser.parse(rpline)
+
+    obj.scopes should have size (4)
+  }
+
 
 }

@@ -161,4 +161,20 @@ class GnLineParserTest extends FunSuite {
     gnObject.names.get(2).getEvidenceInfo.evidences.get("pHK01_011") should contain ("EI14")
     gnObject.names.get(2).getEvidenceInfo.evidences.get("pHK01_011") should contain ("EI15")
   }
+
+  test ("Gn Name canot be parsed"){
+    val gnwithEv =
+      """GN   Name=ACO2; Synonyms=EI305; OrderedLocusNames=At1g62380;
+        |GN   ORFNames=F24O1.10;
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
+    val obj = parser.parse(gnwithEv)
+
+    obj.gnObjects should have size (1)
+    val gnObject: GnObject = obj.gnObjects.get(0)
+    gnObject.names should have size (4)
+    gnObject.names.get(0).names should contain ("ACO2")
+    gnObject.names.get(3).names should contain ("F24O1.10")
+  }
 }

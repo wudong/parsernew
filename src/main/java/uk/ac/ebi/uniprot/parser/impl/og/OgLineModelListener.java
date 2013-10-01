@@ -3,8 +3,8 @@ package uk.ac.ebi.uniprot.parser.impl.og;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.OgLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.OgLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.OgLineParserBaseListener;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 import java.util.List;
@@ -16,19 +16,26 @@ import java.util.List;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class OgLineModelListener extends OgLineBaseListener implements ParseTreeObjectExtractor<OgLineObject> {
+public class OgLineModelListener extends OgLineParserBaseListener implements ParseTreeObjectExtractor<OgLineObject> {
 
 	private OgLineObject object = new OgLineObject();
 
 	@Override
 	public void exitPlasmid_name(@NotNull OgLineParser.Plasmid_nameContext ctx) {
-		String text = ctx.PLASMID_VALUE().getText();
-		object.plasmidNames.add(text);
+		Object targetObj;
+		if (ctx.PLASMID_VALUE()!=null){
+			String text = ctx.PLASMID_VALUE().getText();
+			object.plasmidNames.add(text);
+			targetObj = text;
+		}else{
+			object.ogs.add(OgLineObject.OgEnum.PLASMID);
+			targetObj = OgLineObject.OgEnum.PLASMID;
+		}
 
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			EvidenceInfo.processEvidence(object.getEvidenceInfo(),text, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), targetObj, terminalNodes);
 		}
 	}
 
@@ -38,7 +45,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.HYDROGENOSOME, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), OgLineObject.OgEnum.HYDROGENOSOME, terminalNodes);
 		}
 	}
 
@@ -48,7 +55,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.NUCLEOMORPH, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), OgLineObject.OgEnum.NUCLEOMORPH, terminalNodes);
 		}
 	}
 
@@ -58,7 +65,7 @@ public class OgLineModelListener extends OgLineBaseListener implements ParseTree
 		OgLineParser.EvidenceContext evidence = ctx.evidence();
 		if (evidence != null) {
 			List<TerminalNode> terminalNodes = evidence.EV_TAG();
-			EvidenceInfo.processEvidence(object.getEvidenceInfo(),OgLineObject.OgEnum.MITOCHONDRION, terminalNodes);
+			EvidenceInfo.processEvidence(object.getEvidenceInfo(), OgLineObject.OgEnum.MITOCHONDRION, terminalNodes);
 		}
 	}
 

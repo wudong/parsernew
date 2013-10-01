@@ -209,6 +209,7 @@ cc_disease:
        |cc_disease_note)
      NEW_LINE;
 
+
 cc_disease_name: CC_D_WORD ( cc_disease_separator CC_D_WORD)*;
 cc_disease_abbr: CC_D_ABBR;
 cc_disease_mim: CC_D_MIM ;

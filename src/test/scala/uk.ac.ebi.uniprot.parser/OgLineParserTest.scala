@@ -17,6 +17,17 @@ import uk.ac.ebi.uniprot.parser.impl.og.OgLineObject.OgEnum
 @RunWith(classOf[JUnitRunner])
 class OgLineParserTest extends FunSuite {
 
+
+  test("A og with no plasmid value"){
+    val osOneLiner = "OG   Plasmid.\n";
+    val parser = (new DefaultUniprotLineParserFactory).createOgLineParser();
+    val obj = parser.parse(osOneLiner)
+
+    obj should not be null
+    obj.plasmidNames should have size (0)
+    obj.ogs should contain (OgEnum.PLASMID)
+  }
+
   test("A valid one line og") {
     val osOneLiner = "OG   Plasmid IncFII R1-19 (R1 drd-19).\n";
     val parser = (new DefaultUniprotLineParserFactory).createOgLineParser();

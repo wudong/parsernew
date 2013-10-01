@@ -163,4 +163,16 @@ public class CcLineObject {
 		public boolean end_unknown;
 	}
 
+	public static class Disease {
+		public String name;
+		public String abbr;
+		public String mim;
+		public List<DiseaseText> descriptions = new ArrayList<DiseaseText>();
+		public List<DiseaseText> notes = new ArrayList<DiseaseText>();
+	}
+
+	public static class DiseaseText {
+		public String text;
+		public List<String> pubmedid = new ArrayList<String>();
+	}
 }

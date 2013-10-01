@@ -1,6 +1,5 @@
 package uk.ac.ebi.uniprot.parser
 
-import scala.collection.JavaConverters._
 
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
@@ -9,7 +8,6 @@ import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
-import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
 
 
 /**
@@ -33,8 +31,17 @@ class CcLineParserDiseaseTest extends FunSuite {
       |CC       by mutations affecting the gene represented in this entry.
       |""".stripMargin.replace("\r", "")
 
-    //TODO
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(diseaseLine)
 
+    obj.ccs should have size (1)
+    val cc = obj.ccs.get(0)
+    val disease = cc.asInstanceOf[CcLineObject.Disease]
+    disease.abbr should be ("ACAD9 deficiency")
+    disease.mim should be ("611126")
+    disease.name should be ("Acyl-CoA dehydrogenase family, member 9, deficiency")
+    disease.descriptions should have size (1)
+    disease.notes should have size (1)
   }
 
 }
