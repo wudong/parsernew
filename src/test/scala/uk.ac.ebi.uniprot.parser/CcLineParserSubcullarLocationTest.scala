@@ -1,6 +1,5 @@
 package uk.ac.ebi.uniprot.parser
 
-import scala.collection.JavaConverters._
 
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
@@ -8,7 +7,6 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
 
 
@@ -162,5 +160,21 @@ class CcLineParserSubcullarLocationTest extends FunSuite {
     sl2.notes.get(0).noteFlag should be (LocationFlagEnum.By_similarity)
     sl2.notes.get(1).noteFlag should be (LocationFlagEnum.By_similarity)
   }
+
+  test("name contains DOT inside"){
+    val lines=  """CC   -!- SUBCELLULAR LOCATION: Isoform UL12.5: Host mitochondrion.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+
+    sl2.molecule should be ("Isoform UL12.5")
+    sl2.locations should have size (1)
+    sl2.locations.get(0).subcellular_location should be ("Host mitochondrion")
+  }
+
+
 
 }

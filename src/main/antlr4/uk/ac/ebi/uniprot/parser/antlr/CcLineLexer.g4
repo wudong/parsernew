@@ -115,7 +115,7 @@ CC_SL_SEMICOLON : ';'                        -> type (SEMICOLON);
 CC_SL_NOTE: 'Note='                           -> pushMode(CC_SUBCELLULAR_LOCATION_NOTE);
 CC_SL_CHANGE_OF_LINE: '\nCC       '           {replaceChangeOfLine(); setType(CHANGE_OF_LINE);};
 CC_SL_FLAG: CC_SL_BY_SIMILARITY| CC_SL_BY_PROBABLE|CC_SL_BY_POTENTIAL;
-CC_SL_WORD: CC_SL_WORD_LETTER+ CC_SL_COMA?;
+CC_SL_WORD: (CC_SL_WORD_LETTER|CC_SL_DOT)* CC_SL_WORD_LETTER CC_SL_COMA?;
 CC_SL_BY_SIMILARITY:'(By similarity)';
 CC_SL_BY_PROBABLE:'(Probable)';
 CC_SL_BY_POTENTIAL:'(Potential)';
