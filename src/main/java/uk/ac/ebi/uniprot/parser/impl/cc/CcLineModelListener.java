@@ -131,7 +131,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		CcLineParser.Cc_mass_spectrometry_mass_noteContext noteContext = ctx.cc_mass_spectrometry_mass_note();
 		if (noteContext != null) {
-			ms.note = noteContext.cc_mass_spectrometry_value().getText();
+			ms.note = noteContext.cc_properties_text().getText();
 		}
 
 		CcLineParser.Cc_mass_spectrometry_mass_sourceContext sourceContext = ctx.cc_mass_spectrometry_mass_source();
@@ -221,37 +221,37 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		if (ctx.cc_biophyiochemical_absorption() != null) {
 			TerminalNode terminalNode = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_bas().CC_BP_DIGIT();
 			bp.bsorption_abs = Integer.parseInt(terminalNode.getText());
-			bp.bsorption_note = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note().cc_properties_text().getText();
+			bp.bsorption_note = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note().cc_properties_text_level2().getText();
 		}
 
 		CcLineParser.Cc_biophyiochemical_kineticContext kineticContext = ctx.cc_biophyiochemical_kinetic();
 		if (kineticContext != null) {
 			List<CcLineParser.Cc_biophyiochemical_kinetic_kmContext> cc_biophyiochemical_kinetic_kmContexts = kineticContext.cc_biophyiochemical_kinetic_km();
 			for (CcLineParser.Cc_biophyiochemical_kinetic_kmContext km : cc_biophyiochemical_kinetic_kmContexts) {
-				bp.kms.add(km.cc_properties_text().getText());
+				bp.kms.add(km.cc_properties_text_level2().getText());
 			}
 
 			List<CcLineParser.Cc_biophyiochemical_kinetic_bpmaxContext> maxcontext = kineticContext.cc_biophyiochemical_kinetic_bpmax();
 			for (CcLineParser.Cc_biophyiochemical_kinetic_bpmaxContext c : maxcontext) {
-				bp.vmaxs.add(c.cc_properties_text().getText());
+				bp.vmaxs.add(c.cc_properties_text_level2().getText());
 			}
 
 			CcLineParser.Cc_biophyiochemical_kinetic_noteContext noteContext = kineticContext.cc_biophyiochemical_kinetic_note();
 			if (noteContext != null) {
-				bp.kp_note = noteContext.cc_properties_text().getText();
+				bp.kp_note = noteContext.cc_properties_text_level2().getText();
 			}
 		}
 
 		if (ctx.cc_biophyiochemical_redox() != null) {
-			bp.rdox_potential = ctx.cc_biophyiochemical_redox().cc_properties_text().getText().trim();
+			bp.rdox_potential = ctx.cc_biophyiochemical_redox().cc_properties_text_level2().getText().trim();
 		}
 
 		if (ctx.cc_biophyiochemical_ph() != null) {
-			bp.ph_dependence = ctx.cc_biophyiochemical_ph().cc_properties_text().getText().trim();
+			bp.ph_dependence = ctx.cc_biophyiochemical_ph().cc_properties_text_level2().getText().trim();
 		}
 
 		if (ctx.cc_biophyiochemical_temperature() != null) {
-			bp.temperature_dependence = ctx.cc_biophyiochemical_temperature().cc_properties_text().getText().trim();
+			bp.temperature_dependence = ctx.cc_biophyiochemical_temperature().cc_properties_text_level2().getText().trim();
 		}
 	}
 
@@ -366,7 +366,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 
 		ap.namedIsoforms = cc_alternative_products_eventContext.cc_alternative_products_event_namedisoforms().cc_alternative_value().getText();
 		if (cc_alternative_products_eventContext.cc_alternative_products_event_comment() != null) {
-			ap.comment = cc_alternative_products_eventContext.cc_alternative_products_event_comment().cc_properties_text().getText();
+			ap.comment = cc_alternative_products_eventContext.cc_alternative_products_event_comment().cc_properties_text_level2().getText();
 		}
 
 		List<CcLineParser.Cc_alternative_products_nameContext> cc_alternative_products_nameContexts = ctx.cc_alternative_products_name();
@@ -409,7 +409,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 			CcLineParser.Cc_alternative_products_noteContext cc_alternative_products_noteContext
 					= nameContext.cc_alternative_products_note();
 			if (cc_alternative_products_noteContext != null) {
-				String value = cc_alternative_products_noteContext.cc_properties_text().getText();
+				String value = cc_alternative_products_noteContext.cc_properties_text_level2().getText();
 				name.note = value;
 			}
 			ap.names.add(name);

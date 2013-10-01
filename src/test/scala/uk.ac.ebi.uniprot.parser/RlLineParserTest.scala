@@ -178,4 +178,17 @@ class RlLineParserTest extends FunSuite {
     journal.journal should be ("Hoppe-Seyler's Z. Physiol. Chem.")
   }
 
+  test ("journal name can contain dash 2"){
+    val line =
+      """RL   Abstr. - Soc. Neurosci. 25:168-168(1999).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.JournalArticle])
+    val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
+
+    journal.journal should be ("Abstr. - Soc. Neurosci.")
+  }
+
 }

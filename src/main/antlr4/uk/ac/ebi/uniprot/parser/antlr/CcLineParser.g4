@@ -10,8 +10,11 @@ cc_lines: cc_common | cc_web_resource|cc_biophyiochemical
           |cc_mass_spectrometry |cc_rna_editing
           |cc_disease;
 
-cc_properties_text : CC_PROPERTIES_TEXT_CHANGE_LINE ?
-           CC_PROPERTIES_TEXT (CC_PROPERTIES_TEXT_CHANGE_LINE CC_PROPERTIES_TEXT)*;
+cc_properties_text_level2 : CHANGE_OF_LINE_LEVEL2 ?
+           CC_PROPERTIES_TEXT (CHANGE_OF_LINE_LEVEL2 CC_PROPERTIES_TEXT)*;
+
+cc_properties_text : CHANGE_OF_LINE ?
+           CC_PROPERTIES_TEXT (CHANGE_OF_LINE CC_PROPERTIES_TEXT)*;
 
 cc_common: CC_TOPIC_START CC_TOPIC_COMMON COLON SPACE
            cc_common_text
@@ -44,20 +47,20 @@ cc_biophyiochemical_absorption: CC_HEADER_1  CC_BP_ABSORPTION COLON NEW_LINE
                  CC_HEADER_2 cc_biophyiochemical_absorption_bas  NEW_LINE
                  CC_HEADER_2  cc_biophyiochemical_absorption_note NEW_LINE;
 cc_biophyiochemical_absorption_bas:  CC_BP_ABS  CC_BP_DIGIT SPACE CC_BP_NM SEMICOLON;
-cc_biophyiochemical_absorption_note : CC_BP_NOTE cc_properties_text SEMICOLON;
+cc_biophyiochemical_absorption_note : CC_BP_NOTE cc_properties_text_level2 SEMICOLON;
 cc_biophyiochemical_ph:   CC_HEADER_1  CC_BP_PH_DEPENDENCE
-                 cc_properties_text  SEMICOLON NEW_LINE    ;
+                 cc_properties_text_level2  SEMICOLON NEW_LINE    ;
 cc_biophyiochemical_temperature:   CC_HEADER_1  CC_BP_TEMPERATURE_DEPENDENCE
-                 cc_properties_text  SEMICOLON NEW_LINE      ;
+                 cc_properties_text_level2  SEMICOLON NEW_LINE      ;
 cc_biophyiochemical_redox:   CC_HEADER_1  CC_BP_REDOX_POTENTIAL
-                 cc_properties_text  SEMICOLON NEW_LINE      ;
+                 cc_properties_text_level2  SEMICOLON NEW_LINE      ;
 cc_biophyiochemical_kinetic: CC_HEADER_1 CC_BP_KINETIC_PARAMETERS COLON NEW_LINE
                   (CC_HEADER_2 cc_biophyiochemical_kinetic_km NEW_LINE)*
                   (CC_HEADER_2 cc_biophyiochemical_kinetic_bpmax NEW_LINE)*
                   (CC_HEADER_2 cc_biophyiochemical_kinetic_note NEW_LINE)?;
-cc_biophyiochemical_kinetic_km: CC_BP_KM cc_properties_text  SEMICOLON;
-cc_biophyiochemical_kinetic_bpmax: CC_BP_VMAX cc_properties_text  SEMICOLON;
-cc_biophyiochemical_kinetic_note: CC_BP_NOTE cc_properties_text  SEMICOLON;
+cc_biophyiochemical_kinetic_km: CC_BP_KM cc_properties_text_level2  SEMICOLON;
+cc_biophyiochemical_kinetic_bpmax: CC_BP_VMAX cc_properties_text_level2  SEMICOLON;
+cc_biophyiochemical_kinetic_note: CC_BP_NOTE cc_properties_text_level2  SEMICOLON;
 
 cc_interaction: CC_TOPIC_START  CC_TOPIC_INTERACTION  COLON NEW_LINE
                    cc_interaction_line+;
@@ -110,7 +113,7 @@ cc_alternative_products_event:
 cc_alternative_products_event_event: CC_AP_EVENT cc_alternative_value
                                     (COMA SPACE cc_alternative_value)* SEMICOLON;
 cc_alternative_products_event_namedisoforms: CC_AP_NAMED_ISOFORMS cc_alternative_value SEMICOLON;
-cc_alternative_products_event_comment: CC_AP_COMMENT cc_properties_text SEMICOLON ;
+cc_alternative_products_event_comment: CC_AP_COMMENT cc_properties_text_level2 SEMICOLON ;
 
 cc_alternative_value: CC_AP_WORD (SPACE CC_AP_WORD)*;
 
@@ -132,7 +135,7 @@ cc_alternative_products_sequence_value:
                 );
 cc_alternative_products_sequence_value_identifiers:
                 CC_AP_FEATURE_IDENTIFIER (COMA (SPACE|CHANGE_OF_LINE) CC_AP_FEATURE_IDENTIFIER)*;
-cc_alternative_products_note: CC_AP_NOTE cc_properties_text SEMICOLON;
+cc_alternative_products_note: CC_AP_NOTE cc_properties_text_level2 SEMICOLON;
 
 /*
 CC   -!- SEQUENCE CAUTION:
@@ -178,7 +181,7 @@ cc_mass_spectrometry_mass_range_value:
         cc_mass_spectrometry_mass_range_value_value DASH CHANGE_OF_LINE ? cc_mass_spectrometry_mass_range_value_value;
 cc_mass_spectrometry_mass_range_value_value: INTEGER|CC_MS_R_V_UNKNOWN;
 cc_mass_spectrometry_mass_note:
-        CC_MS_NOTE cc_mass_spectrometry_value SEMICOLON;
+        CC_MS_NOTE cc_properties_text SEMICOLON;
 cc_mass_spectrometry_mass_source:
          CC_MS_SOURCE  cc_mass_spectrometry_value SEMICOLON ;
 cc_mass_spectrometry_value: CC_MS_V_WORD ((SPACE|CHANGE_OF_LINE) CC_MS_V_WORD)*;

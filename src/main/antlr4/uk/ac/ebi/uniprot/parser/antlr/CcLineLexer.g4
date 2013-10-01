@@ -4,7 +4,7 @@ options { superClass=uk.ac.ebi.uniprot.antlr.RememberLastTokenLexer; }
 
 //define the tokens that is common in all the modes.
 tokens { CC_TOPIC_START, SPACE, SEMICOLON, COMA,
- COLON, DOT, NEW_LINE,CHANGE_OF_LINE, DOT_NEW_LINE,
+ COLON, DOT, NEW_LINE, CHANGE_OF_LINE, CHANGE_OF_LINE_LEVEL2,DOT_NEW_LINE,
  CC_HEADER_1, CC_HEADER_2, INTEGER, DASH, QUESTION_MARK}
 
 CC_TOPIC_START  : 'CC   -!- ';
@@ -49,10 +49,11 @@ CC_COMMON_TEXT_WORD: TL+                     {!getText().endsWith(".")}?;
 fragment TL: ~[\n\r\t ];
 
 mode CC_PROPERTIES_TEXT_MODE;
-CC_PROPERTIES_TEXT_END : ';'                                -> popMode, type (SEMICOLON) ;
-fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
-CC_PROPERTIES_TEXT_CHANGE_LINE: '\nCC         '                   {replaceChangeOfLine();};
+CC_PROPERTIES_TEXT_END : ';'                                -> type (SEMICOLON), popMode;
+CC_PROPERTIES_TEXT_CHANGE_LINE_1: '\nCC         '           {setType(CHANGE_OF_LINE_LEVEL2);replaceChangeOfLine();};
+CC_PROPERTIES_TEXT_CHANGE_LINE_2: '\nCC       '             {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
 CC_PROPERTIES_TEXT: CC_PROPERTIES_TEXT_LETTER+;
+fragment CC_PROPERTIES_TEXT_LETTER: ~[\n\r;];
 
 /*CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
   CC       Absorption:
@@ -234,7 +235,7 @@ CC_MS_MASS: 'Mass='                               -> pushMode ( CC_MASS_SPECTROM
 CC_MS_MASS_ERROR: 'Mass_error='                    -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
 CC_MS_METHOD: 'Method='                            -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
 CC_MS_RANGE: 'Range='                              -> pushMode ( CC_MASS_SPECTROMETRY_RANGE_VALUE );
-CC_MS_NOTE: 'Note='                               -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
+CC_MS_NOTE: 'Note='                               -> pushMode ( CC_PROPERTIES_TEXT_MODE );
 CC_MS_SOURCE: 'Source='                           -> pushMode ( CC_MASS_SPECTROMETRY_VALUE );
 CC_MS_CHANGE_OF_LINE: '\nCC       '               -> type (CHANGE_OF_LINE);
 

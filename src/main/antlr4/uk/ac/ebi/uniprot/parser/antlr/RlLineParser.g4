@@ -7,7 +7,7 @@ rl_rl: RL_HEADER rl;
 rl: rl_journal| rl_epub |  rl_book | rl_unpublished|rl_thesis   |rl_patent  |rl_submission;
 
 rl_journal: journal_abbr SPACE journal_volume J_YEAR J_END;
-journal_abbr: J_WORD ((SPACE|DASH) J_WORD)*;
+journal_abbr: J_WORD ((SPACE|DASH) (J_WORD|DASH))*;
 journal_volume: J_WORD COLON journal_first_page DASH journal_last_page;
 journal_first_page: J_WORD;
 journal_last_page: J_WORD;

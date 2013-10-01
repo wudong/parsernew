@@ -1,6 +1,5 @@
 package uk.ac.ebi.uniprot.parser
 
-import scala.collection.JavaConverters._
 
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
@@ -8,7 +7,6 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
 
 
@@ -112,6 +110,19 @@ class CcLineParserMassSpectrometryTest extends FunSuite {
     unit.ranges.get(0).start should be (1)
     unit.ranges.get(0).end should be (0)
     unit.ranges.get(0).end_unknown should be (true)
+  }
+
+  test("CC mass's contain number"){
+    val lines =
+      """CC   -!- MASS SPECTROMETRY: Mass=7190; Method=MALDI; Range=1-67;
+        |CC       Note=Variant 6.01; Source=PubMed:11344362;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    val unit: MassSpectrometry = cc2.`object`.asInstanceOf[MassSpectrometry]
+    unit.note should be ("Variant 6.01")
   }
 
 }
