@@ -187,11 +187,11 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 			if (cc_interaction_spContext.CC_IR_SELF() != null) {
 				interactionObject.isSelf = true;
 			} else {
-				interactionObject.spAc = cc_interaction_spContext.CC_IR_AC(0).getText();
+				interactionObject.spAc = cc_interaction_spContext.CC_IR_AC().getText();
 				if (cc_interaction_spContext.DASH() != null) {
 					interactionObject.gene = "-";
 				} else {
-					interactionObject.gene = cc_interaction_spContext.CC_IR_AC(1).getText();
+					interactionObject.gene = cc_interaction_spContext.CC_IR_GENENAME().getText();
 				}
 
 				if (cc_interaction_spContext.CC_IR_XENO() != null) {

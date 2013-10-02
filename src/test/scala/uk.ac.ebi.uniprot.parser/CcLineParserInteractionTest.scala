@@ -244,6 +244,44 @@ class CcLineParserInteractionTest extends FunSuite {
     genes should contain ("piwi")
   }
 
+  test("CC interaction has / in genes."){
+    val lines =
+      """CC   -!- INTERACTION:
+        |CC       Q67XQ1:At1g03430; NbExp=2; IntAct=EBI-1100967, EBI-1100725;
+        |CC       Q9C5A5:At5g08720/T2K12_70; NbExp=3; IntAct=EBI-1100967, EBI-1998000;
+        |CC       Q9SSW0:AZF3; NbExp=2; IntAct=EBI-1100967, EBI-1807790;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.topic should be (CCTopicEnum.INTERACTION)
+    val ic = cc2.`object`.asInstanceOf[Interaction]
+    ic.interactions should have size (3)
+
+    val genes = ic.interactions.asScala.map( x=> x.gene )
+
+    genes should contain ("At5g08720/T2K12_70")
+  }
+
+  test("CC interaction has : in genes."){
+    val lines =
+      """CC   -!- INTERACTION:
+        |CC       Q9V3G9:EG:BACR37P7.5; NbExp=1; IntAct=EBI-175067, EBI-162998;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.topic should be (CCTopicEnum.INTERACTION)
+    val ic = cc2.`object`.asInstanceOf[Interaction]
+    ic.interactions should have size (1)
+
+    val genes = ic.interactions.asScala.map( x=> x.gene )
+
+    genes should contain ("EG:BACR37P7.5")
+  }
+
 
 
 }

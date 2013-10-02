@@ -20,7 +20,7 @@ CC_TOPIC_BIOPHYSICOCHEMICAL_PROPERTIES :
                   'BIOPHYSICOCHEMICAL PROPERTIES'
                                                      -> pushMode ( CC_BIOPHYSICOCHEMICAL_PROPERTIES );
 CC_TOPIC_INTERACTION:
-                 'INTERACTION'                       -> pushMode ( CC_INTERACTION );
+                 'INTERACTION:'                       -> pushMode ( CC_INTERACTION );
 CC_TOPIC_SUBCELLUR_LOCATION:
                  'SUBCELLULAR LOCATION'              -> pushMode ( CC_SUBCELLULAR_LOCATION );
 CC_TOPIC_ALTERNATIVE_PRODUCTS:
@@ -98,11 +98,18 @@ CC_IR_SPACE : ' '                            -> type (SPACE);
 CC_IR_NEW_LINE: '\n'                             -> type (NEW_LINE);
 CC_IR_INTEGER: [1-9][0-9]*                             -> type (INTEGER);
 CC_IR_SEMICOLON : ';'                               -> type (SEMICOLON);
-CC_IR_COLON : ':'                               -> type (COLON);
+CC_IR_COLON : ':'                               -> type (COLON), pushMode(CC_INTERACTION_GENE_NAME);
 CC_IR_COMA : ','                               -> type (COMA);
+CC_IR_AC: [A-Za-z0-9][-\.A-Za-z0-9]*;
+
+
+mode CC_INTERACTION_GENE_NAME;
 CC_IR_XENO: '(xeno)';
-CC_IR_AC: [A-Za-z0-9][()\-\.A-Za-z0-9]*;
-CC_IR_DASH: '-'                                -> type (DASH);
+CC_IR_GENENAME: (~[ ;])+ ;
+CC_IR_G_SPACE: ' '                    -> type(SPACE);
+CC_IR_G_DASH: '-'                     -> type (DASH);
+CC_IR_G_SEMICOLON: ';'                -> popMode, type(SEMICOLON);
+
 
 mode CC_SUBCELLULAR_LOCATION;
 CC_SL_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
