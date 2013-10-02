@@ -130,11 +130,11 @@ CC_SL_N_FLAG:
         (CC_SL_N_BY_SIMILARITY
         | CC_SL_N_BY_PROBABLE
         |CC_SL_N_BY_POTENTIAL)                  -> type (CC_SL_FLAG);
-CC_SL_N_BY_SIMILARITY:'(By similarity)'          -> type (CC_SL_BY_SIMILARITY);
-CC_SL_N_BY_PROBABLE:'(Probable)'                 -> type (CC_SL_BY_PROBABLE);
-CC_SL_N_BY_POTENTIAL:'(Potential)'               -> type (CC_SL_BY_POTENTIAL);
-CC_SL_N_NOTE_WORD:  CC_SL_N_WORD_LETTER+          -> type (CC_SL_WORD);
-fragment CC_SL_N_WORD_LETTER: ~[ \.\n\r\t];
+CC_SL_N_BY_SIMILARITY:'(By similarity)'         -> type (CC_SL_BY_SIMILARITY);
+CC_SL_N_BY_PROBABLE:'(Probable)'                -> type (CC_SL_BY_PROBABLE);
+CC_SL_N_BY_POTENTIAL:'(Potential)'              -> type (CC_SL_BY_POTENTIAL);
+CC_SL_N_NOTE_WORD:  CC_SL_N_WORD_LETTER+        {!getText().endsWith(".")}?    -> type (CC_SL_WORD);
+fragment CC_SL_N_WORD_LETTER: ~[ \n\r\t];
 
 
 mode CC_ALTERNATIVE_PRODUCTS;

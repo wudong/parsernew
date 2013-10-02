@@ -175,6 +175,24 @@ class CcLineParserSubcullarLocationTest extends FunSuite {
     sl2.locations.get(0).subcellular_location should be ("Host mitochondrion")
   }
 
+  test ("dot inside note."){
+    val lines=  """CC   -!- SUBCELLULAR LOCATION: Cytoplasm. Cell junction, tight junction.
+                  |CC       Golgi apparatus. Cytoplasm, cytoskeleton, spindle. Cell
+                  |CC       projection, ruffle membrane. Note=Localizes to the tips of
+                  |CC       cortical microtubules of the mitotic spindle during cell division,
+                  |CC       and is further released upon microtubule depolymerization.
+                  |CC       Recruited into membrane ruffles induced by S.flexneri at tight
+                  |CC       junctions of polarized epithelial cells.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+
+    sl2.notes should have size (2)
+    sl2.notes.get(1).note should include ("S.flexneri")
+  }
 
 
 }
