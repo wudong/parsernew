@@ -272,6 +272,7 @@ fragment CC_MS_R_V_ISO_L : ~[)]                         ;
 mode CC_RNA_EDITING;
 CC_RE_TOPIC_START  : 'CC   -!- '              ->  popMode, type(CC_TOPIC_START) ;
 CC_RE_MODIFIED_POSITION: 'Modified_positions=';
+CC_RE_MODIFIED_POSITION_UNDETERMINED: 'Undetermined';
 CC_RE_INT: [1-9][0-9]*                        -> type (INTEGER);
 CC_RE_COMA: ','                        -> type (COMA);
 CC_RE_SEMICOLON: ';'                        -> type (SEMICOLON);

@@ -115,8 +115,13 @@ public class CcLineObject {
 	}
 
 	public static class RnaEditing {
+		public RnaEditingLocationEnum locationEnum;
 		public List<Integer> locations = new ArrayList<Integer>();
 		public String note;
+	}
+
+	public static enum RnaEditingLocationEnum {
+		Undetermined
 	}
 
 	public static class SequenceCaution {

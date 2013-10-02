@@ -271,10 +271,15 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		cc.object = re;
 
 		CcLineParser.Cc_rna_editing_positionContext positionContext = ctx.cc_rna_edigint_modified_position().cc_rna_editing_position();
-		List<TerminalNode> integer = positionContext.INTEGER();
-		for (TerminalNode terminalNode : integer) {
-			String text = terminalNode.getText();
-			re.locations.add(Integer.parseInt(text));
+		if (positionContext!=null){
+			List<TerminalNode> integer = positionContext.INTEGER();
+			for (TerminalNode terminalNode : integer) {
+				String text = terminalNode.getText();
+				re.locations.add(Integer.parseInt(text));
+			}
+		} if (ctx.cc_rna_edigint_modified_position()
+					.CC_RE_MODIFIED_POSITION_UNDETERMINED()!=null){
+			re.locationEnum = CcLineObject.RnaEditingLocationEnum.Undetermined;
 		}
 
 		if (ctx.cc_rna_edigint_note()!=null){

@@ -193,7 +193,7 @@ cc_rna_editing:
       NEW_LINE;
 
 cc_rna_edigint_modified_position:
-      CC_RE_MODIFIED_POSITION cc_rna_editing_position;
+      CC_RE_MODIFIED_POSITION (cc_rna_editing_position|CC_RE_MODIFIED_POSITION_UNDETERMINED);
 cc_rna_editing_position:
       INTEGER (COMA cc_re_separator_1 INTEGER)*;
 cc_rna_edigint_note: CC_RE_NOTE cc_re_note_value;
