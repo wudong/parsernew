@@ -300,9 +300,12 @@ CC_D_DOT: '.'                             -> type (DOT);
 CC_D_NEW_LINE: '\n'                            -> type (NEW_LINE);
 CC_D_CHANGE_OF_LINE : '\nCC       '       {setType(CHANGE_OF_LINE); replaceChangeOfLine();};
 CC_D_PUBMED: '(PubMed:' INTEGER (CC_D_COMA CC_D_SPACE|CC_D_CHANGE_OF_LINE INTEGER) ')' ;
-CC_D_ABBR: '(' CC_D_WORD (CC_D_SPACE CC_D_WORD)* ')';
-CC_D_MIM: '[MIM:' INTEGER ']:'             ;
-CC_D_WORD: (CC_D_L+ | (CC_D_ABBR CC_D_L+))   {!getText().endsWith(".")}?;
+
+CC_D_ABBR_MIM: CC_D_ABBR (CC_D_SPACE|CC_D_CHANGE_OF_LINE) CC_D_MIM;
+fragment CC_D_ABBR: '(' CC_D_WORD ((CC_D_SPACE|CC_D_CHANGE_OF_LINE) CC_D_WORD)* ')';
+fragment CC_D_MIM: '[MIM:' INTEGER ']:'             ;
+
+CC_D_WORD: (CC_D_L+)   {!getText().endsWith(".")}?;
 fragment INTEGER: [1-9][0-9]*             ;
 fragment CC_D_L: ~[ \n\r\t=];
 fragment CC_D_COMA: ','     ;

@@ -2,6 +2,7 @@ package uk.ac.ebi.uniprot.parser.impl.cc;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import uk.ac.ebi.uniprot.antlr.TextHelper;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.CcLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.CcLineParserBaseListener;
@@ -418,7 +419,39 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		object.ccs.add(cc);
 	}
 
+
+	@Override
+	public void exitCc_disease(@NotNull CcLineParser.Cc_diseaseContext ctx) {
+
+		CcLineObject.CC cc = new CcLineObject.CC();
+		cc.topic = CcLineObject.CCTopicEnum.DISEASE;
+		CcLineObject.Disease dd = new CcLineObject.Disease();
+		cc.object = dd;
+
+		if (ctx.cc_disease_name()!=null){
+			String text = ctx.cc_disease_name().getText();
+			dd.name = text;
+
+			CcLineParser.Cc_disease_abbr_minContext cc_disease_abbr_minContext = ctx.cc_disease_abbr_min();
+			String text1 = cc_disease_abbr_minContext.getText();
+
+			String[] objects = TextHelper.parseCCDiseaseAbbrMim(text1);
+			dd.abbr = objects[0];
+			dd.mim = objects[1];
+		}
+
+		if (ctx.cc_disease_description()!=null){
+			List<CcLineParser.Cc_disease_textContext> cc_disease_textContexts = ctx.cc_disease_description().cc_disease_text();
+			for (CcLineParser.Cc_disease_textContext textContext : cc_disease_textContexts) {
+
+			}
+		}
+
+		object.ccs.add(cc);
+	}
+
 	public CcLineObject getObject() {
 		return object;
 	}
+
 }

@@ -204,21 +204,18 @@ cc_re_separator_2: (SPACE | CC_RE_N_CHANGE_OF_LINE);
 
 cc_disease:
     CC_TOPIC_START CC_TOPIC_DISEASE SPACE
-     (cc_disease_name  cc_disease_separator
-     cc_disease_abbr  cc_disease_separator
-     cc_disease_mim  cc_disease_separator)?
-     ((cc_disease_description cc_disease_separator cc_disease_note)
+     (cc_disease_name  (SPACE|CHANGE_OF_LINE)
+      cc_disease_abbr_min  (SPACE|CHANGE_OF_LINE))?
+     ((cc_disease_description (SPACE|CHANGE_OF_LINE) cc_disease_note)
        |cc_disease_description
        |cc_disease_note)
      NEW_LINE;
 
+cc_disease_name: cc_disease_text_text;
+cc_disease_abbr_min: CC_D_ABBR_MIM;
 
-cc_disease_name: CC_D_WORD ( cc_disease_separator CC_D_WORD)*;
-cc_disease_abbr: CC_D_ABBR;
-cc_disease_mim: CC_D_MIM ;
-cc_disease_description: cc_disease_text (cc_disease_separator cc_disease_text)*;
-cc_disease_note: CC_D_NOTE  cc_disease_text (cc_disease_separator cc_disease_text)*;
-cc_disease_text:  (CC_D_WORD|CC_D_ABBR)
-          (cc_disease_separator (CC_D_WORD|CC_D_ABBR))* (CC_D_PUBMED)? DOT;
+cc_disease_description: cc_disease_text ((SPACE|CHANGE_OF_LINE) cc_disease_text)*;
+cc_disease_note: CC_D_NOTE  cc_disease_text ((SPACE|CHANGE_OF_LINE) cc_disease_text)*;
+cc_disease_text: cc_disease_text_text (CC_D_PUBMED)? DOT;
+cc_disease_text_text: (CC_D_WORD) ((SPACE|CHANGE_OF_LINE) (CC_D_WORD))*;
 
-cc_disease_separator: (SPACE|CHANGE_OF_LINE);
