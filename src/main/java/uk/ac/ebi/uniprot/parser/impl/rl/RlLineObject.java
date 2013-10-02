@@ -17,12 +17,19 @@ public class RlLineObject {
     public static class Book implements Ref {
         public List<String> editors = new ArrayList<String>();
         public String title;
-        public int year;
+
+
         public String page_start;
         public String page_end;
-        public String press;
-        public String place;
         public String volume;
+
+	    //to accomodate something like "abstract#543"
+	    public String pageString;
+
+	    public String press;
+	    public String place;
+
+	    public int year;
     }
 
     public static class Thesis implements Ref {

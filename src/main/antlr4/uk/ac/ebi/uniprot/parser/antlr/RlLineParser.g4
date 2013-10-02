@@ -19,19 +19,17 @@ rl_book: BOOK (book_editors CHANGE_OF_LINE)?
               book_page COMA (SPACE|CHANGE_OF_LINE)
               ((book_publisher COMA (SPACE|CHANGE_OF_LINE))?
               book_city (SPACE|CHANGE_OF_LINE))?
-              book_year
-              BOOK_END;
+              BOOK_YEAR;
 book_editors:  book_editor (COMA (SPACE|CHANGE_OF_LINE) book_editor)* SPACE BOOK_EDS;
 book_editor:   BOOK_WORD (SPACE BOOK_WORD)*;
 
 book_name: BOOK_WORD ((SPACE|CHANGE_OF_LINE) BOOK_WORD)*  ;
-book_page: BOOK_PP (book_page_volume)? book_page_first DASH book_page_last ;
+book_page: (BOOK_PP (book_page_volume)? book_page_first DASH book_page_last)|BOOK_WORD;
 book_page_volume: BOOK_V_WORD COLON;
 book_page_first: BOOK_V_WORD;
 book_page_last: BOOK_V_WORD;
-book_publisher: BOOK_P_WORD ((SPACE|CHANGE_OF_LINE) BOOK_P_WORD)* ;
-book_city: BOOK_P_WORD ((SPACE|CHANGE_OF_LINE) BOOK_P_WORD)*;
-book_year: BOOK_YEAR_START BOOK_YEAR BOOK_YEAR_END;
+book_publisher: BOOK_WORD ((SPACE|CHANGE_OF_LINE) BOOK_WORD)* ;
+book_city: BOOK_WORD ((SPACE|CHANGE_OF_LINE) BOOK_WORD)*;
 
 rl_unpublished:  UP UP_YEAR_MONTH UP_END;
 

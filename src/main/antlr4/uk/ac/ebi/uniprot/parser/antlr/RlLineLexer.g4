@@ -38,29 +38,19 @@ BOOK_CHANGE_OF_LINE:  '\nRL   ' {setType(CHANGE_OF_LINE);replaceChangeOfLine();}
 BOOK_EDS: '(eds.);';
 BOOK_B_COMA :','       -> type (COMA);
 BOOK_SPACE: ' '    ->type (SPACE);
+BOOK_YEAR:  '('[0-9]+').\n';
+BOOK_PP: 'pp.'    -> pushMode(MODE_BOOK_VOLUME);
 BOOK_WORD: BOOK_L+   {!getText().startsWith("pp.")}?;
-BOOK_PP: 'pp.'    -> mode(MODE_BOOK_VOLUME);
 fragment BOOK_L: ~[ ,;\n\r\t];
 
 mode MODE_BOOK_VOLUME;
+BOOK_COMA: ','     ->type (COMA), popMode;
 BOOK_V_CHANGE_OF_LINE:  '\nRL   ' {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
 BOOK_DASH: '-'     ->type (DASH);
-BOOK_COMA: ','     ->type (COMA), mode(MODE_BOOK_PUBLISH);
 BOOK_COLON: ':'     ->type (COLON);
 BOOK_V_SPACE: ' '     ->type (SPACE);
 BOOK_V_WORD: BOOK_V_L+;
 fragment BOOK_V_L: ~[ :,\-\n\r\t.];
-
-mode MODE_BOOK_PUBLISH;
-BOOK_YEAR_START: '(';
-BOOK_YEAR_END: ')';
-BOOK_YEAR:  [0-9]+ ;
-BOOK_END: '.\n'     ;
-BOOK_P_SPACE: ' '     ->type (SPACE);
-BOOK_P_COMA: ','     ->type (COMA);
-BOOK_P_CHANGE_OF_LINE:  '\nRL   ' {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
-BOOK_P_WORD: BOOK_P_L+;
-fragment BOOK_P_L: ~[ ,\n\r\t()];
 
 /*
 RL   Unpublished observations (MMM-YYYY).

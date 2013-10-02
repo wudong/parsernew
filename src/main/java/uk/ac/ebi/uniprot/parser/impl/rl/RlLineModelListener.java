@@ -66,15 +66,20 @@ public class RlLineModelListener extends RlLineParserBaseListener implements Par
 
 		book.title = ctx.book_name().getText();
 
-		String text = ctx.book_year().BOOK_YEAR().getText();
-		book.year = Integer.parseInt(text);
+		String text = ctx.BOOK_YEAR().getText();
+		//it should be in format (1985).\n
+		book.year = Integer.parseInt(text.substring(1, text.length()-3));
 
 		RlLineParser.Book_pageContext book_pageContext = ctx.book_page();
-		if (book_pageContext.book_page_volume() != null) {
-			book.volume = book_pageContext.book_page_volume().BOOK_V_WORD().getText();
+		if (book_pageContext.BOOK_PP()!=null){
+			if (book_pageContext.book_page_volume() != null) {
+				book.volume = book_pageContext.book_page_volume().BOOK_V_WORD().getText();
+			}
+			book.page_start = book_pageContext.book_page_first().getText();
+			book.page_end = book_pageContext.book_page_last().getText();
+		}else{
+			book.pageString = book_pageContext.BOOK_WORD().getText();
 		}
-		book.page_start = book_pageContext.book_page_first().getText();
-		book.page_end = book_pageContext.book_page_last().getText();
 
 		if (ctx.book_city()!=null)
 			book.place = ctx.book_city().getText();

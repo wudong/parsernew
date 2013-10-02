@@ -191,4 +191,19 @@ class RlLineParserTest extends FunSuite {
     journal.journal should be ("Abstr. - Soc. Neurosci.")
   }
 
+  test ("book's page can be a mere string"){
+    val line =
+      """RL   (In) Proceedings of the 20th international conference on Arabidopsis
+        |RL   research, abstract#543, Edinburgh (2009).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+
+    b.pageString should be ("abstract#543")
+  }
+
+
 }
