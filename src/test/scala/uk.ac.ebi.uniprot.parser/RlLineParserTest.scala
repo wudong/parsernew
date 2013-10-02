@@ -220,4 +220,20 @@ class RlLineParserTest extends FunSuite {
     b.title should be ("The Mycota II, Genetics and Biotechnology (2nd edition)")
   }
 
+  test ("book's change line between editor and (eds.)."){
+    val line =
+      """RL   (In) Cummings D.J., Brost P., Dawid I.B., Weissman S.M., Fox C.F.
+        |RL   (eds.);
+        |RL   Extrachromosomal DNA, pp.339-355, Academic Press, New York (1979).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+
+    b.title should be ("Extrachromosomal DNA")
+    b.editors should have size (5)
+  }
+
 }

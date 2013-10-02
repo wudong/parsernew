@@ -20,7 +20,7 @@ rl_book: BOOK (book_editors CHANGE_OF_LINE)?
               ((book_publisher COMA (SPACE|CHANGE_OF_LINE))?
               book_city (SPACE|CHANGE_OF_LINE))?
               BOOK_YEAR;
-book_editors:  book_editor (COMA (SPACE|CHANGE_OF_LINE) book_editor)* SPACE BOOK_EDS;
+book_editors:  book_editor (COMA (SPACE|CHANGE_OF_LINE) book_editor)* (SPACE|CHANGE_OF_LINE) BOOK_EDS;
 book_editor:   BOOK_WORD (SPACE BOOK_WORD)*;
 
 book_name: BOOK_WORD COMA? ((SPACE|CHANGE_OF_LINE) BOOK_WORD COMA?)*  ;
