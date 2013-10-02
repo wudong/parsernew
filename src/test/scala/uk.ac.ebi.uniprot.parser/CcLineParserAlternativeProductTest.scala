@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
 
 
@@ -157,6 +156,24 @@ class CcLineParserAlternativeProductTest extends FunSuite {
     val unit: AlternativeProducts = cc2.`object`.asInstanceOf[AlternativeProducts]
     unit.names should have size (1)
     unit.names.get(0).synNames.asScala should be (List("BCL2-like 11 transcript variant 10", "BimAD", "Bim-AD"))
+  }
+
+  test ("CC alternative synname can have ',' inside name"){
+    val lines =
+      """CC   -!- ALTERNATIVE PRODUCTS:
+        |CC       Event=Alternative splicing; Named isoforms=5;
+        |CC         Comment=Additional isoforms may exist;
+        |CC       Name=3; Synonyms=II,II3+;
+        |CC         IsoId=Q8K3W0-4; Sequence=VSP_051952;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    val unit: AlternativeProducts = cc2.`object`.asInstanceOf[AlternativeProducts]
+    unit.names should have size (1)
+    unit.names.get(0).synNames should have size (1)
+    unit.names.get(0).synNames should contain ("II,II3+")
   }
 
 }

@@ -166,7 +166,7 @@ CC_AP_SEMICOLON : ';'                              -> popMode, type (SEMICOLON);
 CC_AP_VALUE_SPACE : ' '                            -> type (SPACE);
 CC_AP_VALUE_COMA : ','                             -> type (COMA);
 CC_AR_CHANGE_OF_LINE : '\nCC       '               ->  type (CHANGE_OF_LINE);
-CC_AP_WORD:  CC_AP_WORD_LETTER+;
+CC_AP_WORD:  (CC_AP_WORD_LETTER|CC_AP_VALUE_COMA)*CC_AP_WORD_LETTER;
 fragment CC_AP_WORD_LETTER: ~[ ,;\n\r\t];
 
 mode CC_ALTERNATIVE_PRODUCTS_SEQUENCE_VALUE;
