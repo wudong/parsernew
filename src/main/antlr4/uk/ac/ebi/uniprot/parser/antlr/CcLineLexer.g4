@@ -101,7 +101,7 @@ CC_IR_SEMICOLON : ';'                               -> type (SEMICOLON);
 CC_IR_COLON : ':'                               -> type (COLON);
 CC_IR_COMA : ','                               -> type (COMA);
 CC_IR_XENO: '(xeno)';
-CC_IR_AC: [A-Za-z0-9][\-\.A-Za-z0-9]*;
+CC_IR_AC: [A-Za-z0-9][()\-\.A-Za-z0-9]*;
 CC_IR_DASH: '-'                                -> type (DASH);
 
 mode CC_SUBCELLULAR_LOCATION;
