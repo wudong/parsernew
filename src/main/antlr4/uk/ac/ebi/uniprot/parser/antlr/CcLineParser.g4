@@ -43,8 +43,9 @@ cc_biophyiochemical_properties:
                     |cc_biophyiochemical_kinetic
                     ;
 cc_biophyiochemical_absorption: CC_HEADER_1  CC_BP_ABSORPTION COLON NEW_LINE
-                 CC_HEADER_2 cc_biophyiochemical_absorption_bas  NEW_LINE
-                 CC_HEADER_2  cc_biophyiochemical_absorption_note NEW_LINE;
+                 CC_HEADER_2 cc_biophyiochemical_absorption_bas
+                 (NEW_LINE CC_HEADER_2  cc_biophyiochemical_absorption_note)?
+                 NEW_LINE;
 cc_biophyiochemical_absorption_bas:  CC_BP_ABS  CC_BP_DIGIT SPACE CC_BP_NM SEMICOLON;
 cc_biophyiochemical_absorption_note : CC_BP_NOTE cc_properties_text_level2 SEMICOLON;
 cc_biophyiochemical_ph:   CC_HEADER_1  CC_BP_PH_DEPENDENCE

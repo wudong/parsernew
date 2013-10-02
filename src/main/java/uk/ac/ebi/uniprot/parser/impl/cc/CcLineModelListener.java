@@ -223,7 +223,11 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		if (ctx.cc_biophyiochemical_absorption() != null) {
 			TerminalNode terminalNode = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_bas().CC_BP_DIGIT();
 			bp.bsorption_abs = Integer.parseInt(terminalNode.getText());
-			bp.bsorption_note = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note().cc_properties_text_level2().getText();
+
+			if (ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note()!=null){
+				bp.bsorption_note = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note().
+						cc_properties_text_level2().getText();
+			}
 		}
 
 		CcLineParser.Cc_biophyiochemical_kineticContext kineticContext = ctx.cc_biophyiochemical_kinetic();

@@ -34,8 +34,8 @@ public class CcLineObject {
 	}
 
 	public static class BiophysicochemicalProperties {
-		public String bsorption_note;
 		public int bsorption_abs;
+		public String bsorption_note;
 		public List<String> kms = new ArrayList<String>();
 		public List<String> vmaxs = new ArrayList<String>();
 		public String kp_note;
