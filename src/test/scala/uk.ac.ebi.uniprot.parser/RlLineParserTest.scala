@@ -205,5 +205,19 @@ class RlLineParserTest extends FunSuite {
     b.pageString should be ("abstract#543")
   }
 
+  test ("book's title can have ',' inside the string."){
+    val line =
+      """RL   (In) Kueck U. (eds.);
+        |RL   The Mycota II, Genetics and Biotechnology (2nd edition), pp.95-112,
+        |RL   Springer-Verlag, Berlin-Heidelberg (2004).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+
+    b.title should be ("The Mycota II, Genetics and Biotechnology (2nd edition)")
+  }
 
 }

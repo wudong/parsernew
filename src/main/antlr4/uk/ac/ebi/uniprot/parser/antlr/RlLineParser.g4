@@ -23,7 +23,7 @@ rl_book: BOOK (book_editors CHANGE_OF_LINE)?
 book_editors:  book_editor (COMA (SPACE|CHANGE_OF_LINE) book_editor)* SPACE BOOK_EDS;
 book_editor:   BOOK_WORD (SPACE BOOK_WORD)*;
 
-book_name: BOOK_WORD ((SPACE|CHANGE_OF_LINE) BOOK_WORD)*  ;
+book_name: BOOK_WORD COMA? ((SPACE|CHANGE_OF_LINE) BOOK_WORD COMA?)*  ;
 book_page: (BOOK_PP (book_page_volume)? book_page_first DASH book_page_last)|BOOK_WORD;
 book_page_volume: BOOK_V_WORD COLON;
 book_page_first: BOOK_V_WORD;
