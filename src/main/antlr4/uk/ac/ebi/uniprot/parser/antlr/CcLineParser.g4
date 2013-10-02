@@ -176,7 +176,7 @@ cc_mass_spectrometry_mass_method:
         CC_MS_METHOD cc_mass_spectrometry_value SEMICOLON;
 cc_mass_spectrometry_mass_range:
         CC_MS_RANGE cc_mass_spectrometry_mass_range_value (COMA (SPACE|CHANGE_OF_LINE) cc_mass_spectrometry_mass_range_value)*
-        ( SPACE CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_ISO CC_MS_R_V_RIGHT_BRACKET)? SEMICOLON;
+        ( (SPACE|CHANGE_OF_LINE) CC_MS_R_V_LEFT_BRACKET CC_MS_R_V_ISO CC_MS_R_V_RIGHT_BRACKET)? SEMICOLON;
 cc_mass_spectrometry_mass_range_value:
         cc_mass_spectrometry_mass_range_value_value DASH CHANGE_OF_LINE ? cc_mass_spectrometry_mass_range_value_value;
 cc_mass_spectrometry_mass_range_value_value: INTEGER|CC_MS_R_V_UNKNOWN;
