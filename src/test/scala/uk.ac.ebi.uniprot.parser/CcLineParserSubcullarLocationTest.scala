@@ -194,5 +194,21 @@ class CcLineParserSubcullarLocationTest extends FunSuite {
     sl2.notes.get(1).note should include ("S.flexneri")
   }
 
+  test ("',' inside molecule."){
+    val lines=  """CC   -!- SUBCELLULAR LOCATION: Processed beta-1,4-galactosyltransferase 1:
+                  |CC       Secreted. Note=Soluble form found in body fluids.
+                  |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+    val sl2 = cc2.`object`.asInstanceOf[SubcullarLocation]
+
+    sl2.molecule should be ("Processed beta-1,4-galactosyltransferase 1")
+    sl2.locations should have size (1)
+    sl2.locations.get(0).subcellular_location should be ("Secreted")
+    sl2.notes should have size (1)
+  }
+
 
 }
