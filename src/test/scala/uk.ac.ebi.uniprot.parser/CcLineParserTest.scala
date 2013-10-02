@@ -10,7 +10,6 @@ import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
-import scala.collection.mutable
 
 
 /**
@@ -114,25 +113,6 @@ class CcLineParserTest extends FunSuite {
     bp.ph_dependence should be (null)
     bp.temperature_dependence should be ("Optimum temperature is 65 degrees Celsius. Protected from " +
       "thermal inactivation by ATP")
-  }
-
-  test ("web resource 1"){
-    val lines = """CC   -!- WEB RESOURCE: Name=CD40Lbase; Note=CD40L defect database;
-                |CC       URL="http://bioinf.uta.fi/CD40Lbase/";
-                |""".stripMargin.replace("\r", "")
-
-    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
-    val obj = parser.parse(lines)
-
-    obj.ccs should have size (1)
-
-    val cc1 = obj.ccs.get(0)
-    cc1.`object`.isInstanceOf[WebResource]
-    val wr = cc1.`object`.asInstanceOf[WebResource]
-
-    wr.name should be ("CD40Lbase")
-    wr.note should be ("CD40L defect database")
-    wr.url should be ("http://bioinf.uta.fi/CD40Lbase/")
   }
 
   test("sequence caution 1") {
@@ -287,6 +267,8 @@ class CcLineParserTest extends FunSuite {
     val sc = cc2.`object`.asInstanceOf[String]
     sc should be ("Interacts with daf-16 and sir-2.1")
   }
+
+
 
 
 }

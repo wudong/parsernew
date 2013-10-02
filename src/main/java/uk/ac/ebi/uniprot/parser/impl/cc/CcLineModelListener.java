@@ -150,17 +150,18 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		object.ccs.add(cc);
 
 		CcLineParser.Cc_web_resource_nameContext cc_web_resource_nameContext = ctx.cc_web_resource_name();
-		wr.name = cc_web_resource_nameContext.CC_WR_TEXT().getText();
+		wr.name = cc_web_resource_nameContext.cc_properties_text().getText();
 
 		CcLineParser.Cc_web_resource_urlContext cc_web_resource_urlContext = ctx.cc_web_resource_url();
 		if (cc_web_resource_urlContext != null) {
-			String text = cc_web_resource_urlContext.CC_WR_URL().getText();
+			String text = cc_web_resource_urlContext.cc_properties_text().getText();
+			//url is in the format of "http://..."
 			wr.url = text.substring(1, text.length() - 1);
 		}
 
 		CcLineParser.Cc_web_resource_noteContext cc_web_resource_noteContext = ctx.cc_web_resource_note();
 		if (cc_web_resource_noteContext != null) {
-			wr.note = cc_web_resource_noteContext.CC_WR_TEXT().getText();
+			wr.note = cc_web_resource_noteContext.cc_properties_text().getText();
 		}
 	}
 

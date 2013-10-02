@@ -213,25 +213,25 @@ CC_SC_P_INT : [1-9][0-9]*                             -> type (INTEGER);
 CC_SC_P_VALUE: 'Several';
 
 //the cc web resource model;
-//CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
+//CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress];
 mode CC_WEB_RESOURCE;
 CC_WR_CC_TOPIC_START  : 'CC   -!- '                 -> popMode, type(CC_TOPIC_START) ;
-CC_WR_NAME_START: 'Name='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_NOTE_START: 'Note='                           -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_URL_START: 'URL='                             -> pushMode(CC_WEB_RESOURCE_TEXT);
-CC_WR_CHANGE_OF_LINE: '\nCC       '  {replaceChangeOfLine();}   ;
+CC_WR_NAME_START: 'Name='                           -> pushMode(CC_PROPERTIES_TEXT_MODE);
+CC_WR_NOTE_START: 'Note='                           -> pushMode(CC_PROPERTIES_TEXT_MODE);
+CC_WR_URL_START: 'URL='                             -> pushMode(CC_PROPERTIES_TEXT_MODE);
+CC_WR_CHANGE_OF_LINE: '\nCC       '     {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
 CC_WR_SPACE : ' '                                   -> type (SPACE);
-CC_WR_SEMICOLON : ';'                               -> type (SEMICOLON);
+//CC_WR_SEMICOLON : ';'                               -> type (SEMICOLON);
 CC_WR_COLON: ':'                                    -> type (COLON);
-CC_WR_DOT : '.'                                     -> type (DOT);
 CC_WR_NEW_LINE: '\n'                                -> type (NEW_LINE);
 
-mode CC_WEB_RESOURCE_TEXT;
+/*
+mode CC_WEB_RESOURCE_URL;
 fragment CC_WR_TEXT_LETTER: ~[;.];
 CC_WR_URL: '"' .+? '"';
 CC_WR_TEXT: CC_WR_TEXT_LETTER+;
 CC_WR_WORD_END_1 : ';'                                -> type (SEMICOLON), popMode ;
-CC_WR_WORD_END_2 : '.'                                -> type (DOT), popMode ;
+*/
 
 //CC   -!- MASS SPECTROMETRY: Mass=mass(; Mass_error=error)?; Method=method; Range=ranges( (IsoformID))?(; Note=free_text)?; Source=references;
 mode CC_MASS_SPECTROMETRY;

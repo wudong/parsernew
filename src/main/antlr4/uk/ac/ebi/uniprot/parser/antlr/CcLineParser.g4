@@ -25,13 +25,12 @@ cc_common_text_separator: SPACE | CC_COMMON_CHANGE_OF_LINE|CC_COMMON_DOT_SPACE|C
 //CC   -!- WEB RESOURCE: Name=ResourceName[; Note=FreeText][; URL=WWWAddress].
 cc_web_resource:  CC_TOPIC_START CC_TOPIC_WEB_RESOURCE COLON SPACE
                   cc_web_resource_name
-                  (SEMICOLON cc_web_separator cc_web_resource_note )?
-                  (SEMICOLON cc_web_separator cc_web_resource_url)?
+                  (SEMICOLON (SPACE | CHANGE_OF_LINE) cc_web_resource_note )?
+                  (SEMICOLON (SPACE | CHANGE_OF_LINE) cc_web_resource_url)?
                    (SEMICOLON|DOT) NEW_LINE;
-cc_web_separator: SPACE | CC_WR_CHANGE_OF_LINE;
-cc_web_resource_name: CC_WR_NAME_START CC_WR_TEXT  ;
-cc_web_resource_note: CC_WR_NOTE_START CC_WR_TEXT ;
-cc_web_resource_url: CC_WR_URL_START CC_WR_URL  ;
+cc_web_resource_name: CC_WR_NAME_START cc_properties_text  ;
+cc_web_resource_note: CC_WR_NOTE_START cc_properties_text ;
+cc_web_resource_url: CC_WR_URL_START cc_properties_text ;
 
 cc_biophyiochemical: CC_TOPIC_START
                      CC_TOPIC_BIOPHYSICOCHEMICAL_PROPERTIES COLON NEW_LINE
