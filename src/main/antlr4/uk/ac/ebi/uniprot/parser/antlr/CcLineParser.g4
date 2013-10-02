@@ -124,7 +124,7 @@ cc_alternative_products_name: CC_HEADER_1 CC_AP_NAME cc_alternative_value SEMICO
                               cc_alternative_products_sequence
                               (NEW_LINE CC_HEADER_2 cc_alternative_products_note)?
                               ;
-cc_alternative_products_synonyms:  CC_AP_SYNONYMS cc_alternative_value (COMA SPACE cc_alternative_value)* SEMICOLON;
+cc_alternative_products_synonyms:  CC_AP_SYNONYMS cc_alternative_value (COMA (SPACE|CHANGE_OF_LINE) cc_alternative_value)* SEMICOLON;
 cc_alternative_products_isoid: CC_AP_ISOID cc_alternative_value (COMA SPACE cc_alternative_value)* SEMICOLON;
 cc_alternative_products_sequence: CC_AP_SEQUENCE cc_alternative_products_sequence_value SEMICOLON;
 cc_alternative_products_sequence_value:

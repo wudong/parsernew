@@ -163,9 +163,10 @@ CC_AP_EVENT: 'Event='                               -> pushMode ( CC_ALTERNATIVE
 CC_AP_NAMED_ISOFORMS: 'Named isoforms='             -> pushMode ( CC_ALTERNATIVE_PRODUCTS_VALUE ) ;
 
 mode CC_ALTERNATIVE_PRODUCTS_VALUE;
-CC_AP_SEMICOLON : ';'                               -> popMode, type (SEMICOLON);
+CC_AP_SEMICOLON : ';'                              -> popMode, type (SEMICOLON);
 CC_AP_VALUE_SPACE : ' '                            -> type (SPACE);
 CC_AP_VALUE_COMA : ','                             -> type (COMA);
+CC_AR_CHANGE_OF_LINE : '\nCC       '               ->  type (CHANGE_OF_LINE);
 CC_AP_WORD:  CC_AP_WORD_LETTER+;
 fragment CC_AP_WORD_LETTER: ~[ ,;\n\r\t];
 

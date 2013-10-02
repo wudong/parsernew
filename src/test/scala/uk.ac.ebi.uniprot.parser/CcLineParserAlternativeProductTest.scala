@@ -142,4 +142,21 @@ class CcLineParserAlternativeProductTest extends FunSuite {
     unit.names.get(1).sequence_FTId should have size (5)
   }
 
+  test("CC alternative produces synonyms can change line"){
+    val lines =
+      """CC   -!- ALTERNATIVE PRODUCTS:
+        |CC       Event=Alternative splicing; Named isoforms=20;
+        |CC       Name=Bim-alpha3; Synonyms=BCL2-like 11 transcript variant 10,
+        |CC       BimAD, Bim-AD;
+        |CC         IsoId=O43521-6; Sequence=VSP_035608, VSP_035620;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    val unit: AlternativeProducts = cc2.`object`.asInstanceOf[AlternativeProducts]
+    unit.names should have size (1)
+    unit.names.get(0).synNames.asScala should be (List("BCL2-like 11 transcript variant 10", "BimAD", "Bim-AD"))
+  }
+
 }
