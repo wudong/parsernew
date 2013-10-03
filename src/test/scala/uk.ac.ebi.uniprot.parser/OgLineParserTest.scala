@@ -28,6 +28,17 @@ class OgLineParserTest extends FunSuite {
     obj.ogs should contain (OgEnum.PLASMID)
   }
 
+  test("A og with dot inside plasmid value"){
+    val osOneLiner = "OG   Plasmid R68.45.\n";
+    val parser = (new DefaultUniprotLineParserFactory).createOgLineParser();
+    val obj = parser.parse(osOneLiner)
+
+    obj should not be null
+    obj.plasmidNames should have size (1)
+    obj.plasmidNames.get(0) should be ("R68.45")
+
+  }
+
   test("A valid one line og") {
     val osOneLiner = "OG   Plasmid IncFII R1-19 (R1 drd-19).\n";
     val parser = (new DefaultUniprotLineParserFactory).createOgLineParser();

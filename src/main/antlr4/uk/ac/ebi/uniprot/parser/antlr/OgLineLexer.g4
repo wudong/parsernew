@@ -27,10 +27,10 @@ AND: 'and';
 mode PLASMID_VALUE_MODE;
 DOT_NEW_LINE_V: '.\n'                    -> type (DOT_NEW_LINE), popMode;
 COMA: ','                                -> popMode;
-//CHANGE_OF_LINE_V: '\nOG   '            ->type (CHANGE_OF_LINE);
 LEFT_BRACKET_V: '{'                      -> type (LEFT_BRACKET), pushMode (EVIDENCE_MODE);
-PLASMID_VALUE: LD+;
-fragment LD : ~[,.{];
+PLASMID_VALUE: LD ((LD|DOT)* LD)?;
+fragment LD : ~[,.{\n\r\t];
+fragment DOT: '.';
 
 mode EVIDENCE_MODE;
 RIGHT_BRACKET: '}'                -> popMode;
