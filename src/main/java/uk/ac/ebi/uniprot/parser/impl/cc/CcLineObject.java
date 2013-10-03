@@ -121,7 +121,7 @@ public class CcLineObject {
 	}
 
 	public static enum RnaEditingLocationEnum {
-		Undetermined
+		Undetermined , Not_applicable
 	}
 
 	public static class SequenceCaution {

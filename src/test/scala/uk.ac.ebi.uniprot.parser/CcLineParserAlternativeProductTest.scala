@@ -176,4 +176,23 @@ class CcLineParserAlternativeProductTest extends FunSuite {
     unit.names.get(0).synNames should contain ("II,II3+")
   }
 
+  test ("CC alternative synname can change line inside name"){
+    val lines =
+      """CC   -!- ALTERNATIVE PRODUCTS:
+        |CC       Event=Alternative splicing; Named isoforms=15;
+        |CC       Name=1; Synonyms=FLIP-L, CLARP1, MRIT alpha-1, CASH alpha, I-FLICE
+        |CC       1, FLAME-1 gamma, Usurpin alpha;
+        |CC         IsoId=O15519-1; Sequence=Displayed;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    val unit: AlternativeProducts = cc2.`object`.asInstanceOf[AlternativeProducts]
+    unit.names should have size (1)
+    unit.names.get(0).synNames should have size (6)
+    unit.names.get(0).synNames should contain ("I-FLICE 1")
+  }
+
+
 }

@@ -115,7 +115,7 @@ cc_alternative_products_event_event: CC_AP_EVENT cc_alternative_value
 cc_alternative_products_event_namedisoforms: CC_AP_NAMED_ISOFORMS cc_alternative_value SEMICOLON;
 cc_alternative_products_event_comment: CC_AP_COMMENT cc_properties_text_level2 SEMICOLON ;
 
-cc_alternative_value: CC_AP_WORD (SPACE CC_AP_WORD)*;
+cc_alternative_value: CC_AP_WORD ((SPACE|CHANGE_OF_LINE) CC_AP_WORD)*;
 
 cc_alternative_products_name: CC_HEADER_1 CC_AP_NAME cc_alternative_value SEMICOLON
                               (SPACE cc_alternative_products_synonyms)?  NEW_LINE
@@ -193,7 +193,7 @@ cc_rna_editing:
       NEW_LINE;
 
 cc_rna_edigint_modified_position:
-      CC_RE_MODIFIED_POSITION (cc_rna_editing_position|CC_RE_MODIFIED_POSITION_UNDETERMINED);
+      CC_RE_MODIFIED_POSITION (cc_rna_editing_position|CC_RE_MODIFIED_POSITION_UNDETERMINED|CC_RE_MODIFIED_POSITION_NOT_APPLICABLE);
 cc_rna_editing_position:
       INTEGER (COMA cc_re_separator_1 INTEGER)*;
 cc_rna_edigint_note: CC_RE_NOTE cc_re_note_value;
