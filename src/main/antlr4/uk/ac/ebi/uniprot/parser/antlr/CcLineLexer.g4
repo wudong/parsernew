@@ -37,14 +37,16 @@ CC_TOPIC_DISEASE:
 
 //the common mode for most of the CC lines;
 mode CC_COMMON;
-CC_COMMON_CC_TOPIC_START  : 'CC   -!- '               ->  popMode, type(CC_TOPIC_START) ;
-CC_COMMON_CHANGE_OF_LINE: '\nCC       '          {replaceChangeOfLine();};
+CC_COMMON_CC_TOPIC_START  : 'CC   -!- '               -> popMode, type(CC_TOPIC_START) ;
+CC_COMMON_COLON_SPACE: ': '                           -> pushMode (CC_COMMON_TEXT) ;
+
+mode CC_COMMON_TEXT;
+CC_COMMON_CHANGE_OF_LINE: '\nCC       '              {replaceChangeOfLine();};
 CC_COMMON_SPACE : ' '                                -> type (SPACE);
-CC_COMMON_SEMICOLON : ';'                            -> type (SEMICOLON);
-CC_COMMON_COLON: ':'                                 -> type (COLON);
-CC_COMMON_DOT_NEWLINE : '.\n'        ;
-CC_COMMON_DOT_SPACE : '. '                             ;
-CC_COMMON_DOT_CHANGE_OF_LINE : '.\nCC       '          ;
+CC_COMMON_DOT: '.'                                   -> type (DOT);
+CC_COMMON_NEW_LINE : '\n'                            -> type (NEW_LINE), popMode;
+CC_COMMON_DOT_SPACE : '. '                            ;
+CC_COMMON_DOT_CHANGE_OF_LINE : '.\nCC       '         ;
 CC_COMMON_TEXT_WORD: TL+                     {!getText().endsWith(".")}?;
 fragment TL: ~[\n\r\t ];
 
@@ -281,9 +283,10 @@ CC_RE_COLON: ':'                        -> type (COLON);
 CC_RE_DOT: '.'                        -> type (DOT);
 CC_RE_SPACE: ' '                        -> type (SPACE);
 CC_RE_CHANGE_OF_LINE : '\nCC       '     {replaceChangeOfLine();}   ;
-CC_RE_NOTE: 'Note='                      -> pushMode (CC_RNA_EDITING_NOTE);
+CC_RE_NOTE: 'Note='                      -> pushMode (CC_COMMON_TEXT);
 CC_RE_NEW_LINE: '\n'                          -> type (NEW_LINE);
 
+/*
 mode CC_RNA_EDITING_NOTE;
 CC_RE_N_SPACE: ' '                              -> type (SPACE);
 CC_RE_N_WORD :  CS_RE_LETTER+;
@@ -291,6 +294,7 @@ CC_RE_N_CHANGE_OF_LINE : '\nCC       '          {replaceChangeOfLine();}   ;
 CC_RE_N_NEW_LINE: '\n'                          -> type (NEW_LINE), popMode;
 CC_RE_N_DOT: '.'                                -> type (DOT);
 fragment CS_RE_LETTER: ~[ .\n\r\t];
+*/
 
 mode CC_DISEASE;
 CC_D_TOPIC_START  : 'CC   -!- '           -> popMode, type(CC_TOPIC_START) ;

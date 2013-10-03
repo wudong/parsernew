@@ -287,7 +287,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 		}
 
 		if (ctx.cc_rna_edigint_note() != null) {
-			String text = ctx.cc_rna_edigint_note().cc_re_note_value().getText();
+			String text = ctx.cc_rna_edigint_note().cc_common_text().getText();
 			re.note = text;
 		}
 

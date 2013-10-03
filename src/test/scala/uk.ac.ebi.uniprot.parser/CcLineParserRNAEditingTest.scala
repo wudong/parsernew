@@ -36,7 +36,7 @@ class CcLineParserRNAEditingTest extends FunSuite {
         re.locations should have size (6)
 
         re.note should be ("The nonsense codon at position 59 is modified to a sense codon. " +
-          "The stop codon at position 121 is created by RNA editing.")
+          "The stop codon at position 121 is created by RNA editing")
   }
 
   test("RNA Editing 2"){
@@ -69,7 +69,7 @@ class CcLineParserRNAEditingTest extends FunSuite {
     re.locations should have size (20)
     re.locations.get(0) should be (1)
     re.locations.get(19) should be (313)
-    re.note should be ("The initiator methionine is created by RNA editing.")
+    re.note should be ("The initiator methionine is created by RNA editing")
   }
 
 
@@ -85,7 +85,7 @@ class CcLineParserRNAEditingTest extends FunSuite {
     val re = cc2.`object`.asInstanceOf[RnaEditing]
     re.locations should have size (0)
     re.locationEnum should be (RnaEditingLocationEnum.Undetermined)
-    re.note should be ("Partially edited. 11 sites are edited by Adar.")
+    re.note should be ("Partially edited. 11 sites are edited by Adar")
   }
 
 }

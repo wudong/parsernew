@@ -16,9 +16,9 @@ cc_properties_text_level2 : CHANGE_OF_LINE_LEVEL2 ?
 cc_properties_text : CHANGE_OF_LINE ?
            CC_PROPERTIES_TEXT (CHANGE_OF_LINE CC_PROPERTIES_TEXT)*;
 
-cc_common: CC_TOPIC_START CC_TOPIC_COMMON COLON SPACE
+cc_common: CC_TOPIC_START CC_TOPIC_COMMON CC_COMMON_COLON_SPACE
            cc_common_text
-           CC_COMMON_DOT_NEWLINE;
+           DOT NEW_LINE;
 cc_common_text: CC_COMMON_TEXT_WORD (cc_common_text_separator CC_COMMON_TEXT_WORD)* ;
 cc_common_text_separator: SPACE | CC_COMMON_CHANGE_OF_LINE|CC_COMMON_DOT_SPACE|CC_COMMON_DOT_CHANGE_OF_LINE;
 
@@ -190,18 +190,19 @@ cc_mass_spectrometry_value: CC_MS_V_WORD ((SPACE|CHANGE_OF_LINE) CC_MS_V_WORD)*;
 cc_rna_editing:
       CC_TOPIC_START CC_TOPIC_RNA_EDITING COLON SPACE
       cc_rna_edigint_modified_position
-      ((SEMICOLON cc_re_separator_1 cc_rna_edigint_note)|DOT)
-      NEW_LINE;
+      (SEMICOLON cc_re_separator_1 cc_rna_edigint_note)?
+      DOT NEW_LINE;
 
 cc_rna_edigint_modified_position:
       CC_RE_MODIFIED_POSITION (cc_rna_editing_position|CC_RE_MODIFIED_POSITION_UNDETERMINED|CC_RE_MODIFIED_POSITION_NOT_APPLICABLE);
 cc_rna_editing_position:
       INTEGER (COMA cc_re_separator_1 INTEGER)*;
-cc_rna_edigint_note: CC_RE_NOTE cc_re_note_value;
-cc_re_note_value : cc_re_note_value_detail (cc_re_separator_2 cc_re_note_value_detail)*;
-cc_re_note_value_detail : CC_RE_N_WORD (cc_re_separator_2 CC_RE_N_WORD)* DOT;
 cc_re_separator_1: (SPACE | CC_RE_CHANGE_OF_LINE);
-cc_re_separator_2: (SPACE | CC_RE_N_CHANGE_OF_LINE);
+
+cc_rna_edigint_note: CC_RE_NOTE cc_common_text;
+//cc_re_note_value : cc_re_note_value_detail (cc_re_separator_2 cc_re_note_value_detail)*;
+//cc_re_note_value_detail : CC_RE_N_WORD (cc_re_separator_2 CC_RE_N_WORD)* DOT;
+//cc_re_separator_2: (SPACE | CC_RE_N_CHANGE_OF_LINE);
 
 cc_disease:
     CC_TOPIC_START CC_TOPIC_DISEASE SPACE
