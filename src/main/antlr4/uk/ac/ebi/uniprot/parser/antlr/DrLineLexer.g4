@@ -26,7 +26,7 @@ SPACE: ' ';
 ATTRIBUTE: LT ((LT|DOT|SEMICOLON)* LT)?;
 DOT: '.';
 fragment SEMICOLON: ';';
-fragment LT: ~[ {;\.\n\r\t];
+fragment LT: ~[ {;.\n\r\t];
 
 LEFT_B : '{' -> pushMode(EVIDENCE_MODE);
 

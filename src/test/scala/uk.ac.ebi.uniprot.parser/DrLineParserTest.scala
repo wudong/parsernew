@@ -185,5 +185,34 @@ class DrLineParserTest extends FunSuite  {
     drObject.attributes.asScala should be (List("T23F11.3a.1", "c. elegans"))
   }
 
+  test("Dr Line with \\ in middle"){
+    val drLine = """DR   FlyBase; FBgn0013067; Dvir\Cdc37.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (1);
+    val drObject: DrObject = obj.drObjects.get(0)
+    drObject.DbName should be ("FlyBase")
+    drObject.attributes.asScala should be (List("FBgn0013067", "Dvir\\Cdc37"))
+  }
+
+  test("Dr Line with - in middle"){
+    val drLine = """DR   Orphanet; 99880; Hyperparathyroidism - jaw tumor syndrome.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (1);
+    val drObject: DrObject = obj.drObjects.get(0)
+    drObject.DbName should be ("Orphanet")
+    drObject.attributes.asScala should be (List("99880", "Hyperparathyroidism - jaw tumor syndrome"))
+  }
 
 }

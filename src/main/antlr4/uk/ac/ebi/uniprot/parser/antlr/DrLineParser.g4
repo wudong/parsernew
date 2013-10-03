@@ -26,6 +26,6 @@ dr_two_attribute_line:  dr_attribute SEPARATOR dr_attribute;
 dr_three_attribute_line: dr_attribute SEPARATOR dr_attribute SEPARATOR dr_attribute ;
 dr_four_attribute_line: dr_attribute  SEPARATOR dr_attribute SEPARATOR dr_attribute SEPARATOR dr_attribute;
 
-dr_attribute: DASH | (ATTRIBUTE DOT? (SPACE ATTRIBUTE DOT?)* );
+dr_attribute: DASH | ((ATTRIBUTE DOT?) (SPACE ((ATTRIBUTE DOT?)|DASH))* );
 
 evidence: LEFT_B  EV_TAG (COMA EV_TAG)* RIGHT_B;
