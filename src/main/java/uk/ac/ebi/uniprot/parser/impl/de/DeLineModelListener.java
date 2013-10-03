@@ -3,8 +3,8 @@ package uk.ac.ebi.uniprot.parser.impl.de;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
-import uk.ac.ebi.uniprot.parser.antlr.DeLineBaseListener;
 import uk.ac.ebi.uniprot.parser.antlr.DeLineParser;
+import uk.ac.ebi.uniprot.parser.antlr.DeLineParserBaseListener;
 import uk.ac.ebi.uniprot.parser.impl.EvidenceInfo;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 12:26
  * To change this template use File | Settings | File Templates.
  */
-public class DeLineModelListener extends DeLineBaseListener implements ParseTreeObjectExtractor<DeLineObject> {
+public class DeLineModelListener extends DeLineParserBaseListener implements ParseTreeObjectExtractor<DeLineObject> {
 
 	private DeLineObject object = new DeLineObject();
 
