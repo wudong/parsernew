@@ -109,6 +109,21 @@ class RlLineParserTest extends FunSuite {
     }
   }
 
+  test("A valid RL thesis has . inside uni name") {
+    val line = "RL   Thesis (2001), A. Mickiewicz University, Poland.\n";
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+
+    assert(obj.reference.isInstanceOf[RlLineObject.Thesis])
+
+    val pat = obj.reference.asInstanceOf[RlLineObject.Thesis]
+
+    expectResult(("A. Mickiewicz University", "Poland", 2001)) {
+      (pat.institute, pat.country, pat.year)
+    }
+  }
+
   test("A valid RL unpublished") {
     val line = "RL   Unpublished observations (OCT-1978).\n";
 
@@ -191,20 +206,6 @@ class RlLineParserTest extends FunSuite {
     journal.journal should be ("Abstr. - Soc. Neurosci.")
   }
 
-  test ("book's page can be a mere string"){
-    val line =
-      """RL   (In) Proceedings of the 20th international conference on Arabidopsis
-        |RL   research, abstract#543, Edinburgh (2009).
-        |""".stripMargin.replace("\r", "");
-
-    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
-    val obj = parser.parse(line)
-    assert(obj.reference.isInstanceOf[RlLineObject.Book])
-    val b = obj.reference.asInstanceOf[RlLineObject.Book]
-
-    b.pageString should be ("abstract#543")
-  }
-
   test ("book's title can have ',' inside the string."){
     val line =
       """RL   (In) Kueck U. (eds.);
@@ -234,6 +235,36 @@ class RlLineParserTest extends FunSuite {
 
     b.title should be ("Extrachromosomal DNA")
     b.editors should have size (5)
+  }
+
+
+  test ("book's page can be a mere string"){
+    val line =
+      """RL   (In) Proceedings of the 20th international conference on Arabidopsis
+        |RL   research, abstract#543, Edinburgh (2009).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+
+    b.pageString should be ("abstract#543")
+  }
+
+
+  ignore ("book's 's page has abstract in it."){
+    val line =
+      """RL   (In) Proceedings of the 19th international conference on Arabidopsis
+        |RL   research, pp.abstract#10018, Montreal (2008)
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+
+    //TODO
   }
 
 }

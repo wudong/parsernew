@@ -34,7 +34,7 @@ book_city: BOOK_WORD ((SPACE|CHANGE_OF_LINE) BOOK_WORD)*;
 rl_unpublished:  UP UP_YEAR_MONTH UP_END;
 
 rl_thesis: THESIS THESIS_YEAR COMA SPACE thesis_institution COMA SPACE thesis_country THESIS_END;
-thesis_institution:  THESIS_WORD (SPACE THESIS_WORD)*;
+thesis_institution:  THESIS_WORD DOT? (SPACE THESIS_WORD DOT?)*;
 thesis_country: THESIS_WORD (SPACE THESIS_WORD)*;
 
 rl_patent: PATENT patent_number COMA SPACE PATENT_DATE PATENT_END;

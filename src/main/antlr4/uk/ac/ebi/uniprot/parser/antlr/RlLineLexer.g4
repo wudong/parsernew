@@ -1,7 +1,7 @@
 lexer grammar RlLineLexer;
 
 options { superClass=uk.ac.ebi.uniprot.antlr.RememberLastTokenLexer; }
-tokens {CHANGE_OF_LINE, SPACE, COMA, DASH, SEMICOLON, COLON}
+tokens {CHANGE_OF_LINE, SPACE, COMA, DASH, SEMICOLON, COLON, DOT}
 
 RL_HEADER: 'RL   ';
 EP: '(er) '   ->  pushMode (MODE_EP);
@@ -66,6 +66,7 @@ mode MODE_THESIS;
 THESIS_END : '.\n'  -> popMode;
 THESIS_YEAR: '(' [0-9]+ ')';
 THESIS_COMA: ','     ->type (COMA);
+THESIS_DOT: '.'     ->type (DOT);
 THESIS_SPACE: ' '    ->type (SPACE);
 THESIS_WORD: THESIS_L+;
 fragment THESIS_L: ~[ ,\n\r\t.];
