@@ -142,5 +142,17 @@ class RcLineParserTest extends FunSuite {
     obj.rcs.get(0).values.get(0) should be ("PP24[03,07,10]")
   }
 
+  test("RC with 'and' inside word") {
+    val rcLines = """RC   STRAIN=Black and white Danish dairy cattle;
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createRcLineParser();
+    val obj = parser.parse(rcLines)
+    obj.rcs should have size (1)
+    obj.rcs.get(0).tokenType should be (RcTokenEnum.STRAIN);
+    obj.rcs.get(0).values should have size (1)
+    obj.rcs.get(0).values.get(0) should be ("Black and white Danish dairy cattle")
+  }
+
 
 }

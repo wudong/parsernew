@@ -8,8 +8,8 @@ rc : rc_token rc_text SEMICOLON;
 
 rc_separator: SPACE | CHANGE_OF_LINE;
 
-rc_text: rc_value ((rc_value_separator rc_value)* (rc_value_separator
-           AND rc_separator rc_value))? ;
+rc_text: rc_value ((rc_value_separator rc_value)*
+                 (AND rc_separator rc_value))? ;
 
 rc_value_separator: COMA (SPACE|CHANGE_OF_LINE);
 rc_value: rc_value_v evidence?;

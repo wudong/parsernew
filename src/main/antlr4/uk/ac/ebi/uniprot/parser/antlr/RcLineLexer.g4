@@ -16,7 +16,7 @@ mode RC_VALUE_MODE;
 SEMICOLON: ';'             ->popMode;
 COMA: ',';
 LEFT_B : '{'              ->pushMode(EVIDENCE_MODE);
-AND : 'and';
+AND : ',' (SPACE|CHANGE_OF_LINE_) 'and';
 WORD: LD ((LD|COMA)* LD)?;
 SPACE_: ' '                -> type(SPACE);
 CHANGE_OF_LINE_: '\nRC   '  {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
