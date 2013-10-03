@@ -319,4 +319,15 @@ class DeLineParserTest extends FunSuite {
     val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
     obj.recName.ecs should contain ("6.2.1.n2")
   }
+
+  test ("name has ';' inside"){
+    val deLines = """DE   RecName: Full=Dual specificity phosphatase Cdc25;
+                    |DE            EC=3.1.3.48;
+                    |DE   AltName: Full=Arath;CDC25;
+                    |""".stripMargin.replace("\r", "");
+
+    val obj = (new DefaultUniprotLineParserFactory).createDeLineParser().parse(deLines)
+    obj.altName should have size (1)
+    obj.altName.get(0).fullName should be ("Arath;CDC25")
+  }
 }

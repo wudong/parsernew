@@ -45,10 +45,11 @@ RIGHT_B : '}'     -> popMode;
 COMA: ',';
 
 mode NAME_VALUE_MODE;
-NAME_VALUE: NL+;
+NAME_VALUE: (NL|SEMICOLON_IN_NAME)+NL;
 END_OF_NAME_N: ';\n'    -> type(END_OF_NAME), popMode;
 LEFT_B_N : '{'   ->  type(LEFT_B), pushMode(EVIDENCE_MODE) ;
-fragment NL: ~[;{}\n\r\t];
+fragment SEMICOLON_IN_NAME: ';';
+fragment NL: ~[;{\n\r\t];
 
 mode EC_VALUE_MODE;
 EC_NAME_VALUE: EC_NAME_VALUE_V '.' EC_NAME_VALUE_V '.' EC_NAME_VALUE_V '.' EC_NAME_VALUE_V;
