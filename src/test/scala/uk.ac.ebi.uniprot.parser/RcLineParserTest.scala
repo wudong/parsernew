@@ -5,7 +5,7 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
 import org.scalatest.matchers.ShouldMatchers._
-import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject.{RcTokenEnum, RC}
+import uk.ac.ebi.uniprot.parser.impl.rc.RcLineObject.RcTokenEnum
 
 
 /**
@@ -127,6 +127,19 @@ class RcLineParserTest extends FunSuite {
     obj.rcs.get(0).tokenType should be (RcTokenEnum.STRAIN);
     obj.rcs.get(0).values should have size (1)
     obj.rcs.get(0).values.get(0) should be ("ATCC 6260 / CBS 566 / DSM 6381 / JCM 1539 / NBRC 10279 / NRRL Y-324")
+  }
+
+
+  test("RC with value , inside word") {
+    val rcLines = """RC   STRAIN=PP24[03,07,10];
+                    |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createRcLineParser();
+    val obj = parser.parse(rcLines)
+    obj.rcs should have size (1)
+    obj.rcs.get(0).tokenType should be (RcTokenEnum.STRAIN);
+    obj.rcs.get(0).values should have size (1)
+    obj.rcs.get(0).values.get(0) should be ("PP24[03,07,10]")
   }
 
 

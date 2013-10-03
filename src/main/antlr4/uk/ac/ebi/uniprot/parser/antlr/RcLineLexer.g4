@@ -17,7 +17,7 @@ SEMICOLON: ';'             ->popMode;
 COMA: ',';
 LEFT_B : '{'              ->pushMode(EVIDENCE_MODE);
 AND : 'and';
-WORD: (LD)+ ;
+WORD: LD ((LD|COMA)* LD)?;
 SPACE_: ' '                -> type(SPACE);
 CHANGE_OF_LINE_: '\nRC   '  {setType(CHANGE_OF_LINE);replaceChangeOfLine();};
 fragment LD : ~[;, \r\n\t{];
