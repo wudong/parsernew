@@ -44,7 +44,7 @@ class CcLineParserDiseaseTest extends FunSuite {
     // disease.notes should have size (1)
   }
 
-  test ("disease's abbr has more than one word"){
+  test ("disease's wired abbr."){
     val diseaseLine =
       """CC   -!- DISEASE: Severe combined immunodeficiency autosomal recessive T-
         |CC       cell-negative/B-cell-positive/NK-cell-positive (T(-)B(+)NK(+)
@@ -57,9 +57,9 @@ class CcLineParserDiseaseTest extends FunSuite {
     obj.ccs should have size (1)
     val cc = obj.ccs.get(0)
     val disease = cc.`object`.asInstanceOf[CcLineObject.Disease]
-    disease.abbr should be ("ACAD9 deficiency")
-    disease.mim should be ("611126")
-    disease.name should be ("Acyl-CoA dehydrogenase family, member 9, deficiency")
+    disease.name should be ("Severe combined immunodeficiency autosomal recessive T-cell-negative/B-cell-positive/NK-cell-positive")
+    disease.mim should be ("608971")
+    disease.abbr should be ("T(-)B(+)NK(+) SCID")
     // disease.descriptions should have size (1)
     // disease.notes should have size (1)
   }

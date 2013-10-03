@@ -16,7 +16,10 @@ text_cc_disease_abbr_mim:
    CC_DISEASE_ABBR_MIM_COLON;
 
 p_text_cc_disease_abbr_mim_abbr:
-   CC_DISEASE_ABBR_MIM_WORD ((CC_DISEASE_ABBR_MIM_SPACE|CC_DISEASE_ABBR_MIM_CHANGE_LINE) CC_DISEASE_ABBR_MIM_WORD)*;
+   p_text_cc_disease_abbr_mim_abbr_word+ ((CC_DISEASE_ABBR_MIM_SPACE|CC_DISEASE_ABBR_MIM_CHANGE_LINE) p_text_cc_disease_abbr_mim_abbr_word+)*;
 p_text_cc_disease_abbr_mim_mim:
    CC_DISEASE_ABBR_MIM_MIM CC_DISEASE_ABBR_MIM_VALUE;
+p_text_cc_disease_abbr_mim_abbr_word: CC_DISEASE_ABBR_MIM_WORD
+           | (CC_DISEASE_ABBR_MIM_LEFT_BRACKET p_text_cc_disease_abbr_mim_abbr_word CC_DISEASE_ABBR_MIM_RIGHT_BRACKET);
+
 

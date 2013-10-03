@@ -1,5 +1,6 @@
 package uk.ac.ebi.uniprot.antlr;
 
+import com.google.common.base.Preconditions;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import uk.ac.ebi.uniprot.parser.antlr.TextHelperLexer;
@@ -35,6 +36,9 @@ public class TextHelper {
 	public static String[] parseCCDiseaseAbbrMim(String string) {
 		TextHelperParser parser = setUp(string, TextHelperLexer.MODE_CC_DISEASE_ABBR_MIM);
 		TextHelperParser.Text_cc_disease_abbr_mimContext context = parser.text_cc_disease_abbr_mim();
+		Preconditions.checkState(context.p_text_cc_disease_abbr_mim_abbr()!=null, "Not be able to parse CC Disease Abbr and MIM for String: "+string);
+		Preconditions.checkState(context.p_text_cc_disease_abbr_mim_mim()!=null, "Not be able to parse CC Disease Abbr and MIM for String: "+string);
+
 		return new String[]{context.p_text_cc_disease_abbr_mim_abbr().getText(),
 				context.p_text_cc_disease_abbr_mim_mim().CC_DISEASE_ABBR_MIM_VALUE().getText()};
 	}
