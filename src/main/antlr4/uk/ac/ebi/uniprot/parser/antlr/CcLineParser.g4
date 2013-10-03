@@ -65,7 +65,8 @@ cc_biophyiochemical_kinetic_note: CC_BP_NOTE cc_properties_text_level2  SEMICOLO
 cc_interaction: CC_TOPIC_START  CC_TOPIC_INTERACTION  NEW_LINE
                    cc_interaction_line+;
 cc_interaction_line: CC_HEADER_1 cc_interaction_sp cc_interaction_nbexp cc_interaction_intact;
-cc_interaction_sp: ( CC_IR_SELF | ( CC_IR_AC COLON (CC_IR_GENENAME|DASH) (SPACE CC_IR_XENO)?)) SEMICOLON SPACE;
+cc_interaction_sp: ( CC_IR_SELF | ( CC_IR_AC COLON (cc_interaction_gene|DASH) (SPACE CC_IR_XENO)?)) SEMICOLON SPACE;
+cc_interaction_gene: CC_IR_GENENAME (SPACE CC_IR_GENENAME)*;
 cc_interaction_nbexp: CC_IR_NBEXP INTEGER SEMICOLON SPACE;
 cc_interaction_intact: CC_IR_INTACT CC_IR_AC COMA SPACE CC_IR_AC SEMICOLON NEW_LINE;
 

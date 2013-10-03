@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
 import uk.ac.ebi.uniprot.parser.impl.DefaultUniprotLineParserFactory
-import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineObject._
 
 
@@ -280,6 +279,24 @@ class CcLineParserInteractionTest extends FunSuite {
     val genes = ic.interactions.asScala.map( x=> x.gene )
 
     genes should contain ("EG:BACR37P7.5")
+  }
+
+
+  test("CC interaction has more than one word in genes."){
+    val lines =
+      """CC   -!- INTERACTION:
+        |CC       A1Z199:BCR/ABL fusion; NbExp=2; IntAct=EBI-491549, EBI-7286259;
+        |""".stripMargin.replace("\r", "")
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+    val cc2 = obj.ccs.get(0)
+
+    cc2.topic should be (CCTopicEnum.INTERACTION)
+    val ic = cc2.`object`.asInstanceOf[Interaction]
+    ic.interactions should have size (1)
+
+    val genes = ic.interactions.asScala.map( x=> x.gene )
+    genes should contain ("BCR/ABL fusion")
   }
 
 
