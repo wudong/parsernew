@@ -155,4 +155,20 @@ class DrLineParserTest extends FunSuite  {
     drObject.attributes.asScala should be (List("3.40.50.1000", "-", "2"))
   }
 
+  test("Dr Line with ';' in middle"){
+    val drLine = """DR   Orphanet; 102724; Acute myeloid leukemia with t(8;21)(q22;q22) translocation.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (1);
+    val drObject: DrObject = obj.drObjects.get(0)
+    drObject.DbName should be ("Orphanet")
+    drObject.attributes.asScala should be (List("102724", "Acute myeloid leukemia with t(8;21)(q22;q22) translocation"))
+  }
+
+
 }

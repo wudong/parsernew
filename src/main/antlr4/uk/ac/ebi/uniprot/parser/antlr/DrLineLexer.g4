@@ -19,18 +19,20 @@ DR_HEADER : 'DR   ';
 DB_NAME: [A-Za-z][A-Za-z0-9\-]* -> pushMode (DR_ATTR);
 
 mode DR_ATTR;
-SEPARATOR: '; '  ;
 END_OF_LINE: '\n'         -> popMode;
+SEPARATOR: '; '  ;
+DASH: '-';
+SPACE: ' ';
+ATTRIBUTE: LT ((LT|DOT|SEMICOLON)* LT)?;
+DOT: '.';
+fragment SEMICOLON: ';';
+fragment LT: ~[ {;\.\n\r\t];
 
+LEFT_B : '{' -> pushMode(EVIDENCE_MODE);
+
+mode EVIDENCE_MODE;
 COMA: ',';
 EV_TAG : ('EI'|'EA') [1-9][0-9]*;
-LEFT_B : '{';
-RIGHT_B : '}';
-
-DASH: '-';
-ATTRIBUTE: LT ((LT|DOT)* LT)?;
-DOT: '.';
-fragment LT: ~[.;\n\r\t{}];
-
+RIGHT_B : '}'  -> popMode;
 
 

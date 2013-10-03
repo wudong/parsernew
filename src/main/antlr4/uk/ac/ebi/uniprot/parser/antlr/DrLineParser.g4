@@ -20,12 +20,12 @@ dr_dr:   dr_line+;
 dr_line:
        DR_HEADER DB_NAME SEPARATOR
        (dr_two_attribute_line|dr_four_attribute_line|dr_three_attribute_line)
-       DOT evidence? END_OF_LINE;
+       DOT (evidence)? END_OF_LINE;
 
 dr_two_attribute_line:  dr_attribute SEPARATOR dr_attribute;
 dr_three_attribute_line: dr_attribute SEPARATOR dr_attribute SEPARATOR dr_attribute ;
 dr_four_attribute_line: dr_attribute  SEPARATOR dr_attribute SEPARATOR dr_attribute SEPARATOR dr_attribute;
 
-dr_attribute: DASH | ATTRIBUTE;
+dr_attribute: DASH | (ATTRIBUTE (SPACE ATTRIBUTE)*);
 
 evidence: LEFT_B  EV_TAG (COMA EV_TAG)* RIGHT_B;
