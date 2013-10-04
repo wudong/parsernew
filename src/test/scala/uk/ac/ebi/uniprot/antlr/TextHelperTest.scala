@@ -5,6 +5,7 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 
 import org.scalatest.matchers.ShouldMatchers._
+import java.util
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,6 +47,15 @@ class TextHelperTest extends FunSuite {
     val mim: Array[String] = TextHelper.parseCCDiseaseAbbrMim(string)
     mim(0) should be ("CD3ZID")
     mim(1) should be ("610163")
+  }
+
+  test ("parse cc pubmed "){
+    val string = """(PubMed:123, 23, 322)""".stripMargin.replace("\r", "");
+    val pubmed: util.List[String] = TextHelper.parseCCDiseasePubmed(string)
+    pubmed should have size (3)
+    pubmed should contain ("123")
+    pubmed should contain ("23")
+    pubmed should contain ("322")
   }
 
 }

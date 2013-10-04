@@ -3,6 +3,7 @@ package uk.ac.ebi.uniprot.antlr;
 import com.google.common.base.Preconditions;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import uk.ac.ebi.uniprot.parser.antlr.TextHelperLexer;
 import uk.ac.ebi.uniprot.parser.antlr.TextHelperParser;
 
@@ -46,7 +47,16 @@ public class TextHelper {
 				context.p_text_cc_disease_abbr_mim_mim().CC_DISEASE_ABBR_MIM_VALUE().getText()};
 	}
 
-	public static List<String> parseCCDiseasePubmed(String text) {
-		return new ArrayList<String>();
+
+	public static List<String> parseCCDiseasePubmed(String string) {
+		ArrayList<String> result = new ArrayList<>();
+		TextHelperParser parser = setUp(string, TextHelperLexer.MODE_CC_DISEASE_PUBMED);
+		TextHelperParser.Text_cc_disease_pubmedContext text_cc_disease_pubmedContext = parser.text_cc_disease_pubmed();
+		List<TerminalNode> terminalNodes = text_cc_disease_pubmedContext.CC_DISEASE_PUBMED_ID();
+		for (TerminalNode t: terminalNodes){
+			String text = t.getText();
+			result.add(text);
+		}
+		return result;
 	}
 }

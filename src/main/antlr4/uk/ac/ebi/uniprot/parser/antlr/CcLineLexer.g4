@@ -315,12 +315,3 @@ fragment INTEGER: [1-9][0-9]*             ;
 fragment CC_D_L: ~[ \n\r\t=];
 fragment CC_D_COMA: ','     ;
 
-
-
-
-
-
-
-
-
-
