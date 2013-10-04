@@ -40,8 +40,10 @@ class CcLineParserDiseaseTest extends FunSuite {
     disease.abbr should be ("ACAD9 deficiency")
     disease.mim should be ("611126")
     disease.name should be ("Acyl-CoA dehydrogenase family, member 9, deficiency")
-    // disease.descriptions should have size (1)
-    // disease.notes should have size (1)
+    disease.descriptions should have size (1)
+    disease.notes should have size (1)
+    disease.notes.get(0).text should be ("The disease is caused by mutations affecting the gene represented in this entry");
+    disease.notes.get(0).pubmedid should be ('empty)
   }
 
   test ("disease's wired abbr."){
@@ -60,8 +62,10 @@ class CcLineParserDiseaseTest extends FunSuite {
     disease.name should be ("Severe combined immunodeficiency autosomal recessive T-cell-negative/B-cell-positive/NK-cell-positive")
     disease.mim should be ("608971")
     disease.abbr should be ("T(-)B(+)NK(+) SCID")
-    // disease.descriptions should have size (1)
-    // disease.notes should have size (1)
+
+    disease.descriptions should have size (1)
+    disease.descriptions.get(0).text should be ("A form of severe")
+    disease.descriptions.get(0).pubmedid should be ('empty)
   }
 
 }

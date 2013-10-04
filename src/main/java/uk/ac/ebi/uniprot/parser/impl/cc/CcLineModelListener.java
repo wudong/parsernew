@@ -462,7 +462,7 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 			}
 		}
 
-		if (ctx.cc_disease_note()!=null){
+		if (ctx.cc_disease_note() != null) {
 			List<CcLineParser.Cc_disease_textContext> cc_disease_textContexts = ctx.cc_disease_note().cc_disease_text();
 			for (CcLineParser.Cc_disease_textContext textContext : cc_disease_textContexts) {
 				CcLineObject.DiseaseText diseaseText = processDiseaseText(textContext);
@@ -476,9 +476,11 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 	private CcLineObject.DiseaseText processDiseaseText(CcLineParser.Cc_disease_textContext textContext) {
 		CcLineObject.DiseaseText diseaseText = new CcLineObject.DiseaseText();
 		diseaseText.text = textContext.cc_disease_text_text().getText();
-		String text = textContext.CC_D_PUBMED().getText();
-		List<String> pubmeds = TextHelper.parseCCDiseasePubmed(text);
-		diseaseText.pubmedid.addAll(pubmeds);
+		if (textContext.CC_D_PUBMED() != null) {
+			String text = textContext.CC_D_PUBMED().getText();
+			List<String> pubmeds = TextHelper.parseCCDiseasePubmed(text);
+			diseaseText.pubmedid.addAll(pubmeds);
+		}
 		return diseaseText;
 	}
 
