@@ -6,6 +6,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import uk.ac.ebi.uniprot.parser.antlr.TextHelperLexer;
 import uk.ac.ebi.uniprot.parser.antlr.TextHelperParser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p/>
  * User: wudong, Date: 02/10/13, Time: 16:21
@@ -41,5 +44,9 @@ public class TextHelper {
 
 		return new String[]{context.p_text_cc_disease_abbr_mim_abbr().getText(),
 				context.p_text_cc_disease_abbr_mim_mim().CC_DISEASE_ABBR_MIM_VALUE().getText()};
+	}
+
+	public static List<String> parseCCDiseasePubmed(String text) {
+		return new ArrayList<String>();
 	}
 }
