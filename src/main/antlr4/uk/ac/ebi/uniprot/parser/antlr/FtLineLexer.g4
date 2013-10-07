@@ -18,7 +18,7 @@ tokens{FT_HEADER, NEW_LINE, CHANGE_OF_LINE}
 }
 
 FT_HEADER: 'FT   '                     {loc=0;inVarSeq=false;};
-FT_LOCATION: SPACE+ ((('<'|'>')? [1-9][0-9]*)|'?')    {loc<2}? {loc++;};
+FT_LOCATION: SPACE+     ((('<' | '>' | '?') ?  ([1-9][0-9]*)) | '?')      {loc<2}? {loc++;};
 fragment SPACE: ' ';
 FT_HEADER_2: 'FT                                ';
 
