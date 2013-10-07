@@ -215,4 +215,20 @@ class DrLineParserTest extends FunSuite  {
     drObject.attributes.asScala should be (List("99880", "Hyperparathyroidism - jaw tumor syndrome"))
   }
 
+  test("Dr Line with {} in middle"){
+    val drLine = """DR   GO; GO:0033942; F:4-alpha-D-{(1->4)-alpha-D-glucano}trehalose trehalohydrolase activity; IEA:UniProtKB-EC.
+                   |""".stripMargin.replace("\r", "")
+
+    val parser = (new DefaultUniprotLineParserFactory).createDrLineParser();
+    val obj = parser.parse(drLine)
+
+    obj should not be null;
+    obj.drObjects should not be null;
+    obj.drObjects should have size (1);
+    val drObject: DrObject = obj.drObjects.get(0)
+    drObject.DbName should be ("GO")
+    drObject.attributes.asScala should be
+        (List("GO:0033942", "F:4-alpha-D-{(1->4)-alpha-D-glucano}trehalose trehalohydrolase activity", "IEA:UniProtKB-EC"))
+  }
+
 }

@@ -23,12 +23,12 @@ END_OF_LINE: '\n'         -> popMode;
 SEPARATOR: '; '  ;
 DASH: '-';
 SPACE: ' ';
-ATTRIBUTE: LT ((LT|DOT|SEMICOLON)* LT)?;
+ATTRIBUTE: LT ((LT|DOT|SEMICOLON)* LT)?    {!getText().contains(".{")}? ;
 DOT: '.';
 fragment SEMICOLON: ';';
-fragment LT: ~[ {;.\n\r\t];
+fragment LT: ~[ ;.\n\r\t];
 
-LEFT_B : '{' -> pushMode(EVIDENCE_MODE);
+LEFT_B : '.{' -> pushMode(EVIDENCE_MODE);
 
 mode EVIDENCE_MODE;
 COMA: ',';
