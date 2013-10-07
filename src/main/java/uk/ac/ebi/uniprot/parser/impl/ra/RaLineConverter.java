@@ -7,7 +7,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.Author;
 import uk.ac.ebi.kraken.model.factories.DefaultCitationNewFactory;
 import uk.ac.ebi.uniprot.parser.Converter;
 
-public class RaLineConoverter implements Converter<RaLineObject, List<Author> > {
+public class RaLineConverter implements Converter<RaLineObject, List<Author> > {
 
 	@Override
 	public List<Author> convert(RaLineObject f) {
