@@ -17,6 +17,6 @@ AGRICOLA: 'AGRICOLA='  -> pushMode (RX_VALUE);
 mode RX_VALUE;
 SEMICOLON_SPACE: '; '  ->popMode;
 SEMICOLON_NEW_LINE: ';\n'  ->popMode;
-VALUE: LD (LD|SEMICOLON)* LD;
+VALUE: LD ((LD|SEMICOLON)* LD)?;
 fragment SEMICOLON: ';';
 fragment LD: ~[;\r\t\n ] ;

@@ -124,4 +124,15 @@ class RxLineParserTest extends FunSuite {
     }
   }
 
+  test("Pubmed can be single letter."){
+    val rxLine = "RX   PubMed=5;\n"
+
+    val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
+    val obj = parser.parse(rxLine)
+    obj.rxs should have size (1);
+
+    obj.rxs.get(0).value should be ("5")
+
+  }
+
 }
