@@ -1,8 +1,13 @@
 package uk.ac.ebi.uniprot.parser.impl.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
+import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.Citation;
 import uk.ac.ebi.uniprot.parser.Converter;
 import uk.ac.ebi.uniprot.parser.impl.ac.AcLineConverter;
+import uk.ac.ebi.uniprot.parser.impl.ac.UniProtAcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineConverter;
@@ -15,14 +20,6 @@ import uk.ac.ebi.uniprot.parser.impl.oh.OhLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.os.OsLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.ox.OxLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.pe.PeLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.ra.RaLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rc.RcLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rg.RgLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rl.RlLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rn.RnLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rp.RpLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rt.RtLineConverter;
-import uk.ac.ebi.uniprot.parser.impl.rx.RxLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.ss.SsLineConverter;
 
@@ -37,27 +34,51 @@ public class EntryObjectConverter implements Converter<EntryObject, UniProtEntry
 	private final static OcLineConverter ocLineConverter = new OcLineConverter();
 	private final static OgLineConverter OgLineConverter = new OgLineConverter();
 	
-	private final static OhLineConverter OhLineConverter = new OhLineConverter();
-	private final static OsLineConverter OsLineConverter = new OsLineConverter();
-	private final static OxLineConverter OxLineConverter = new OxLineConverter();
+	private final static OhLineConverter ohLineConverter = new OhLineConverter();
+	private final static OsLineConverter osLineConverter = new OsLineConverter();
+	private final static OxLineConverter oxLineConverter = new OxLineConverter();
 	private final static PeLineConverter peLineConverter = new PeLineConverter();
-	private final static RaLineConverter raLineConverter = new RaLineConverter();
-	
-	private final static RcLineConverter rcLineConverter = new RcLineConverter();
-	private final static RgLineConverter rgLineConverter = new RgLineConverter();
-	private final static RlLineConverter rlLineConverter = new RlLineConverter();
-	private final static RnLineConverter rnLineConverter = new RnLineConverter();
-	private final static RpLineConverter rpLineConverter = new RpLineConverter();
-	private final static RtLineConverter rtLineConverter = new RtLineConverter();
-	private final static RxLineConverter rxLineConverter = new RxLineConverter();
+
 	private final static SqLineConverter sqLineConverter = new SqLineConverter();
 	private final static SsLineConverter ssLineConverter = new SsLineConverter();
 	
+	private final static ReferenceObjectConverter refObjConverter = new ReferenceObjectConverter();
 	
 	@Override
 	public UniProtEntry convert(EntryObject f) {
-		// TODO Auto-generated method stub
-		return null;
+		UniProtEntry entry  =idLineConverter.convert(f.id);
+		UniProtAcLineObject acLineObj =acLineConverter.convert(f.ac);
+		entry.setPrimaryUniProtAccession(acLineObj.primaryAccession);
+		entry.setSecondaryUniProtAccessions(acLineObj.secondAccessions);
+		if(f.cc !=null)
+			entry.setComments(ccLineConverter.convert(f.cc));
+		entry.setProteinDescription(deLineConverter.convert(f.de));
+		entry.setDatabaseCrossReferencesNew(drLineConverter.convert(f.dr));
+		if(f.gn !=null)
+			entry.setGenes(gnLineConverter.convert(f.gn));
+		if(f.kw !=null){
+			entry.setKeywords(kwLineConverter.convert(f.kw));
+		}
+		entry.setTaxonomy(ocLineConverter.convert(f.oc));
+		if(f.og !=null){
+			entry.setOrganelles(OgLineConverter.convert(f.og));
+		}
+		if(f.oh !=null){
+			entry.getOrganismHosts().add(ohLineConverter.convert(f.oh));
+		}
+
+		entry.setOrganism(osLineConverter.convert(f.os));
+		
+		entry.getNcbiTaxonomyIds().add(oxLineConverter.convert(f.ox));
+		entry.setProteinExistence(peLineConverter.convert(f.pe));
+		entry.setSequence(sqLineConverter.convert(f.sq));
+		List<Citation> citations = new ArrayList<>();
+		for(EntryObject.ReferenceObject refObj: f.ref){
+			citations.add(refObjConverter.convert(refObj));
+		}
+		entry.setCitationsNew(citations);
+		//star star line not available
+		return entry;
 	}
 
 }
