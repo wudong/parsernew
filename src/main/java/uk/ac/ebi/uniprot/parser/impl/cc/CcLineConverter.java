@@ -1,50 +1,12 @@
 package uk.ac.ebi.uniprot.parser.impl.cc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import uk.ac.ebi.kraken.interfaces.uniprot.CommentStatus;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.Absorption;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.AlternativeProductsComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.AlternativeProductsIsoform;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.BioPhysicoChemicalPropertiesComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseCommentStructured;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.Interaction;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.InteractionComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.InteractionType;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.IsoformId;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.IsoformSequenceId;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.IsoformSequenceStatus;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.IsoformSynonym;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.KineticParameters;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MassSpectrometryComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MassSpectrometryCommentSource;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MassSpectrometryMethod;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MassSpectrometryRange;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MaximumVelocity;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MaximumVelocityUnit;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MichaelisConstant;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.MichaelisConstantUnit;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.PHDependence;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.Position;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.RedoxPotential;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.RnaEditingComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.RnaEditingLocationType;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.RnaEditingNote;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SequenceCautionComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SequenceCautionPosition;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SequenceCautionType;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SubcellularLocation;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SubcellularLocationComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SubcellularLocationValue;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.SubcellularMolecule;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.TemperatureDependence;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.TextOnlyComment;
-import uk.ac.ebi.kraken.interfaces.uniprot.comments.WebResourceComment;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.*;
 import uk.ac.ebi.kraken.model.factories.DefaultCommentFactory;
 import uk.ac.ebi.uniprot.parser.Converter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CcLineConverter implements Converter<CcLineObject, List<Comment> > {
 	private final DefaultCommentFactory factory = DefaultCommentFactory.getInstance();
@@ -257,6 +219,9 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 			  if((cObj.bsorption_note !=null) &&(!cObj.bsorption_note.isEmpty())){
 				  absorption.setNote(factory.buildAbsorptionNote(cObj.bsorption_note));
 			  }
+
+              absorption.setApproximation(cObj.bsorption_abs_approximate);
+
 			  comment.setAbsorption(absorption);
 		}
 		

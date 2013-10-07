@@ -80,7 +80,7 @@ CC_BP_PH_DEPENDENCE: 'pH dependence:'         -> pushMode( CC_PROPERTIES_TEXT_MO
 CC_BP_REDOX_POTENTIAL: 'Redox potential:'     -> pushMode( CC_PROPERTIES_TEXT_MODE );
 CC_BP_TEMPERATURE_DEPENDENCE: 'Temperature dependence:' -> pushMode( CC_PROPERTIES_TEXT_MODE );
 CC_BP_NM : 'nm';
-CC_BP_DIGIT: [1-9][0-9]*;
+CC_BP_DIGIT: '~'?[1-9][0-9]*;
 CC_BP_COLON : ':'                            -> type (COLON);
 CC_BP_SPACE : ' '                            -> type (SPACE);
 CC_BP_SEMICOLON : ';'                            -> type (SEMICOLON);

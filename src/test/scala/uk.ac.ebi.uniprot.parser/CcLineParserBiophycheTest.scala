@@ -103,4 +103,25 @@ class CcLineParserBiophycheTest extends FunSuite {
     bp.bsorption_abs should be (578)
     bp.bsorption_note should be (null)
   }
+
+  test ("biophysiocalproperties 4"){
+    val lines=  """CC   -!- BIOPHYSICOCHEMICAL PROPERTIES:
+                  |CC       Absorption:
+                  |CC         Abs(max)=~596 nm;
+                  |CC         Note=In the presence of anions, the maximum absorption shifts to
+                  |CC         about 575 nm;
+                  |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createCcLineParser();
+    val obj = parser.parse(lines)
+
+    obj.ccs should have size (1)
+
+    val cc1 = obj.ccs.get(0)
+    cc1.`object`.isInstanceOf[BiophysicochemicalProperties]
+    val bp = cc1.`object`.asInstanceOf[BiophysicochemicalProperties]
+
+    bp.bsorption_abs should be (596)
+    bp.bsorption_abs_approximate should be (true)
+  }
 }

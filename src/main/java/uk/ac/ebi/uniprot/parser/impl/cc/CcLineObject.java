@@ -42,7 +42,8 @@ public class CcLineObject {
 		public String ph_dependence;
 		public String rdox_potential;
 		public String temperature_dependence;
-	}
+        public boolean bsorption_abs_approximate;
+    }
 
 	public static enum AlternativeNameSequenceEnum {
 		Displayed, External, Not_described, Unsure

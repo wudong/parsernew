@@ -223,9 +223,15 @@ public class CcLineModelListener extends CcLineParserBaseListener implements Par
 	private void processBiophysicalProperties(@NotNull CcLineParser.Cc_biophyiochemical_propertiesContext ctx, CcLineObject.BiophysicochemicalProperties bp) {
 		if (ctx.cc_biophyiochemical_absorption() != null) {
 			TerminalNode terminalNode = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_bas().CC_BP_DIGIT();
-			bp.bsorption_abs = Integer.parseInt(terminalNode.getText());
+            String text = terminalNode.getText();
+            if (text.startsWith("~")){
+                bp.bsorption_abs_approximate = true;
+                bp.bsorption_abs = Integer.parseInt(text.substring(1));
+            } else{
+                bp.bsorption_abs = Integer.parseInt(text);
+            }
 
-			if (ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note() != null) {
+            if (ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note() != null) {
 				bp.bsorption_note = ctx.cc_biophyiochemical_absorption().cc_biophyiochemical_absorption_note().
 						cc_properties_text_level2().getText();
 			}
