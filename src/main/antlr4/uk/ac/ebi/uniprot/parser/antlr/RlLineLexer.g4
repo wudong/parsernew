@@ -15,18 +15,24 @@ SUBMISSION : 'Submitted '  ->pushMode (MODE_SUBMISSION);
 /*
 RL   Journal_abbrev Volume:First_page-Last_page(YYYY).
 */
-J_END: '.\n';
-J_YEAR: '('[0-9]*')';
-J_WORD:  J_WORD_L+;
-J_DASH: '-'  ->type(DASH);
-J_COLON: ':'  ->type(COLON);
+J_COLON: ':'  ->type(COLON), pushMode(JOURNAL_AFTER_COLON);
 J_SPACE: ' ' ->type(SPACE);
-fragment J_WORD_L: ~[ :\n\r\t()\-];
+J_ABBR_WORD: J_ABBR_WORD_L+;
+fragment J_ABBR_WORD_L: ~[ \n\r\t:];
+
+mode JOURNAL_AFTER_COLON;
+J_END: '.\n'       -> popMode;
+J_YEAR_START: '(';
+J_YEAR_END: ')';
+J_DASH: '-'  -> type (DASH);
+J_WORD:  J_WORD_L+;
+fragment J_WORD_L: ~[ \n\r\t()-];
 
 //RL   (er) Free text.
 mode MODE_EP;
 EP_END: '.\n' -> popMode ;
-EP_WORD: EP_L+;
+EP_WORD: EP_L (EP_L|EP_DOT)* EP_L;
+fragment EP_DOT: '.';
 fragment EP_L: ~[.\n\r\t];
 
 /*

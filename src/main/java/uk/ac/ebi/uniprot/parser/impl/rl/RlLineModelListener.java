@@ -22,11 +22,10 @@ public class RlLineModelListener extends RlLineParserBaseListener implements Par
 	public void exitRl_journal(@NotNull RlLineParser.Rl_journalContext ctx) {
 		RlLineObject.JournalArticle journalArticle = new RlLineObject.JournalArticle();
 		journalArticle.journal = ctx.journal_abbr().getText();
-		journalArticle.volume = ctx.journal_volume().J_WORD().getText();
+		journalArticle.volume = ctx.journal_volume().J_ABBR_WORD().getText();
 		journalArticle.first_page = ctx.journal_volume().journal_first_page().getText();
 		journalArticle.last_page = ctx.journal_volume().journal_last_page().getText();
-		String text = ctx.J_YEAR().getText();
-		journalArticle.year = Integer.parseInt(text.substring(1, text.length() - 1));
+		journalArticle.year = Integer.parseInt(ctx.journal_year().J_WORD().getText());
 		object.reference = journalArticle;
 	}
 

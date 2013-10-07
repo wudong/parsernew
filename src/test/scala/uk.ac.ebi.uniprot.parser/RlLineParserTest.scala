@@ -64,6 +64,21 @@ class RlLineParserTest extends FunSuite {
     }
   }
 
+  test ("anothe valid RL EPUB with DOT inisde"){
+    val line = "RL   (er) Invest. Ophthalmol. Vis. Sci. 43:ARVO E-Abstract 791(2002).\n";
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+
+    assert(obj.reference.isInstanceOf[RlLineObject.EPub])
+
+    val epub = obj.reference.asInstanceOf[RlLineObject.EPub]
+
+    expectResult("Invest. Ophthalmol. Vis. Sci. 43:ARVO E-Abstract 791(2002)") {
+      epub.title;
+    }
+  }
+
   test("A valid RL submission") {
     val line = "RL   Submitted (OCT-1995) to the EMBL/GenBank/DDBJ databases.\n";
 
@@ -283,4 +298,34 @@ class RlLineParserTest extends FunSuite {
     b.page_start should be ("13")
     b.page_end should be ("16")
   }
+
+  test ("journal contains (Oxf.)") {
+    val line =
+      """RL   Clin. Endocrinol. (Oxf.) 56:413-418(2002).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.JournalArticle])
+    val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
+
+    journal.journal should be ("Clin. Endocrinol. (Oxf.)")
+  }
+
+
+  test ("journal has special page number") {
+    val line =
+      """RL   PLoS ONE 3:E1450-E1450(2008).
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.JournalArticle])
+    val journal = obj.reference.asInstanceOf[RlLineObject.JournalArticle]
+
+    journal.journal should be ("PLoS ONE")
+    journal.first_page should be ("E1450")
+    journal.last_page should be ("E1450")
+  }
+
 }
