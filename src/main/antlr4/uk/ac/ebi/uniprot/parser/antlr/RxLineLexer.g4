@@ -13,11 +13,10 @@ RX_HEADER : 'RX   ' ;
 PUBMED: 'PubMed=' -> pushMode (RX_VALUE);
 DOI: 'DOI='  -> pushMode (RX_VALUE);
 AGRICOLA: 'AGRICOLA='  -> pushMode (RX_VALUE);
-SPACE: ' ';
-NEW_LINE: '\n';
 
 mode RX_VALUE;
-SEMICOLON: ';'  ->popMode;
-VALUE: LD+;
-
+SEMICOLON_SPACE: '; '  ->popMode;
+SEMICOLON_NEW_LINE: ';\n'  ->popMode;
+VALUE: LD (LD|SEMICOLON)* LD;
+fragment SEMICOLON: ';';
 fragment LD: ~[;\r\t\n ] ;

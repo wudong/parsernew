@@ -95,4 +95,33 @@ class RxLineParserTest extends FunSuite {
 
   }
 
+
+  test("another strangely formatted DOI"){
+    val rxLine = "RX   PubMed=14577811; DOI=10.1597/1545-1569(2003)040<0632:AMMITS>2.0.CO;2;\n"
+
+    val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
+    val obj = parser.parse(rxLine)
+    obj.rxs should have size (2);
+
+
+    expectResult(("DOI", "10.1597/1545-1569(2003)040<0632:AMMITS>2.0.CO;2")) {
+      val v = obj.rxs.get(1);
+      (v.`type`.name(), v.value)
+    }
+  }
+
+  ignore("DOI contains space."){
+    val rxLine = "RX   PubMed=15060122; DOI=10.1136/jmg 2003.012781;\n"
+
+    val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
+    val obj = parser.parse(rxLine)
+    obj.rxs should have size (2);
+
+
+    expectResult(("DOI", "10.1136/jmg 2003.012781")) {
+      val v = obj.rxs.get(1);
+      (v.`type`.name(), v.value)
+    }
+  }
+
 }

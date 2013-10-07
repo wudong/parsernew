@@ -11,9 +11,10 @@ parser grammar RxLineParser;
 
 options { tokenVocab=RxLineLexer;}
 
-rx_rx : RX_HEADER rx  (SPACE rx )* NEW_LINE;
+rx_rx : RX_HEADER (rx)* rx_last;
 
-rx : (pubmed|doi|agri) SEMICOLON;
+rx : (pubmed|doi|agri) SEMICOLON_SPACE;
+rx_last : (pubmed|doi|agri) SEMICOLON_NEW_LINE;
 
 pubmed: PUBMED VALUE;
 doi: DOI VALUE;
