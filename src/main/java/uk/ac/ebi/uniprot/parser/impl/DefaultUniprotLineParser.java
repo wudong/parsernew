@@ -1,16 +1,11 @@
 package uk.ac.ebi.uniprot.parser.impl;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.misc.Nullable;
 import uk.ac.ebi.uniprot.parser.GrammarFactory;
 import uk.ac.ebi.uniprot.parser.ParseException;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.UniprotLineParser;
-import uk.ac.ebi.uniprot.parser.antlr.IdLineParser;
-import uk.ac.ebi.uniprot.parser.antlr.OsLineParser;
-import uk.ac.ebi.uniprot.parser.impl.id.IdLineObject;
-import uk.ac.ebi.uniprot.parser.impl.os.OsLineModelListener;
-import uk.ac.ebi.uniprot.parser.impl.os.OsLineObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -37,7 +32,15 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
 
 	public P createParserFromInput(CharStream in,
 	                               GrammarFactory<L, P> factory) {
-		L lexer = factory.createLexer(in);
+        L lexer = factory.createLexer(in);
+        lexer.addErrorListener(new BaseErrorListener() {
+            @Override
+            public void syntaxError(Recognizer<?, ?> recognizer, @Nullable Object o, int line, int i2, String s, @Nullable RecognitionException e) {
+                throw new ParseException("Syntax Error while lexing the input String in Line: " + line + ", Position: " + i2,
+                        "", e);
+            }
+        });
+
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		P parser = factory.createParser(tokens);
 		parser.addErrorListener(new BaseErrorListener() {
