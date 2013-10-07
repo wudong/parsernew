@@ -192,4 +192,32 @@ class GnLineParserTest extends FunSuite {
     gnObject.names.get(0).names should contain ("ARG5,6")
   }
 
+  ignore ("Gn Name has ';' inside"){
+    val gnwithEv =
+      """GN   Name=ANTR1; Synonyms=PHT4;1; OrderedLocusNames=At2g29650;
+        |GN   ORFNames=T27A16.25;
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
+    val obj = parser.parse(gnwithEv)
+
+    val gnObject: GnObject = obj.gnObjects.get(1)
+    gnObject.names should have size (1)
+    gnObject.names.get(0).names should contain ("PHT4;1")
+  }
+
+  ignore ("Gn Name has ';' and '-' inside"){
+    val gnwithEv =
+      """GN   Name=CXP;2-1;
+        |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createGnLineParser();
+    val obj = parser.parse(gnwithEv)
+
+    val gnObject: GnObject = obj.gnObjects.get(0)
+    gnObject.names should have size (1)
+    gnObject.names.get(0).names should contain ("CXP;2-1")
+
+  }
+
 }

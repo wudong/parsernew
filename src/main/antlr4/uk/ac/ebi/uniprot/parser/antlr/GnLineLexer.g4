@@ -26,7 +26,7 @@ CHANGE_OF_LINE_GN: '\nGN   '      -> type (CHANGE_OF_LINE);
 LEFT_BRACKET: '{'                 -> pushMode(EVIDENCE_MODE);
 
 GENE_NAME: GL_WORD (SPACE GL_WORD)*;
-fragment GL_WORD: (GL|COMA)* GL;
+fragment GL_WORD: GL ((GL|COMA|SEMICOLON)* GL)?;
 fragment GL: ~[ ,;{\n\r\t];
 
 mode EVIDENCE_MODE;
