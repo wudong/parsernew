@@ -11,6 +11,8 @@ import uk.ac.ebi.uniprot.parser.impl.ac.UniProtAcLineObject;
 import uk.ac.ebi.uniprot.parser.impl.cc.CcLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.de.DeLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.dr.DrLineConverter;
+import uk.ac.ebi.uniprot.parser.impl.dt.DtLineConverter;
+import uk.ac.ebi.uniprot.parser.impl.ft.FtLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.gn.GnLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.id.IdLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.kw.KwLineConverter;
@@ -28,6 +30,8 @@ public class EntryObjectConverter implements Converter<EntryObject, UniProtEntry
 	private final static CcLineConverter ccLineConverter = new CcLineConverter();
 	private final static DeLineConverter deLineConverter = new DeLineConverter();
 	private final static DrLineConverter drLineConverter = new DrLineConverter();
+	private final static DtLineConverter dtLineConverter = new DtLineConverter();
+	private final static FtLineConverter ftLineConverter = new FtLineConverter();
 	private final static GnLineConverter gnLineConverter = new GnLineConverter();
 	private final static IdLineConverter idLineConverter = new IdLineConverter();
 	private final static KwLineConverter kwLineConverter = new KwLineConverter();
@@ -50,10 +54,14 @@ public class EntryObjectConverter implements Converter<EntryObject, UniProtEntry
 		UniProtAcLineObject acLineObj =acLineConverter.convert(f.ac);
 		entry.setPrimaryUniProtAccession(acLineObj.primaryAccession);
 		entry.setSecondaryUniProtAccessions(acLineObj.secondAccessions);
+		entry.setEntryAudit(dtLineConverter.convert(f.dt));
 		if(f.cc !=null)
 			entry.setComments(ccLineConverter.convert(f.cc));
 		entry.setProteinDescription(deLineConverter.convert(f.de));
 		entry.setDatabaseCrossReferencesNew(drLineConverter.convert(f.dr));
+		if(f.ft !=null){
+			entry.setFeatures(ftLineConverter.convert(f.ft));
+		}
 		if(f.gn !=null)
 			entry.setGenes(gnLineConverter.convert(f.gn));
 		if(f.kw !=null){
