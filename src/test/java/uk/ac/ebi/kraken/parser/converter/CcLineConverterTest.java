@@ -14,6 +14,9 @@ import uk.ac.ebi.kraken.interfaces.uniprot.comments.AlternativeProductsIsoform;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.BioPhysicoChemicalPropertiesComment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseCommentStructured;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseReference;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseReferenceType;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.DomainComment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.FunctionComment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Interaction;
@@ -541,5 +544,100 @@ public class CcLineConverterTest {
 		assertEquals(1,inter3.getNumberOfExperiments());
 		assertEquals(InteractionType.XENO ,inter3.getInteractionType());
 		
+	}
+	@Test
+	public void testDisease() {
+		/*
+		 * Kleefstra syndrome (KLESTS) [MIM:610253]: A syndrome characterized by 
+		 * severe mental retardation, hypotonia, brachy(micro)cephaly, and facial 
+		 * dysmorphisms. Additionally, congenital heart defects, urogenital defects, 
+		 * epilepsy and behavioral problems are frequently observed. Note=The disease 
+		 * is caused by mutations affecting the gene represented in this entry 
+		 * (PubMed:16826528). The syndrome can be either caused by intragenic EHMT1 
+		 * mutations leading to haploinsufficiency of the EHMT1 gene or by a submicroscopic 
+		 * 9q34.3 deletion. Although it is not known if and to what extent other genes in 
+		 * the 9q34.3 region contribute to the syndrome observed in deletion cases, EHMT1 seems to be the major 
+		 * determinant of the core disease phenotype (PubMed:19264732)
+		 */
+		CcLineObject ccLineO = new CcLineObject();	
+		CcLineObject.CC cc1 =new CcLineObject.CC();
+		cc1.topic =CcLineObject.CCTopicEnum.DISEASE;
+		CcLineObject.Disease disease = new CcLineObject.Disease ();
+		cc1.object =disease;
+		disease.name ="Kleefstra syndrome";
+		disease.abbr ="KLESTS";
+		disease.mim ="610253";
+		CcLineObject.DiseaseText desc = new CcLineObject.DiseaseText();
+		desc.text ="A syndrome characterized by severe mental retardation, hypotonia, brachy(micro)cephaly, and facial dysmorphisms. Additionally, congenital heart defects, urogenital defects, epilepsy and behavioral problems are frequently observed.";
+		disease.descriptions.add(desc);
+		CcLineObject.DiseaseText note1 = new CcLineObject.DiseaseText();
+		note1.text = "The disease is caused by mutations affecting the gene represented in this entry";
+		note1.pubmedid.add("16826528");
+		CcLineObject.DiseaseText note2 = new CcLineObject.DiseaseText();
+		note2.text = "The syndrome can be either caused by intragenic EHMT1 mutations leading to haploinsufficiency of the EHMT1 gene or by a submicroscopic 9q34.3 deletion. Although it is not known if and to what extent other genes in the 9q34.3 region contribute to the syndrome observed in deletion cases, EHMT1 seems to be the major determinant of the core disease phenotype";
+		note2.pubmedid.add("19264732");
+		disease.notes.add(note1);
+		disease.notes.add(note2);
+		
+		ccLineO.ccs.add(cc1);
+		List<Comment> comments = converter.convert(ccLineO) ;
+		assertEquals(1, comments.size());
+		
+		Comment comment1 =comments.get(0);
+		assertEquals(CommentType.DISEASE, comment1.getCommentType());
+		assertTrue (comment1 instanceof DiseaseCommentStructured);
+		
+		DiseaseCommentStructured diseaseComment = (DiseaseCommentStructured) comment1;
+		assertTrue(diseaseComment.hasDefinedDisease());
+		assertEquals("Kleefstra syndrome", diseaseComment.getDisease().getDiseaseId().getValue());
+		assertEquals("KLESTS", diseaseComment.getDisease().getAcronym().getValue());
+		assertEquals(desc.text,
+				diseaseComment.getDisease().getDescription().getValue());
+		DiseaseReference diseaseRef = diseaseComment.getDisease().getReference();
+		assertNotNull(diseaseRef);
+		assertEquals(DiseaseReferenceType.MIM, diseaseRef.getDiseaseReferenceType());
+		assertEquals("610253", diseaseRef.getDiseaseReferenceId().getValue());
+		assertEquals("The disease is caused by mutations affecting the gene represented in this entry (PubMed:16826528). "
+				+ "The syndrome can be either caused by intragenic EHMT1 mutations leading to haploinsufficiency of the EHMT1 gene "
+				+ "or by a submicroscopic 9q34.3 deletion. Although it is not known if and to what extent other genes in the 9q34.3 "
+				+ "region contribute to the syndrome observed in deletion cases, EHMT1 seems to be the major determinant of the core "
+				+ "disease phenotype (PubMed:19264732).", diseaseComment.getNote().getValue());
+	
+	}
+	
+	@Test
+	public void testDisease2() {
+		//Note=Frequently mutated in a variety of human cancers (PubMed:15155950)
+		CcLineObject ccLineO = new CcLineObject();	
+		CcLineObject.CC cc1 =new CcLineObject.CC();
+		cc1.topic =CcLineObject.CCTopicEnum.DISEASE;
+		CcLineObject.Disease disease = new CcLineObject.Disease ();
+		cc1.object =disease;
+		CcLineObject.DiseaseText note1 = new CcLineObject.DiseaseText();
+		note1.text = "Frequently mutated in a variety of human cancers";
+		note1.pubmedid.add("15155950");
+	
+		disease.notes.add(note1);
+	
+		
+		ccLineO.ccs.add(cc1);
+		List<Comment> comments = converter.convert(ccLineO) ;
+		assertEquals(1, comments.size());
+		
+		Comment comment1 =comments.get(0);
+		assertEquals(CommentType.DISEASE, comment1.getCommentType());
+		assertTrue (comment1 instanceof DiseaseCommentStructured);
+		
+		DiseaseCommentStructured diseaseComment = (DiseaseCommentStructured) comment1;
+		assertFalse(diseaseComment.hasDefinedDisease());
+		assertEquals("", diseaseComment.getDisease().getDiseaseId().getValue());
+		assertEquals("", diseaseComment.getDisease().getAcronym().getValue());
+		assertEquals("",
+				diseaseComment.getDisease().getDescription().getValue());
+		DiseaseReference diseaseRef = diseaseComment.getDisease().getReference();
+		assertNotNull(diseaseRef);
+		assertEquals(DiseaseReferenceType.NONE, diseaseRef.getDiseaseReferenceType());
+		assertEquals("Frequently mutated in a variety of human cancers (PubMed:15155950).", diseaseComment.getNote().getValue());
+	
 	}
 }

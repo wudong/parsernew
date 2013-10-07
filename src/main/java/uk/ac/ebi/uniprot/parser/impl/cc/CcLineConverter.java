@@ -10,7 +10,15 @@ import uk.ac.ebi.kraken.interfaces.uniprot.comments.AlternativeProductsIsoform;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.BioPhysicoChemicalPropertiesComment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.Disease;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseAcronym;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseCommentStructured;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseDescription;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseId;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseNote;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseReference;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseReferenceId;
+import uk.ac.ebi.kraken.interfaces.uniprot.comments.DiseaseReferenceType;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Interaction;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.InteractionComment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.InteractionType;
@@ -129,7 +137,7 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 			break;
 		case DISEASE:
 			updateDisease((DiseaseCommentStructured)comment, 
-					(CcLineObject.Interaction)cc.object);
+					(CcLineObject.Disease)cc.object);
 			break;
 		case MASS_SPECTROMETRY:
 			updateMassSpectrometry((MassSpectrometryComment)comment, 
@@ -297,8 +305,60 @@ public class CcLineConverter implements Converter<CcLineObject, List<Comment> > 
 		}
 		comment.setInteractions(interactions);
 	}
-	private void updateDisease(DiseaseCommentStructured comment, CcLineObject.Interaction cObj){
-		//to be implemented
+	private void updateDisease(DiseaseCommentStructured comment, CcLineObject.Disease cObj){
+	
+		if((cObj.name !=null) &&(!cObj.name.isEmpty())){
+			Disease disease =factory.buildDisease();
+			DiseaseId id= factory.buildDiseaseId();
+			id.setValue(cObj.name);
+			disease.setDiseaseId(id);
+			if((cObj.abbr !=null) &&(!cObj.abbr.isEmpty())){
+				DiseaseAcronym da = factory.buildDiseaseAcronym();
+				da.setValue(cObj.abbr);
+				disease.setDiseaseAcronym(da);
+			}
+			if((cObj.mim !=null) &&(!cObj.mim.isEmpty())){
+				DiseaseReference dr = factory.buildDiseaseReference();
+				dr.setDiseaseReferenceType(DiseaseReferenceType.MIM);
+				DiseaseReferenceId drId =factory.buildDiseaseReferenceId();
+				drId.setValue(cObj.mim);
+				dr.setDiseaseReferenceId(drId);
+				disease.setDiseaseReference(dr);
+			}
+			if(cObj.descriptions.size()>0){
+				DiseaseDescription diseaseDescr = factory.buildDiseaseDescription();
+				diseaseDescr.setValue(convert(cObj.descriptions));
+				disease.setDiseaseDescription(diseaseDescr);
+			}
+			comment.setDisease(disease);
+		}
+		if(cObj.notes.size()>0){
+			DiseaseNote diseaseNote = factory.buildDiseaseNote();
+			diseaseNote.setValue(convert(cObj.notes));
+			comment.setNote(diseaseNote);
+		}
+		
+	}
+	
+	private String convert(List<CcLineObject.DiseaseText> value){
+		StringBuilder sb = new StringBuilder();
+		for(int i=0;i<value.size(); i++){
+			if(i>0){
+				sb.append(" ");
+			}
+			CcLineObject.DiseaseText disText = value.get(i);
+			sb.append(disText.text);
+			if(disText.pubmedid.size()>0){
+				sb.append(" (PubMed:");
+				sb.append(disText.pubmedid.get(0));
+				sb.append(").");
+			}else{
+				if(!disText.text.endsWith(".")){
+					sb.append(".");
+				}
+			}
+		}
+		return sb.toString();
 	}
 	
 	private void updateSubcellularLocation(SubcellularLocationComment comment, CcLineObject.SubcullarLocation cObj){
