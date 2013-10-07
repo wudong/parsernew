@@ -59,4 +59,14 @@ public class TextHelper {
 		}
 		return result;
 	}
+
+    //volumn:page1-page2.
+    public static String[] parseVolumnPageString(String text1) {
+        TextHelperParser parser = setUp(text1, TextHelperLexer.MODE_VOLUME_PAGE);
+        TextHelperParser.Text_volume_pageContext context = parser.text_volume_page();
+        List<TerminalNode> terminalNodes = context.VOLUME_PAGE_WORD();
+        return
+                new String[]{terminalNodes.get(0).getText(), terminalNodes.get(1).getText(), terminalNodes.get(2).getText()};
+
+    }
 }
