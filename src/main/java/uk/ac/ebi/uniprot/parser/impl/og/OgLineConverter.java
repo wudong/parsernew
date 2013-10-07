@@ -47,7 +47,10 @@ public class OgLineConverter implements Converter<OgLineObject, List<Organelle> 
 			case PLASTID_NON_PHOTOSYNTHETIC:
 				type = GeneEncodingType.NON_PHOTOSYNTHETIC_PLASTID;
 				break;
-		
+			default:
+				type = GeneEncodingType.UNKOWN;
+				break;
+			
 			}
 			 Organelle org = factory.buildOrganelle(type);
 			 EvidenceHelper.setEvidences( org, evidenceMap, ogEnum);

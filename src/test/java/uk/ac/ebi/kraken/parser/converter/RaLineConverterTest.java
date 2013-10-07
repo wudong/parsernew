@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.Author;
-import uk.ac.ebi.uniprot.parser.impl.ra.RaLineConoverter;
+import uk.ac.ebi.uniprot.parser.impl.ra.RaLineConverter;
 import uk.ac.ebi.uniprot.parser.impl.ra.RaLineObject;
 
 public class RaLineConverterTest {
@@ -19,7 +19,7 @@ public class RaLineConverterTest {
 		ra.authors.add("Perriere G.");
 		ra.authors.add("Duclos B.");
 		
-		RaLineConoverter converter = new RaLineConoverter();
+		RaLineConverter converter = new RaLineConverter();
 		 List<Author> authors = converter.convert (ra);
 		 TestCase.assertEquals(3, authors.size());
 		 validate(authors, "Galinier A.");
