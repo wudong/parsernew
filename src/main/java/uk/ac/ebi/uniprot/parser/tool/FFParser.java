@@ -32,35 +32,37 @@ public class FFParser {
 	}
 
 	public void parse(String in) throws IOException {
-		boolean startParsing=true;
-		if (this.startParingString!=null)startParsing=false;
+		boolean found=true;
+		if (this.startParingString!=null)found=false;
 
 		EntryBufferedReader reader = new EntryBufferedReader(in);
 		String entry = reader.next();
 
 		if (this.startParingString!=null){
-			startParsing = entry.startsWith(this.startParingString);
+			found = entry.startsWith(this.startParingString);
 		}
 
+        boolean foundNext=false;
 		int count = 0;
 		long time = 0;
 		try {
 			while (entry != null) {
-
-				if (startParsing){
-					count++;
-					long start = System.currentTimeMillis();
-					EntryObject entryObject = parseEntry(entry);
-					System.out.println(entryObject.id.entryName);
-					time += System.currentTimeMillis() - start;
-				}
+				if (found && !foundNext){
+                    foundNext=true;
+					//doing nothing. just read the next one.
+				} else if (found && foundNext){
+                    count++;
+                    long start = System.currentTimeMillis();
+                    EntryObject entryObject = parseEntry(entry);
+                    System.out.println(entryObject.id.entryName);
+                    time += System.currentTimeMillis() - start;
+                }
 
 				entry = reader.next();
 
-				if (!startParsing&&this.startParingString!=null){
-					startParsing = entry.startsWith(this.startParingString);
+				if (!found&&this.startParingString!=null){
+					found = entry.startsWith(this.startParingString);
 				}
-
 
 			}
 		} finally {
