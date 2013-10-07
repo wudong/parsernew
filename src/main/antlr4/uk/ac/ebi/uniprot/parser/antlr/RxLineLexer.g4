@@ -11,12 +11,17 @@ lexer grammar RxLineLexer;
 
 RX_HEADER : 'RX   ' ;
 PUBMED: 'PubMed=' -> pushMode (RX_VALUE);
-DOI: 'DOI='  -> pushMode (RX_VALUE);
+DOI: 'DOI='  -> pushMode (RX_VALUE_DOI);
 AGRICOLA: 'AGRICOLA='  -> pushMode (RX_VALUE);
 
 mode RX_VALUE;
-SEMICOLON_SPACE: '; '  ->popMode;
+SEMICOLON_SPACE: '; '       ->popMode;
+SEMICOLON_NEW_LINE_R: ';\n'   ->type(SEMICOLON_NEW_LINE), popMode;
+R_VALUE: R_LD+              -> type(VALUE);
+fragment R_LD: [A-Z0-9];
+
+mode RX_VALUE_DOI;
 SEMICOLON_NEW_LINE: ';\n'  ->popMode;
 VALUE: LD ((LD|SEMICOLON)* LD)?;
 fragment SEMICOLON: ';';
-fragment LD: ~[;\r\t\n ] ;
+fragment LD: ~[;\r\t\n] ;

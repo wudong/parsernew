@@ -110,7 +110,7 @@ class RxLineParserTest extends FunSuite {
     }
   }
 
-  ignore("DOI contains space."){
+  test("DOI contains space."){
     val rxLine = "RX   PubMed=15060122; DOI=10.1136/jmg 2003.012781;\n"
 
     val parser = (new DefaultUniprotLineParserFactory).createRxLineParser();
@@ -132,7 +132,6 @@ class RxLineParserTest extends FunSuite {
     obj.rxs should have size (1);
 
     obj.rxs.get(0).value should be ("5")
-
   }
 
 }
