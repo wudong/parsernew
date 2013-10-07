@@ -50,7 +50,7 @@ BOOK_DASH: '-'     ->type (DASH);
 BOOK_COLON: ':'     ->type (COLON);
 BOOK_V_SPACE: ' '     ->type (SPACE);
 BOOK_V_WORD: BOOK_V_L+;
-fragment BOOK_V_L: ~[ :,\-\n\r\t.];
+fragment BOOK_V_L: ~[ :,\-\n\r\t];
 
 /*
 RL   Unpublished observations (MMM-YYYY).

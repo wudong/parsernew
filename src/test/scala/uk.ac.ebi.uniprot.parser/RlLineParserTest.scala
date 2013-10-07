@@ -267,4 +267,20 @@ class RlLineParserTest extends FunSuite {
     //TODO
   }
 
+
+  test("books 's page can contain dot in it."){
+    val line=
+      """RL   (In) Biggins J. (eds.);
+      |RL   Progress in photosynthesis research, pp.II.1:13-16, Martinus Nijhoff,
+      |RL   The Hague (1987).
+      |""".stripMargin.replace("\r", "");
+
+    val parser = (new DefaultUniprotLineParserFactory).createRlLineParser()
+    val obj = parser.parse(line)
+    assert(obj.reference.isInstanceOf[RlLineObject.Book])
+    val b = obj.reference.asInstanceOf[RlLineObject.Book]
+    b.volume should be ("II.1")
+    b.page_start should be ("13")
+    b.page_end should be ("16")
+  }
 }
