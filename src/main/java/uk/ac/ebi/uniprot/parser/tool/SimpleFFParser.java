@@ -11,10 +11,10 @@ import java.io.IOException;
  * <p/>
  * User: wudong, Date: 18/09/13, Time: 22:22
  */
-public class FFParser {
+public class SimpleFFParser {
 
 	public static void main(String[] args) throws IOException {
-		FFParser ffParser = new FFParser();
+		SimpleFFParser ffParser = new SimpleFFParser();
 		if (args.length==2){
 			ffParser.setStartParingString(args[1]);
 		}

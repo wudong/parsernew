@@ -230,6 +230,6 @@ public class EntryModelListener extends UniprotParserBaseListener implements Par
 
 	@Override
 	public EntryObject getObject() {
-		return this.object;
-	}
+        return this.object;
+    }
 }

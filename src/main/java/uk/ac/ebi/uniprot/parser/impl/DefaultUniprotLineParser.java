@@ -74,7 +74,7 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
 			logger.info("Offending String \n{}", originString);
 			throw new ParseException("Parser's method doesn't exist", originString, e);
 		} catch (InvocationTargetException e) {
-			logger.error("Exception while calling the parser on rule {}.", factory.getTopRuleName());
+			logger.error("Exception while calling the parser on rule {}, with exception message: {}", factory.getTopRuleName(), e.getMessage());
 			logger.info("Offending String \n{}", originString);
 			throw new ParseException("Exception while calling the parser", originString, e);
 		} catch (IllegalAccessException e) {
