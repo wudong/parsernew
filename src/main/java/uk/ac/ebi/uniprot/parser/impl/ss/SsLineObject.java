@@ -1,7 +1,5 @@
 package uk.ac.ebi.uniprot.parser.impl.ss;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +10,11 @@ import java.util.List;
  */
 public class SsLineObject {
 
+	public List<SsLine> ssIALines = new ArrayList<SsLine>() ;
+	public List<String> ssSourceLines = new ArrayList<String>();
 
-	public List<Ev> evs = new ArrayList<Ev>();
-
-	public static class Ev {
-		public String evtag;
-		public String xref;
-		public String value_1;
-		public String value_2;
-		public DateTime date;
-	}
+    public static class SsLine {
+        public String topic;
+        public String text;
+    }
 }
