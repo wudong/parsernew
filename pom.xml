@@ -8,7 +8,7 @@
         <artifactId>ujdk-parent</artifactId>
         <groupId>uk.ac.ebi.uniprot</groupId>
         <version>1.0</version>
-        <relativePath>../ujdk-parent</relativePath>
+        <relativePath>../uniprot-ujdk-parent</relativePath>
     </parent>
 
 
