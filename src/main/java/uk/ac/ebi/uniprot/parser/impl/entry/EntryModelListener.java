@@ -30,6 +30,7 @@ import uk.ac.ebi.uniprot.parser.impl.rp.RpLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rt.RtLineObject;
 import uk.ac.ebi.uniprot.parser.impl.rx.RxLineObject;
 import uk.ac.ebi.uniprot.parser.impl.sq.SqLineObject;
+import uk.ac.ebi.uniprot.parser.impl.ss.SsLineObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -226,6 +227,13 @@ public class EntryModelListener extends UniprotParserBaseListener implements Par
 		UniprotLineParser<OhLineObject> kwLineParser = parserFactory.createOhLineParser();
 		OhLineObject parse = kwLineParser.parse(ctx.getText());
 		object.oh = parse;
+	}
+
+	@Override
+	public void exitSs(@NotNull UniprotParser.SsContext ctx) {
+		UniprotLineParser<SsLineObject> kwLineParser = parserFactory.createSsLineParser();
+		SsLineObject parse = kwLineParser.parse(ctx.getText());
+		object.ss = parse;
 	}
 
 	@Override

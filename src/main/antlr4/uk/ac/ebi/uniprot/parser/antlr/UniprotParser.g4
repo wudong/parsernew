@@ -22,6 +22,7 @@ entry:
         pe
         kw?
         ft?
+        ss?
         sq
         END_OF_ENTRY
         ;
@@ -61,6 +62,6 @@ ra: RA_LINE+;
 rg: RG_LINE+;
 rt: RT_LINE+;
 rl: RL_LINE+;
-
+ss: SS_LINE+;
 
 

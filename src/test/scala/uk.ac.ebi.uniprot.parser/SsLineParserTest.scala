@@ -49,6 +49,11 @@ class SsLineParserTest extends FunSuite{
     obj.ssEVLines.get(2).date.getYear should be (2010)
     obj.ssEVLines.get(2).date.getMonthOfYear should be (12)
     obj.ssEVLines.get(2).date.getDayOfMonth should be (18)
+
+    obj.ssIALines.get(0).topic should be ("DG")
+    obj.ssIALines.get(0).text should be ("dg-000-000-614_P;")
+    obj.ssIALines.get(1).topic should be ("ZB")
+    obj.ssIALines.get(1).text should be ("YOK, 19-NOV-2002;")
   }
 
 
