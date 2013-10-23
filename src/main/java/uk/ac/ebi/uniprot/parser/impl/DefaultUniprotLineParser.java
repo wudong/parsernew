@@ -1,14 +1,11 @@
 package uk.ac.ebi.uniprot.parser.impl;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.Nullable;
+import uk.ac.ebi.uniprot.parser.DefaultErrorListener;
 import uk.ac.ebi.uniprot.parser.GrammarFactory;
-import uk.ac.ebi.uniprot.parser.ParseException;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.UniprotLineParser;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import uk.ac.ebi.uniprot.parser.antlr.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,24 +30,14 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
 	public P createParserFromInput(CharStream in,
 	                               GrammarFactory<L, P> factory) {
         L lexer = factory.createLexer(in);
-        lexer.addErrorListener(new BaseErrorListener() {
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, @Nullable Object o, int line, int i2, String s, @Nullable RecognitionException e) {
-                throw new ParseException("Syntax Error while lexing the input String in Line: " + line + ", Position: " + i2,
-                        "", e);
-            }
-        });
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(new DefaultErrorListener(true));
 
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		P parser = factory.createParser(tokens);
-		parser.addErrorListener(new BaseErrorListener() {
-			@Override
-			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
-			                        int line, int charPositionInLine, String msg, RecognitionException e) {
-				throw new ParseException("Syntax Error while parsing the input String in Line: " + line + ", Position: " + charPositionInLine,
-						"", e);
-			}
-		});
+        parser.removeErrorListeners();
+        parser.addErrorListener(new DefaultErrorListener(false));
+
 		return parser;
 	}
 
@@ -64,24 +51,62 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
 	protected T processWithParser(P parser, String originString) {
 		parser.addParseListener(listener);
 
-		//call the parser with the top rule name.
-		Method method = null;
-		try {
-			method = parser.getClass().getMethod(factory.getTopRuleName());
-			method.invoke(parser);
-		} catch (NoSuchMethodException e) {
-			logger.error("Parser's method doesn't exist.");
-			logger.info("Offending String \n{}", originString);
-			throw new ParseException("Parser's method doesn't exist", originString, e);
-		} catch (InvocationTargetException e) {
-			logger.error("Exception while calling the parser on rule {}, with exception message: {}", factory.getTopRuleName(), e.getMessage());
-			logger.info("Offending String \n{}", originString);
-			throw new ParseException("Exception while calling the parser", originString, e);
-		} catch (IllegalAccessException e) {
-			logger.error("No privilege to call the parser's method.");
-			logger.info("Offending String \n{}", originString);
-			throw new ParseException("No privilege to call the parser's method", originString, e);
-		}
+        //remove thie reflection to improve error handling and parsing speed.
+        if (parser instanceof AcLineParser){
+            ((AcLineParser) parser).ac_ac();
+        }else if (parser instanceof CcLineParser){
+            ((CcLineParser) parser).cc_cc();
+        }else if (parser instanceof DeLineParser){
+            ((DeLineParser) parser).de_de();
+        }else if (parser instanceof DrLineParser){
+            ((DrLineParser) parser).dr_dr();
+        }else if (parser instanceof DtLineParser){
+            ((DtLineParser) parser).dt_dt();
+        }else if (parser instanceof FtLineParser){
+            ((FtLineParser) parser).ft_ft();
+        }else if (parser instanceof GnLineParser){
+            ((GnLineParser) parser).gn_gn();
+        }else if (parser instanceof IdLineParser){
+            ((IdLineParser) parser).id_id();
+        }else if (parser instanceof KwLineParser){
+            ((KwLineParser) parser).kw_kw();
+        }else if (parser instanceof OcLineParser){
+            ((OcLineParser) parser).oc_oc();
+        }else if (parser instanceof OgLineParser){
+            ((OgLineParser) parser).og_og();
+        }else if (parser instanceof OhLineParser){
+            ((OhLineParser) parser).oh_oh();
+        }else if (parser instanceof OsLineParser){
+            ((OsLineParser) parser).os_os();
+        }else if (parser instanceof OxLineParser){
+            ((OxLineParser) parser).ox_ox();
+        }else if (parser instanceof PeLineParser){
+            ((PeLineParser) parser).pe_pe();
+        }else if (parser instanceof RaLineParser){
+            ((RaLineParser) parser).ra_ra();
+        }else if (parser instanceof RcLineParser){
+            ((RcLineParser) parser).rc_rc();
+        }else if (parser instanceof RgLineParser){
+            ((RgLineParser) parser).rg_rg();
+        }else if (parser instanceof RlLineParser){
+            ((RlLineParser) parser).rl_rl();
+        }else if (parser instanceof RnLineParser){
+            ((RnLineParser) parser).rn_rn();
+        }else if (parser instanceof RpLineParser){
+            ((RpLineParser) parser).rp_rp();
+        }else if (parser instanceof RtLineParser){
+            ((RtLineParser) parser).rt_rt();
+        }else if (parser instanceof RxLineParser){
+            ((RxLineParser) parser).rx_rx();
+        }else if (parser instanceof SqLineParser){
+            ((SqLineParser) parser).sq_sq();
+        }else if (parser instanceof SsLineParser){
+            ((SsLineParser) parser).ss_ss();
+        }else if (parser instanceof UniprotParser){
+            ((UniprotParser) parser).entry();
+        }else{
+            throw new RuntimeException("Parser's type : "+parser.getClass() +" is not recognized.");
+        }
 
 		return listener.getObject();
 	}
