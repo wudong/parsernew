@@ -6,6 +6,9 @@ import uk.ac.ebi.uniprot.parser.GrammarFactory;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.UniprotLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.*;
+import uk.ac.ebi.uniprot.parser.impl.cc.CcLineErrorListener;
+import uk.ac.ebi.uniprot.parser.impl.entry.EntryErrorListener;
+import uk.ac.ebi.uniprot.parser.impl.ft.FtLineErrorListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,12 +34,30 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
 	                               GrammarFactory<L, P> factory) {
         L lexer = factory.createLexer(in);
         lexer.removeErrorListeners();
-        lexer.addErrorListener(new DefaultErrorListener(true));
+
+        if (lexer instanceof FtLineLexer){
+            lexer.addErrorListener(new FtLineErrorListener(true));
+        }else if (lexer instanceof CcLineLexer){
+            lexer.addErrorListener(new CcLineErrorListener(true));
+        }else if (lexer instanceof UniprotLexer){
+            lexer.addErrorListener(new EntryErrorListener(true));
+        }else {
+            lexer.addErrorListener(new DefaultErrorListener(true));
+        }
 
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		P parser = factory.createParser(tokens);
         parser.removeErrorListeners();
-        parser.addErrorListener(new DefaultErrorListener(false));
+
+        if (parser instanceof FtLineParser){
+            parser.addErrorListener(new FtLineErrorListener(false));
+        }else if (parser instanceof CcLineParser){
+            parser.addErrorListener(new CcLineErrorListener(false));
+        }else if (parser instanceof UniprotParser){
+            parser.addErrorListener(new EntryErrorListener(false));
+        }else {
+            parser.addErrorListener(new DefaultErrorListener(false));
+        }
 
 		return parser;
 	}
