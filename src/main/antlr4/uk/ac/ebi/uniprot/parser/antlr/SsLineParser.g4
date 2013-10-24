@@ -50,7 +50,17 @@ options { tokenVocab=SsLineLexer;}
 **                        subunit"
 */
 ss_ss:  STAR_LINE IS_LINE
-       ss_line_ia* ss_line_source*;
+       ss_line_ev*
+       ss_line_ia*
+       ss_line_source*;
+
+ss_line_ev: EV_TOPIC ev_id EV_SEPARATOR ev_db EV_SEPARATOR
+            ev_attr_1 EV_SEPARATOR ev_attr_2 EV_SEPARATOR
+            EV_DATE LINE_END;
+ev_id:   EV_WORD;
+ev_db:   EV_WORD;
+ev_attr_1:   EV_WORD;
+ev_attr_2:   EV_WORD;
 
 ss_line_ia: STAR_STAR TOPIC SPACE
        IA_TEXT LINE_END;

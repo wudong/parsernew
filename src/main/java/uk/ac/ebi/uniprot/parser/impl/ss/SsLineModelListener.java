@@ -1,6 +1,9 @@
 package uk.ac.ebi.uniprot.parser.impl.ss;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import uk.ac.ebi.uniprot.parser.ParseTreeObjectExtractor;
 import uk.ac.ebi.uniprot.parser.antlr.SsLineParser;
 import uk.ac.ebi.uniprot.parser.antlr.SsLineParserBaseListener;
@@ -15,8 +18,11 @@ import uk.ac.ebi.uniprot.parser.antlr.SsLineParserBaseListener;
 public class SsLineModelListener extends SsLineParserBaseListener implements ParseTreeObjectExtractor<SsLineObject> {
 
     private SsLineObject object = new SsLineObject();
+	private DateTimeFormatter formatter
+			= DateTimeFormat.forPattern("dd-MMM-yyyy");
 
-    @Override
+
+	@Override
     public void exitSs_line_source(@NotNull SsLineParser.Ss_line_sourceContext ctx) {
         String text = ctx.SOURCE_TEXT().getText();
         object.ssSourceLines.add(text);
@@ -30,7 +36,18 @@ public class SsLineModelListener extends SsLineParserBaseListener implements Par
         object.ssIALines.add(ssLine);
     }
 
-    public SsLineObject getObject() {
+	@Override
+	public void exitSs_line_ev(@NotNull SsLineParser.Ss_line_evContext ctx) {
+		SsLineObject.EvLine evLine = new SsLineObject.EvLine();
+		evLine.id = ctx.ev_id().getText();
+		evLine.db = ctx.ev_db().getText();
+		evLine.attr_1 = ctx.ev_attr_1().getText();
+		evLine.attr_2 = ctx.ev_attr_2().getText();
+		evLine.date = DateTime.parse(ctx.EV_DATE().getText(), formatter);
+		object.ssEVLines.add(evLine);
+	}
+
+	public SsLineObject getObject() {
         return object;
     }
 }
