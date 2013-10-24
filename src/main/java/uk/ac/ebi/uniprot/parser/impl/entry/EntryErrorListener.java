@@ -10,7 +10,5 @@ import uk.ac.ebi.uniprot.parser.DefaultErrorListener;
  * To change this template use File | Settings | File Templates.
  */
 public class EntryErrorListener extends DefaultErrorListener {
-    public EntryErrorListener(boolean inLax) {
-        super(inLax);
-    }
+
 }

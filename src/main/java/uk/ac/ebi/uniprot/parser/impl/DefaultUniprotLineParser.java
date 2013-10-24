@@ -36,13 +36,13 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
         lexer.removeErrorListeners();
 
         if (lexer instanceof FtLineLexer){
-            lexer.addErrorListener(new FtLineErrorListener(true));
+            lexer.addErrorListener(new FtLineErrorListener());
         }else if (lexer instanceof CcLineLexer){
-            lexer.addErrorListener(new CcLineErrorListener(true));
+            lexer.addErrorListener(new CcLineErrorListener());
         }else if (lexer instanceof UniprotLexer){
-            lexer.addErrorListener(new EntryErrorListener(true));
+            lexer.addErrorListener(new EntryErrorListener());
         }else {
-            lexer.addErrorListener(new DefaultErrorListener(true));
+            lexer.addErrorListener(new DefaultErrorListener());
         }
 
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -50,13 +50,13 @@ public class DefaultUniprotLineParser<T, L extends Lexer, P extends Parser>
         parser.removeErrorListeners();
 
         if (parser instanceof FtLineParser){
-            parser.addErrorListener(new FtLineErrorListener(false));
+            parser.addErrorListener(new FtLineErrorListener());
         }else if (parser instanceof CcLineParser){
-            parser.addErrorListener(new CcLineErrorListener(false));
+            parser.addErrorListener(new CcLineErrorListener());
         }else if (parser instanceof UniprotParser){
-            parser.addErrorListener(new EntryErrorListener(false));
+            parser.addErrorListener(new EntryErrorListener());
         }else {
-            parser.addErrorListener(new DefaultErrorListener(false));
+            parser.addErrorListener(new DefaultErrorListener());
         }
 
 		return parser;

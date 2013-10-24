@@ -32,6 +32,16 @@ class AcLineParserTest extends FunSuite {
     obj.secondaryAcc should be('empty)
   }
 
+  test("a invliad AC") {
+    val ac_one_line = "AC   Q6GDDZX4;\n"
+
+    val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
+    val e = intercept[ParseException] {
+      val obj = parser.parse(ac_one_line)
+    }
+    System.out.println(e.getDetailedMessage)
+  }
+
   test("a valid one line with more than one secondary acc ") {
 
     val ac_one_line_moreacc = "AC   Q6GZX4; Q6GZX5; Q6GZX6;\n"
@@ -56,7 +66,7 @@ class AcLineParserTest extends FunSuite {
       """AC   Q6GZX4; Q6GZX5; Q6GZX6;
         |AC   Q6GZX7; Q6GZX8; Q6GZX9;
         |AC   Q6GZX0;
-        |""".stripMargin.replace("\r", "");
+        | """.stripMargin.replace("\r", "");
 
     val parser = (new DefaultUniprotLineParserFactory).createAcLineParser();
     val obj = parser.parse(ac_three_lineer_moreacc)

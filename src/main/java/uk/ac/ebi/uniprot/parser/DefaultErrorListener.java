@@ -1,8 +1,6 @@
 package uk.ac.ebi.uniprot.parser;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,20 +11,33 @@ import org.antlr.v4.runtime.Recognizer;
  */
 public class DefaultErrorListener extends BaseErrorListener {
 
-    private final boolean inLex;
-
-    public DefaultErrorListener(boolean inLax){
-        this.inLex = inLax;
-    }
 
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
                             int line, int charPositionInLine, String msg, RecognitionException e) {
-        String prefix = inLex ? "Lex": "Parser";
-        String errorMessage =
-                String.format("%s Syntax Error while parsing the input String in Line: %d, Position: %d. The original" +
-                        "parsing error message is: \n %s", prefix, line, charPositionInLine, msg);
 
-        throw new ParseException(errorMessage, "",e);
+        String inputString = "";
+        if (offendingSymbol instanceof CommonToken){
+            CommonToken t = (CommonToken) offendingSymbol;
+            CharStream inputStream = t.getInputStream();
+            inputString=inputStream.toString();
+        }
+
+//        String ruleName = "";
+//        String parsedSoFar = "";
+//
+//        if (e!=null){
+//            RuleContext ctx = e.getCtx();
+//            if (ctx!=null && ctx instanceof ParserRuleContext){
+//                ParserRuleContext pp = (ParserRuleContext) ctx;
+//                parsedSoFar = pp.getText();
+//                ruleName = pp.getClass().getSimpleName().toLowerCase();
+//                if (ruleName.endsWith("context")){
+//                    ruleName  = ruleName.substring(0, ruleName.length()-"context".length()) ;
+//                }
+//            }
+//        }
+
+        throw new ParseException(msg, inputString, line, charPositionInLine, e);
     }
 
 }
